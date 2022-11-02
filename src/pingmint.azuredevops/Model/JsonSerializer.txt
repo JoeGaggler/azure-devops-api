@@ -12,7 +12,7 @@ Pipeline
 
 ReferenceLinks
 - self => Self : ReferenceLink
-- web => Web : ReferenceLink
+- * => All : {ReferenceLink}
 
 ReferenceLink
 - href => Href : String

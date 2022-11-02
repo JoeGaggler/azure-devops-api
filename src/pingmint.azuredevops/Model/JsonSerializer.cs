@@ -212,10 +212,13 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			writer.WritePropertyName("self");
 			ReferenceLink.Serialize(ref writer, localSelf);
 		}
-		if (value.Web is { } localWeb)
+		if (value.All is { } localAll)
 		{
-			writer.WritePropertyName("web");
-			ReferenceLink.Serialize(ref writer, localWeb);
+			foreach (var (localAllKey, localAllValue) in localAll)
+			{
+				writer.WritePropertyName(localAllKey);
+				ReferenceLink.Serialize(ref writer, localAllValue);
+			}
 		}
 		writer.WriteEndObject();
 	}
@@ -239,18 +242,15 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						};
 						break;
 					}
-					else if (reader.ValueTextEquals("web"))
+					obj.All ??= new();
+					var lhs = reader.GetString() ?? throw new NullReferenceException();
+					var rhs = Next(ref reader) switch
 					{
-						obj.Web = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => ReferenceLink.Deserialize(ref reader),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Web: {unexpected} ")
-						};
-						break;
-					}
-
-					reader.Skip();
+						JsonTokenType.Null => null,
+						JsonTokenType.StartObject => ReferenceLink.Deserialize(ref reader),
+						var unexpected => throw new InvalidOperationException($"unexpected token type for All: {unexpected} ")
+					};
+					obj.All.Add(lhs, rhs);
 					break;
 				}
 				case JsonTokenType.EndObject:
@@ -373,7 +373,7 @@ public sealed partial class Pipeline
 public sealed partial class ReferenceLinks
 {
 	public ReferenceLink? Self { get; set; }
-	public ReferenceLink? Web { get; set; }
+	public Dictionary<String, ReferenceLink>? All { get; set; }
 }
 public sealed partial class ReferenceLink
 {

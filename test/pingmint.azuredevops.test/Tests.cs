@@ -8,24 +8,24 @@ public class Tests
     {
         var value = Environment.GetEnvironmentVariable("AZDO_API_KEY");
         Assert.That(value, Is.Not.Null);
-        return value;
+        return value!;
     }
 
     private static String GetOrg()
     {
         var value = Environment.GetEnvironmentVariable("AZDO_ORG");
         Assert.That(value, Is.Not.Null);
-        return value;
+        return value!;
     }
 
     private static String GetProj()
     {
         var value = Environment.GetEnvironmentVariable("AZDO_PROJECT");
         Assert.That(value, Is.Not.Null);
-        return value;
+        return value!;
     }
 
-    private AzdoClient client;
+    private AzdoClient client = null!;
 
     [SetUp]
     public void Setup()
@@ -34,8 +34,14 @@ public class Tests
     }
 
     [Test]
-    public async Task test_get_pipelines()
+    public async Task Test_get_pipelines()
     {
-        await client.GetPipelinesAsync();
+        var all = await client.GetPipelinesAsync();
+        Assert.That(all, Is.Not.Null);
+        Assert.That(all, Has.Count.GreaterThan(0));
+
+        var pipelines = all.Value;
+        Assert.That(pipelines, Is.Not.Null);
+        Assert.That(pipelines, Has.Count.GreaterThan(0));
     }
 }

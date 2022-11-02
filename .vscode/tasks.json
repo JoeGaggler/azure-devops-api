@@ -86,14 +86,12 @@
             }
         },
         {
-            "label": "dotnet tool install (nupkg)",
+            "label": "dotnet tool install",
             "command": "dotnet",
             "type": "process",
             "args": [
                 "tool",
                 "install",
-                "--add-source",
-                "nupkg",
                 "pingmint.codegen.json"
             ],
             "problemMatcher": "$msCompile",
