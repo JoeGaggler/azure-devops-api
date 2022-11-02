@@ -1,0 +1,18 @@
+PipelinesResults
+- count => Count : int
+- value => Value : [Pipeline]
+
+Pipeline
+- id => Id : int
+- revision => Revision : int
+- name => Name : String
+- folder => Folder : String
+- url => Url : String
+- _links => Links : ReferenceLinks
+
+ReferenceLinks
+- self => Self : ReferenceLink
+- web => Web : ReferenceLink
+
+ReferenceLink
+- href => Href : String
