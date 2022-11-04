@@ -82,11 +82,11 @@ public class Tests
         Assert.That(repo.DefaultBranch, Is.Not.Empty);
 
         var stats = await client.GetGitStatsAsync(repositoryId, "master");
-        var commitId = stats.commit.commitId;
+        var commitId = stats.Commit.commitId;
         var parentId = "f65b40b840e3531f9edb7d879d53481de987bfe9";
 
         var diffs = await client.GetGitDiffsAsync(repositoryId, baseVersion: commitId, baseVersionType: "commit", targetVersion: parentId, targetVersionType: "commit");
-        var json = AzdoClient.Serialize(diffs, Model.JsonSerializer.GitDiffsResult);
+        var json = AzdoClient.Serialize(diffs, Model.JsonSerializer.GitDiffs);
         Console.WriteLine(json);
     }
 }

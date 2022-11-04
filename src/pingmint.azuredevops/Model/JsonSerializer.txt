@@ -1,111 +1,120 @@
-GitDiffsResult
+GitBranchStats
+- commit => Commit : GitCommit
+- name => Name : String
 - aheadCount : int
-- allChangesIncluded : bool
 - behindCount : int
-- changeCounts : GitDiffsResultChangeCounts
-- commonCommit : String
-- changes : [GitDiffsResultChange]
+- isBaseVersion : bool
 
-GitDiffsResultChange
-- TODO : String
+GitCommit
+- treeId : String
+- commitId : String
+- author : GitPerson
+- committer : GitPerson
+- comment : String
+- parents => Parents : [String]
+- url : String
 
-GitDiffsResultChangeCounts
+GitDiffsChangeCounts
 - Add : int
 - Edit : int
 
-GitRepositoryResult
-- _links => Links : ReferenceLinks
-- defaultBranch => DefaultBranch : String
-- id => Id : String
-- name => Name : String
-- project => Project : GitRepositoryResultProject
-- remoteUrl => RemoteUrl : String
-- size => Size : int
-- sshUrl => sshUrl : String
-- url => Url : String
-- webUrl => webUrl : String
+GitDiffChange
+- item : GitDiffChangeItem
+- changeType : String
 
-TODO_GitRepositoryResult
-- isDisabled => IsDisabled : int
-
-GitRepositoryResultProject
-- id : String
-- name : String
-- url: String
-- state: String
-- revision: int
-- visibility: String
-- lastUpdateTime: String
-
-GitBranchStatsResults
-- aheadCount: int
-- behindCount: int
-- commit : GitBranchStatsResultsCommit
-- isBaseVersion: bool
-- name: String
-
-GitBranchStatsResultsCommit
-- treeId : String
+GitDiffChangeItem
+- objectId : String
+- originalObjectId : String
+- gitObjectType : String
 - commitId : String
-- author : GitBranchStatsResultsCommitPerson
-- committer : GitBranchStatsResultsCommitPerson
-- comment : String
-- parents : [String]
+- path : String
+- isFolder : bool
 - url : String
 
-GitBranchStatsResultsCommitPerson
+GitDiffs
+- allChangesIncluded : bool
+- changeCounts : GitDiffsChangeCounts
+- changes: [GitDiffChange]
+- commonCommit : String
+- baseCommit : String
+- targetCommit : String
+- aheadCount : int
+- behindCount : int
+
+GitPerson
 - name : String
 - email : String
 - date : String
 
+GitRepository : ILinks
+- defaultBranch => DefaultBranch : String
+- id => Id : String
+- isDisabled : bool
+- name => Name : String
+- project => Project : Project
+- remoteUrl : String
+- size => Size : int
+- sshUrl : String
+- url => Url : String
+- webUrl : String
+
 PipelinesResult
 - count => Count : int
-- value => Value : [PipelinesResultItem]
+- value => Value : [Pipeline]
 
-PipelinesResultItem : IPipelineReference
-- _links => Links : ReferenceLinks
+Pipeline : ILinks
+- id => Id : int
+- folder => Folder : String
+- name => Name : String
+- revision => Revision : int
+- url => Url : String
 
-PipelineRunResult : IPipelineRun
-- resources => Resources : PipelineRunResultResources
+Project
+- id => Id : String
+- name => Name : String
+- url => Url : String
+- state => State : String
+- revision => Revision : int
+- visibility => Visibility : String
+- lastUpdateTime => LastUpdateTime : String
 
-PipelineRunResultPipeline : IPipelineReference
+RunsResult
+- count => Count : int
+- value => Value : [Run]
 
-PipelineRunResultResources
-// containers
-- repositories => Repositories : PipelineRunResultResourcesRepositories
-- pipelines => Pipelines : PipelineRunResultResourcesPipelines
+Run : ILinks // https://learn.microsoft.com/en-us/rest/api/azure/devops/pipelines/runs/list?view=azure-devops-rest-7.1#run
+- createdDate => CreatedDate : String
+- finishedDate => FinishedDate : String
+- id => Id : int
+- name => Name : String
+- pipeline => Pipeline : Pipeline
+- state => State : String
+- resource => Resources : RunResources
+- result => Result : String
+- templateParameters => TemplateParameters : TemplateParameters
+- url => Url : String
 
-PipelineRunResultResourcesPipelines
-- * => All : PipelineRunResultResourcesPipelinesItem
+RunResources
+// TODO: containers
+- pipelines => Pipelines : [PipelineRunResource]
+- repositories => Repositories : [RepositoryRunResource]
 
-PipelineRunResultResourcesPipelinesItem
-- pipeline => Pipeline : PipelineRunResultResourcesPipelinesItemReference
-
-PipelineRunResultResourcesPipelinesItemReference : IPipelineReference
-
-PipelineRunResultResourcesRepositories
-- * => All : PipelineRunResultResourcesRepositoriesItem
-
-PipelineRunResultResourcesRepositoriesItem
-- refName => RefName : String
-- repository => Repository : PipelineRunResultResourcesRepositoriesItemReference
+PipelineRunResource
+- pipeline => Pipeline : Pipeline
 - version => Version : String
 
-PipelineRunResultResourcesRepositoriesItemReference
+RepositoryRunResource
+- refName => RefName : String
+- repository => Repository : Respository
+- version => Version : String
+
+Respository
 - id => Id : String
 - type => Type : String
 
-PipelineRunsResult
-- count => Count : int
-- value => Value : [PipelineRunsResultItem]
-
-PipelineRunsResultItem : IPipelineRun
-
-PipelineRunsResultItemPipeline : IPipelineReference
-
-TemplateParameters
-
+//
 // Common Types
+//
 
 ReferenceLinks
 - self => Self : ReferenceLink
@@ -115,24 +124,15 @@ ReferenceLinks
 ReferenceLink
 - href => Href : String
 
+//
 // Interfaces
+//
 
-: IPipelineReference
-- id => Id : int
-- folder => Folder : String
-- name => Name : String
-- revision => Revision : int
-- url => Url : String
-
-: IPipelineRun
+: ILinks
 - _links => Links : ReferenceLinks
-- createdDate => CreatedDate : String
-- finishedDate => FinishedDate : String
-- id => Id : int
-- name => Name : String
-- pipeline => Pipeline : PipelineRunsResultItemPipeline
-- state => State : String
-// resources only exists on main
-- result => Result : String
-- templateParameters => TemplateParameters : TemplateParameters
-- url => Url : String
+
+//
+// Unknown Types
+//
+
+TemplateParameters
