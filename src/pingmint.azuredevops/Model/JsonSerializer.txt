@@ -1,18 +1,152 @@
-PipelinesResults
-- count => Count : int
-- value => Value : [Pipeline]
+GitDiffsResult
+- aheadCount : int
+- behindCount : int
+- changeCounts : GitDiffsResultChangeCounts
+- commonCommit : String
+- changes : [GitDiffsResultChange]
 
-Pipeline
-- id => Id : int
-- revision => Revision : int
-- name => Name : String
-- folder => Folder : String
-- url => Url : String
+TODO_GitDiffsResult
+- allChangesIncluded : int
+
+GitDiffsResultChange
+- TODO : String
+
+GitDiffsResultChangeCounts
+- Add : int
+- Edit : int
+
+GitRepositoryResult
 - _links => Links : ReferenceLinks
+- defaultBranch => DefaultBranch : String
+- id => Id : String
+- name => Name : String
+- project => Project : GitRepositoryResultProject
+- remoteUrl => RemoteUrl : String
+- size => Size : int
+- sshUrl => sshUrl : String
+- url => Url : String
+- webUrl => webUrl : String
+
+TODO_GitRepositoryResult
+- isDisabled => IsDisabled : int
+
+GitRepositoryResultProject
+- id : String
+- name : String
+- url: String
+- state: String
+- revision: int
+- visibility: String
+- lastUpdateTime: String
+
+GitBranchStatsResults
+- aheadCount: int
+- behindCount: int
+- commit : GitBranchStatsResultsCommit
+- name: String
+
+TODO_GitBranchStatsResults
+- isBaseVersion: int
+
+GitBranchStatsResultsCommit
+- treeId : String
+- commitId : String
+- author : GitBranchStatsResultsCommitPerson
+- committer : GitBranchStatsResultsCommitPerson
+- comment : String
+- parents : [String]
+- url : String
+
+GitBranchStatsResultsCommitPerson
+- name : String
+- email : String
+- date : String
+
+PipelinesResult
+- count => Count : int
+- value => Value : [PipelinesResultItem]
+
+PipelinesResultItem
+- _links => Links : ReferenceLinks
+- id => Id : int
+- folder => Folder : String
+- name => Name : String
+- revision => Revision : int
+- url => Url : String
+
+PipelineRunResult
+- _links => Links : ReferenceLinks
+- createdDate => CreatedDate : String
+- finishedDate => FinishedDate : String
+- id => Id : int
+- name => Name : String
+- pipeline => Pipeline : PipelineRunResultPipeline
+- resources => Resources : PipelineRunResultResources
+- result => Result : String
+- state => State : String
+- templateParameters => TemplateParameters : TemplateParameters
+- url => Url : String
+
+PipelineRunResultPipeline
+- id => Id : int
+- folder => Folder : String
+- name => Name : String
+- revision => Revision : int
+- url => Url : String
+
+PipelineRunResultResources
+- repositories => Repositories : PipelineRunResultResourcesRepositories
+- pipelines => Pipelines : PipelineRunResultResourcesPipelines
+
+PipelineRunResultResourcesPipelines
+- * => All : PipelineRunResultResourcesPipelinesItem
+
+PipelineRunResultResourcesPipelinesItem
+- pipeline => Pipeline : PipelineRunResultResourcesPipelinesItemReference
+
+PipelineRunResultResourcesPipelinesItemReference
+- id => Id : int
+- folder => Folder : String
+- name => Name : String
+- revision => Revision : int
+- url => Url : String
+
+PipelineRunResultResourcesRepositories
+- * => All : PipelineRunResultResourcesRepositoriesItem
+
+PipelineRunResultResourcesRepositoriesItem
+- refName => RefName : String
+- repository => Repository : PipelineRunResultResourcesRepositoriesItemReference
+- version => Version : String
+
+PipelineRunResultResourcesRepositoriesItemReference
+- id => Id : String
+- type => Type : String
+
+PipelineRunsResult
+- count => Count : int
+- value => Value : [PipelineRunsResultItem]
+
+PipelineRunsResultItem
+- _links => Links : ReferenceLinks
+- createdDate => CreatedDate : String
+- finishedDate => FinishedDate : String
+- id => Id : int
+- name => Name : String
+- pipeline => Pipeline : PipelineRunsResultItemPipeline
+- result => Result : String
+- state => State : String
+- templateParameters => TemplateParameters : TemplateParameters
+- url => Url : String
+
+PipelineRunsResultItemPipeline
 
 ReferenceLinks
 - self => Self : ReferenceLink
+- web => Web : ReferenceLink
 - * => All : {ReferenceLink}
 
 ReferenceLink
 - href => Href : String
+
+TemplateParameters

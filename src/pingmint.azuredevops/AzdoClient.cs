@@ -11,6 +11,8 @@ public partial class AzdoClient
     private readonly UrlHelper urlHelper;
     private readonly HttpClient httpClient;
 
+    public UrlHelper Urls => urlHelper;
+
     public AzdoClient(String organization, String project, String apikey)
     {
         this.organization = organization;
@@ -50,7 +52,7 @@ public partial class AzdoClient
         message.Headers.Authorization = header;
     }
 
-    private static T Deserialize<T>(String json, Model.IJsonSerializer<T> serializer)
+    public static T Deserialize<T>(String json, Model.IJsonSerializer<T> serializer)
     {
         var bytes = Encoding.UTF8.GetBytes(json);
         var options = new JsonReaderOptions()
@@ -62,11 +64,12 @@ public partial class AzdoClient
         return serializer.Deserialize(ref reader);
     }
 
-    private static String Serialize<T>(T model, Model.IJsonSerializer<T> serializer)
+    public static String Serialize<T>(T model, Model.IJsonSerializer<T> serializer)
     {
         var options = new JsonWriterOptions()
         {
-            SkipValidation = true,
+            Indented = true,
+            SkipValidation = false,
         };
 
         using (var stream = new MemoryStream())
@@ -102,7 +105,7 @@ public partial class AzdoClient
         return await httpClient.SendAsync(message);
     }
 
-    private async Task<String> GetStringAsync(Uri uri)
+    public async Task<String> GetStringAsync(Uri uri)
     {
         var response = await GetAsync(uri);
         return await response.Content.ReadAsStringAsync();
