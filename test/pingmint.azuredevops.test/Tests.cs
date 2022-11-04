@@ -69,6 +69,8 @@ public class Tests
     {
         var all = await client.GetPipelineRunsAsync(1652);
         ApiAssert.CollectionResultHasItems(all);
+
+        var first = all.Value.First();
     }
 
     [Test]
