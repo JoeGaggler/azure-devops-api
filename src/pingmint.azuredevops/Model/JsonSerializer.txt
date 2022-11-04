@@ -89,19 +89,25 @@ Run : ILinks // https://learn.microsoft.com/en-us/rest/api/azure/devops/pipeline
 - name => Name : String
 - pipeline => Pipeline : Pipeline
 - state => State : String
-- resource => Resources : RunResources
+- resources => Resources : RunResources
 - result => Result : String
 - templateParameters => TemplateParameters : TemplateParameters
 - url => Url : String
 
 RunResources
 // TODO: containers
-- pipelines => Pipelines : [PipelineRunResource]
-- repositories => Repositories : [RepositoryRunResource]
+- pipelines => Pipelines : PipelineRunResources
+- repositories => Repositories : RepositoryRunResources
+
+PipelineRunResources
+- * => All : {PipelineRunResource}
 
 PipelineRunResource
 - pipeline => Pipeline : Pipeline
 - version => Version : String
+
+RepositoryRunResources
+- * => All : {RepositoryRunResource}
 
 RepositoryRunResource
 - refName => RefName : String

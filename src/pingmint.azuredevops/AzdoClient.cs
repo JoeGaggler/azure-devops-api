@@ -110,4 +110,11 @@ public partial class AzdoClient
         var response = await GetAsync(uri);
         return await response.Content.ReadAsStringAsync();
     }
+
+    private async Task<TResult> GetterAsync<TResult>(Func<UrlHelper, Uri> urlFunc, Model.IJsonSerializer<TResult> serializer)
+    {
+        var url = urlFunc(urlHelper);
+        var json = await GetStringAsync(url);
+        return Deserialize(json, serializer);
+    }
 }

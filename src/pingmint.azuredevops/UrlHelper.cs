@@ -23,7 +23,9 @@ public partial class UrlHelper
 
     public Uri Pipelines(int? top = null, String apiVersion = DefaultApiVersion) => new($"{ProjectUrlString}/_apis/pipelines?api-version={apiVersion}{Parameters.Top(top)}");
 
-    public Uri PipelineRuns(int pipelineId, String apiVersion = DefaultApiVersion) => new($"https://dev.azure.com/{organization}/{project}/_apis/pipelines/{pipelineId}/runs?{apiVersion}");
+    public Uri Run(int pipelineId, int runId, String apiVersion = DefaultApiVersion) => new($"https://dev.azure.com/{organization}/{project}/_apis/pipelines/{pipelineId}/runs/{runId}?{apiVersion}");
+
+    public Uri Runs(int pipelineId, String apiVersion = DefaultApiVersion) => new($"https://dev.azure.com/{organization}/{project}/_apis/pipelines/{pipelineId}/runs?{apiVersion}");
 }
 
 partial class UrlHelper

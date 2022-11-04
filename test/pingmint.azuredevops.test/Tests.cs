@@ -67,7 +67,7 @@ public class Tests
     [Test]
     public async Task Test_get_pipeline_runs()
     {
-        var all = await client.GetPipelineRunsAsync(1652);
+        var all = await client.GetRunsAsync(1652);
         ApiAssert.CollectionResultHasItems(all);
 
         var first = all.Value.First();
@@ -85,7 +85,18 @@ public class Tests
         var commitId = stats.Commit.commitId;
         var parentId = "f65b40b840e3531f9edb7d879d53481de987bfe9";
 
-        var diffs = await client.GetGitDiffsAsync(repositoryId, baseVersion: commitId, baseVersionType: "commit", targetVersion: parentId, targetVersionType: "commit");
+        var pipelineId = 1274;
+        var runs = await client.GetRunsAsync(1274);
+        var firstRun = runs.Value.First();
+        var runId = firstRun.Id.Value;
+        var run = await client.GetRunAsync(pipelineId, runId);
+        // var json1 = AzdoClient.Serialize(run, Model.JsonSerializer.Run);
+        // Console.WriteLine(client.Urls.Run(pipelineId, runId));
+        // Console.WriteLine(json1);
+        var targetId = run.Resources.Repositories.All["self"].Version;
+
+
+        var diffs = await client.GetGitDiffsAsync(repositoryId, baseVersion: commitId, baseVersionType: "commit", targetVersion: targetId, targetVersionType: "commit");
         var json = AzdoClient.Serialize(diffs, Model.JsonSerializer.GitDiffs);
         Console.WriteLine(json);
     }
