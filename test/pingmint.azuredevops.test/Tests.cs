@@ -81,8 +81,12 @@ public class Tests
         Assert.That(repo, Is.Not.Null);
         Assert.That(repo.DefaultBranch, Is.Not.Empty);
 
-        var stats = await client.GetGitStatsAsync(repositoryId, "master");
-        var commitId = stats.Commit.commitId;
+        Console.WriteLine(repo.DefaultBranch);
+        var stats = await client.GetGitStatsAsync(repositoryId, repo.DefaultBranch);
+        var commit = stats.Commit;
+        Assert.That(commit, Is.Not.Null);
+        var commitId = commit.commitId;
+        Assert.That(commitId, Is.Not.Empty);
         var parentId = "f65b40b840e3531f9edb7d879d53481de987bfe9";
 
         var pipelineId = 1274;
