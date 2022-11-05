@@ -86,12 +86,12 @@
             }
         },
         {
-            "label": "dotnet tool install",
+            "label": "dotnet tool update",
             "command": "dotnet",
             "type": "process",
             "args": [
                 "tool",
-                "install",
+                "update",
                 "pingmint.codegen.json"
             ],
             "problemMatcher": "$msCompile",
