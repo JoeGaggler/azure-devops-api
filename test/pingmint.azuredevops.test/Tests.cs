@@ -118,7 +118,8 @@ public class Tests
         {
             // var env = await client.GetReleaseEnvironmentAsync(s.Id.Value, 282);
             var env = s.environments.First(i => i.definitionEnvironmentId == 282);
-            Console.WriteLine($"{s.name} - {s.status} - {env.status}");
+            var art = s.artifacts.First(i => i.alias == "sql");
+            Console.WriteLine($"{s.name} - {s.status} - {env.status} - {art.alias} - {art.definitionReference.sourceVersion.id}");
         }
     }
 

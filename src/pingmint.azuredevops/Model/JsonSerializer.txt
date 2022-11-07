@@ -150,8 +150,16 @@ Release : ILinks
 - triggeringArtifactAlias : String
 - projectReference : ProjectReference
 - properties : ReleasePropertiesCollection
+- artifacts : [ReleaseArtifact]
 - environments : [ReleaseEnvironment]
 
+ReleaseArtifact
+- alias : String
+- definitionReference : ReleaseArtifactDefinitionReference
+// TODO: more properties
+
+ReleaseArtifactDefinitionReference
+- sourceVersion : IdReference
 
 ReleaseDefinitionsResult
 - count => Count : int
@@ -187,6 +195,11 @@ ReleasePropertiesCollection
 //
 // Common Types
 //
+
+// TODO: match with actual type
+IdReference
+- id : String
+- name : String
 
 IdentityRef : ILinks
 - displayName : String

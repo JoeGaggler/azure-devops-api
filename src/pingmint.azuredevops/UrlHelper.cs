@@ -26,7 +26,7 @@ public partial class UrlHelper
     public Uri Pipelines(int? top = null, String apiVersion = DefaultApiVersion) => new($"{DevAzureUrlString}/_apis/pipelines?api-version={apiVersion}{Parameters.Top(top)}");
 
     public Uri Releases(int? definitionId = null, String apiVersion = DefaultApiVersion) =>
-        new($"{ReleaseMgmtUrlString}/_apis/release/releases?$expand=environments&{apiVersion}{Parameters.DefinitionId(definitionId)}");
+        new($"{ReleaseMgmtUrlString}/_apis/release/releases?$expand=environments,artifacts&{apiVersion}{Parameters.DefinitionId(definitionId)}");
 
     public Uri ReleaseEnvironment(int releaseId, int environmentId, String apiVersion = DefaultApiVersion) => new Uri($"{ReleaseMgmtUrlString}/_apis/Release/releases/{releaseId}/environments/{environmentId}?{apiVersion}");
 
