@@ -101,7 +101,35 @@ public class Tests
 
 
         var diffs = await client.GetGitDiffsAsync(repositoryId, baseVersion: commitId, baseVersionType: "commit", targetVersion: targetId, targetVersionType: "commit");
-        var json = AzdoClient.Serialize(diffs, Model.JsonSerializer.GitDiffs);
-        Console.WriteLine(json);
+        // var json = AzdoClient.Serialize(diffs, Model.JsonSerializer.GitDiffs);
+        // Console.WriteLine(json);
+    }
+
+    [Test]
+    public async Task Test_get_releases()
+    {
+        var all = await client.GetReleasesAsync(43);
+        var json = AzdoClient.Serialize(all, Model.JsonSerializer.ReleasesResult);
+
+        // Console.WriteLine(json);
+        // File.WriteAllText("../../../all.json", json);
+        var sql = all.Value;
+        foreach (var s in sql)
+        {
+            // var env = await client.GetReleaseEnvironmentAsync(s.Id.Value, 282);
+            var env = s.environments.First(i => i.definitionEnvironmentId == 282);
+            Console.WriteLine($"{s.name} - {s.status} - {env.status}");
+        }
+    }
+
+    [Test]
+    public async Task Test_get_release_definitions()
+    {
+        var all = await client.GetReleaseDefinitionsAsync();
+
+        var sql = all.Value.First(i => i.Id == 43);
+        var sql2 = await client.GetReleaseDefinitionAsync(new Uri(sql.url));
+        var json = await client.GetStringAsync(new Uri(sql.url));
+        File.WriteAllText("../../../all.json", json);
     }
 }
