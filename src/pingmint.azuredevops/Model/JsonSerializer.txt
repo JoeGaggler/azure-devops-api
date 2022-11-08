@@ -119,8 +119,99 @@ Respository
 - type => Type : String
 
 //
+// Classic Releases
+//
+
+ReleasesResult
+- count => Count : int
+- value => Value : [Release]
+
+Release : ILinks
+- id => Id : int
+- name : String
+- status : String
+- createdOn : String
+- createdBy : IdentityRef
+- modifiedOn : String
+- modifiedBy : IdentityRef
+- createdFor : IdentityRef
+- variables : Variables
+- variableGroups : [VariableGroups]
+- releaseDefinition : ReleaseDefinition
+- releaseDefinitionRevision : int
+- description : String
+- reason : String
+- releaseNameFormat : String
+- keepForever : bool
+- definitionSnapshotRevision : int
+- logsContainerUrl : String
+- url : String
+- tags : [String]
+- triggeringArtifactAlias : String
+- projectReference : ProjectReference
+- properties : ReleasePropertiesCollection
+- artifacts : [ReleaseArtifact]
+- environments : [ReleaseEnvironment]
+
+ReleaseArtifact
+- alias : String
+- definitionReference : ReleaseArtifactDefinitionReference
+// TODO: more properties
+
+ReleaseArtifactDefinitionReference
+- sourceVersion : IdReference
+
+ReleaseDefinitionsResult
+- count => Count : int
+- value => Value : [ReleaseDefinition]
+
+ReleaseDefinition : ILinks
+- source : String
+- revision => Revision : int
+- description : String
+- createdBy : IdentityRef
+- createdOn : String
+- modifiedBy : IdentityRef
+- modifiedOn : String
+- isDeleted : bool
+- variableGroups : [VariableGroups]
+- releaseNameFormat : String
+- properties : ReleasePropertiesCollection
+- id => Id : int
+- name : String
+- path : String
+- projectReference : ProjectReference
+- url : String
+
+ReleaseEnvironment
+- id : int
+- name : String
+- status : String
+- definitionEnvironmentId : int
+// TODO: other properties: https://learn.microsoft.com/en-us/rest/api/azure/devops/release/releases/get-release-environment?view=azure-devops-rest-7.1
+
+ReleasePropertiesCollection
+
+//
 // Common Types
 //
+
+// TODO: match with actual type
+IdReference
+- id : String
+- name : String
+
+IdentityRef : ILinks
+- displayName : String
+- url : String
+- id : String
+- uniqueName : String
+- imageUrl : String
+- descriptor : String
+
+ProjectReference
+- id : String
+- name : String
 
 ReferenceLinks
 - self => Self : ReferenceLink
@@ -129,6 +220,10 @@ ReferenceLinks
 
 ReferenceLink
 - href => Href : String
+
+Variables
+
+VariableGroups
 
 //
 // Interfaces
