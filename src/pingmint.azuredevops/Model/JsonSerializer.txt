@@ -93,6 +93,7 @@ Run : ILinks // https://learn.microsoft.com/en-us/rest/api/azure/devops/pipeline
 - result => Result : String
 - templateParameters => TemplateParameters : TemplateParameters
 - url => Url : String
+- variables => Variables : Variables
 
 RunResources
 // TODO: containers
@@ -222,6 +223,10 @@ ReferenceLink
 - href => Href : String
 
 Variables
+- * => All : {VariableValue}
+
+VariableValue
+- value => Value : String
 
 VariableGroups
 
