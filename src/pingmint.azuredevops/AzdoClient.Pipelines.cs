@@ -10,6 +10,21 @@ partial class AzdoClient
 
     public async Task<Model.GitRepository> GetGitRepositoryAsync(String repositoryId) => await GetterAsync(u => u.GitRepository(repositoryId), Model.JsonSerializer.GitRepository);
 
+    public async Task<Model.Run> GetRunFromPipelineResourceAsync(Model.Run run, String resourceId, Int32 pipelineIdForResource)
+    {
+        if (run.Resources?.Pipelines?.All?[resourceId] is not { } otherResource)
+        {
+            throw new InvalidOperationException($"Run does not have pipeline resource: {resourceId}");
+        }
+
+        if (otherResource.Pipeline is not {} otherPipeline || otherPipeline.Id is not {} runId)
+        {
+            throw new InvalidOperationException($"Run does not have pipeline id for resource: {resourceId}");
+        }
+
+        return await GetRunAsync(pipelineIdForResource, runId);
+    }
+
     /// <summary>
     ///
     /// </summary>
