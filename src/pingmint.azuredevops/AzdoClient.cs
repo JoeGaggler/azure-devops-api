@@ -91,9 +91,9 @@ public partial class AzdoClient
         return await httpClient.SendAsync(message);
     }
 
-    private async Task<HttpResponseMessage> PostJsonAsync(Uri url, String json)
+    public async Task<HttpResponseMessage> SendJsonAsync(Uri url, String json, HttpMethod method)
     {
-        var message = new HttpRequestMessage(HttpMethod.Post, url);
+        var message = new HttpRequestMessage(method, url);
         AddAcceptHeader(message);
         AddAuthenticationHeader(message);
 

@@ -120,6 +120,25 @@ Respository
 - type => Type : String
 
 //
+// Pull Requests
+//
+
+PullRequestThreadsResult
+- value => Value : [PullRequestThread]
+
+PullRequestThread
+- id => Id : int
+- isDeleted => IsDeleted : bool
+- comments => Comments : [PullRequestThreadComment]
+- status => Status : String
+
+PullRequestThreadComment
+- id => Id : int
+- content => Content : String
+- commentType => CommentType : String
+- parentCommentId => ParentCommentId : int
+
+//
 // Classic Releases
 //
 
