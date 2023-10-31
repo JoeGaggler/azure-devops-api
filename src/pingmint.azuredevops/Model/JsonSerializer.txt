@@ -14,6 +14,10 @@ GitCommit
 - parents => Parents : [String]
 - url : String
 
+GitCommitRef
+- commitId : String
+- url : String
+
 GitDiffsChangeCounts
 - Add : int
 - Edit : int
@@ -41,10 +45,64 @@ GitDiffs
 - aheadCount : int
 - behindCount : int
 
+GitMergeRequest
+- comment => Comment : String
+- parents => Parents : [String]
+
+GitMergeResult
+- status => Status : String
+- mergeOperationId => MergeOperationId : int
+- detailedStatus => DetailedStatus : GitMergeOperationStatusDetail
+
+GitMergeOperationStatusDetail
+- mergeCommitId => MergeCommitId : String
+- failureMessage => FailureMessage : String
+
 GitPerson
 - name : String
 - email : String
 - date : String
+
+GitPullRequest
+- pullRequestId => PullRequestId : int
+- title => Title : String
+- description => Description : String
+- status => Status : String
+- sourceRefName => SourceRefName : String
+- targetRefName => TargetRefName : String
+- lastMergeSourceCommit => LastMergeSourceCommit : GitCommitRef
+- lastMergeTargetCommit => LastMergeTargetCommit : GitCommitRef
+- mergeId => MergeId : String
+- mergeStatus => MergeStatus : String
+- url => Url : String
+- isDraft => IsDraft : bool
+
+GitPullRequestResponse
+- value => Value : [GitPullRequest]
+
+GitRef
+- name => Name : String
+- objectId => ObjectId : String
+
+GitRefResult
+- value => Value : [GitRef]
+
+GitRefUpdate
+- name => Name : String
+- oldObjectId => OldObjectId : String
+- newObjectId => NewObjectId : String
+
+GitRefUpdateRequest
+- value => Value : [GitRefUpdate]
+
+GitRefUpdateResponse
+- value => Value : [GitRefUpdateResult]
+
+GitRefUpdateResult
+- name => Name : String
+- oldObjectId => OldObjectId : String
+- newObjectId => NewObjectId : String
+- success => WasSuccessful : bool
 
 GitRepository : ILinks
 - defaultBranch => DefaultBranch : String

@@ -91,7 +91,7 @@ public partial class AzdoClient
         return await httpClient.SendAsync(message);
     }
 
-    private async Task<HttpResponseMessage> PostJsonAsync(Uri url, String json)
+    public async Task<String> PostJsonStringAsync(Uri url, String json)
     {
         var message = new HttpRequestMessage(HttpMethod.Post, url);
         AddAcceptHeader(message);
@@ -102,7 +102,8 @@ public partial class AzdoClient
         await content.LoadIntoBufferAsync(); // HACK: VSTS does not accept chunked transfer-encoding
         message.Content = content;
 
-        return await httpClient.SendAsync(message);
+        var response = await httpClient.SendAsync(message);
+        return await response.Content.ReadAsStringAsync();
     }
 
     public async Task<String> GetStringAsync(Uri uri)
