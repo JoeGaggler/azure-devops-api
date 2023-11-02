@@ -81,6 +81,31 @@ GitPullRequest
 GitPullRequestResponse
 - value => Value : [GitPullRequest]
 
+CreateGitPullRequestStatusesRequest
+- iteration => Iteration : int
+- state => State : String
+- description => Description : String
+- context => Context : GitStatusContext
+- targetUrl => TargetUrl : String
+
+GitPullRequestStatus
+- id => Id : int
+- state => State : String
+- description => Description : String
+- context => Context : GitStatusContext
+- creationDate => CreationDate : String
+- updatedDate => UpdatedDate : String
+- createdBy => CreatedBy : IdentityRef
+- targetUrl => TargetUrl : String
+
+GitStatusContext
+- genre => Genre : String
+- name => Name : String
+
+GitPullRequestStatusesResponse
+- count => Count : int
+- value => Value : [GitPullRequestStatus]
+
 GitRef
 - name => Name : String
 - objectId => ObjectId : String

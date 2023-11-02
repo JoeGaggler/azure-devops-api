@@ -26,4 +26,32 @@ partial class AzdoClient
 
     public async Task<Model.GitPullRequestResponse> GetPullRequestsByRepositoryAsync(String repositoryNameOrId) =>
         await GetterAsync(u => u.GetPullRequests(repositoryNameOrId), Model.JsonSerializer.GitPullRequestResponse);
+
+    public async Task<Model.GitPullRequestStatusesResponse> GetPullRequestStatusesAsync(String repositoryNameOrId, Int32 pullRequestId) =>
+        await GetterAsync(u => u.GetPullRequestStatuses(repositoryNameOrId, pullRequestId), Model.JsonSerializer.GitPullRequestStatusesResponse);
+
+    public async Task<Model.GitPullRequestStatus> PostPullRequestStatusesAsync(String repositoryNameOrId, Int32 pullRequestId, Model.CreateGitPullRequestStatusesRequest request)
+    {
+        var json = Serialize(request, Model.JsonSerializer.CreateGitPullRequestStatusesRequest);
+        var url = urlHelper.GetPullRequestStatuses(repositoryNameOrId, pullRequestId);
+        var json2 = await PostJsonStringAsync(url, json);
+        return Deserialize(json2, Model.JsonSerializer.GitPullRequestStatus);
+    }
+
+    public async Task<Model.GitPullRequestStatus> RemovePullRequestStatusesAsync(String repositoryNameOrId, Int32 pullRequestId, Int32 statusId)
+    {
+        var json = """
+            [
+                {
+                    "op": "remove",
+                    "path": $"/{statusId}",
+                    "from": null,
+                    "value": null
+                }
+            ]
+            """;
+        var url = urlHelper.GetPullRequestStatuses(repositoryNameOrId, pullRequestId);
+        var json2 = await PatchJsonStringAsync(url, json);
+        return Deserialize(json2, Model.JsonSerializer.GitPullRequestStatus);
+    }
 }

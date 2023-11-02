@@ -91,7 +91,11 @@ public partial class AzdoClient
         return await httpClient.SendAsync(message);
     }
 
-    public async Task<String> PostJsonStringAsync(Uri url, String json)
+    public async Task<String> PostJsonStringAsync(Uri url, String json) => await SendJsonStringAsync(url, json, HttpMethod.Post);
+    
+    public async Task<String> PatchJsonStringAsync(Uri url, String json) => await SendJsonStringAsync(url, json, HttpMethod.Patch);
+
+    public async Task<String> SendJsonStringAsync(Uri url, String json, HttpMethod httpMethod)
     {
         var message = new HttpRequestMessage(HttpMethod.Post, url);
         AddAcceptHeader(message);

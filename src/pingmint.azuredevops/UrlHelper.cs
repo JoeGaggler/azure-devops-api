@@ -47,6 +47,9 @@ public partial class UrlHelper
 
     public Uri GetPullRequests(String repositoryId, String apiVersion = Version72preview1) =>
         new($"{DevAzureUrlString}/_apis/git/repositories/{repositoryId}/pullrequests?api-version={apiVersion}");
+
+    public Uri GetPullRequestStatuses(String repositoryId, Int32 pullRequestId, String apiVersion = Version72preview1) =>
+        new($"{DevAzureUrlString}/_apis/git/repositories/{repositoryId}/pullRequests/{pullRequestId}/statuses?api-version={apiVersion}");
 }
 
 partial class UrlHelper
