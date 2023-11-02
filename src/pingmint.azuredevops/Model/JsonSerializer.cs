@@ -1097,6 +1097,11 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			writer.WritePropertyName("targetRefName");
 			writer.WriteStringValue(localTargetRefName);
 		}
+		if (value.LastMergeCommit is { } localLastMergeCommit)
+		{
+			writer.WritePropertyName("lastMergeCommit");
+			GitCommitRef.Serialize(ref writer, localLastMergeCommit);
+		}
 		if (value.LastMergeSourceCommit is { } localLastMergeSourceCommit)
 		{
 			writer.WritePropertyName("lastMergeSourceCommit");
@@ -1196,6 +1201,16 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 							JsonTokenType.Null => null,
 							JsonTokenType.String => reader.GetString(),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for TargetRefName: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("lastMergeCommit"))
+					{
+						obj.LastMergeCommit = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.StartObject => GitCommitRef.Deserialize(ref reader),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for LastMergeCommit: {unexpected} ")
 						};
 						break;
 					}
@@ -5212,6 +5227,7 @@ public sealed partial class GitPullRequest
 	public String? Status { get; set; }
 	public String? SourceRefName { get; set; }
 	public String? TargetRefName { get; set; }
+	public GitCommitRef? LastMergeCommit { get; set; }
 	public GitCommitRef? LastMergeSourceCommit { get; set; }
 	public GitCommitRef? LastMergeTargetCommit { get; set; }
 	public String? MergeId { get; set; }

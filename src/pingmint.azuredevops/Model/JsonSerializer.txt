@@ -70,6 +70,7 @@ GitPullRequest
 - status => Status : String
 - sourceRefName => SourceRefName : String
 - targetRefName => TargetRefName : String
+- lastMergeCommit => LastMergeCommit : GitCommitRef
 - lastMergeSourceCommit => LastMergeSourceCommit : GitCommitRef
 - lastMergeTargetCommit => LastMergeTargetCommit : GitCommitRef
 - mergeId => MergeId : String
