@@ -30,7 +30,7 @@ jobs:
     - name: Version (pre-release)
       run: |
         OLD=$(yq ".Project.PropertyGroup[0].Version" -p xml -o xml src/pingmint.azuredevops/pingmint.azuredevops.csproj)
-        NEW="$OLD.${COUNTER}-alpha" yq ".Project.PropertyGroup[0].Version = env(NEW)" -p xml -o xml -i src/pingmint.azuredevops/pingmint.azuredevops.csproj
+        NEW="$OLD.${COUNTER}" yq ".Project.PropertyGroup[0].Version = env(NEW)" -p xml -o xml -i src/pingmint.azuredevops/pingmint.azuredevops.csproj
         cat src/pingmint.azuredevops/pingmint.azuredevops.csproj
       env:
         COUNTER: ${{ github.run_number }}
