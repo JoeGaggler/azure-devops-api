@@ -93,16 +93,16 @@ public partial class AzdoClient
 
     public async Task<String> PostJsonStringAsync(Uri url, String json) => await SendJsonStringAsync(url, json, HttpMethod.Post);
 
-    public async Task<String> PatchJsonStringAsync(Uri url, String json) => await SendJsonStringAsync(url, json, HttpMethod.Patch);
+    public async Task<String> PatchJsonStringAsync(Uri url, String payload) => await SendJsonStringAsync(url, payload, HttpMethod.Patch, "application/json-patch+json");
 
-    public async Task<String> SendJsonStringAsync(Uri url, String json, HttpMethod httpMethod)
+    public async Task<String> SendJsonStringAsync(Uri url, String json, HttpMethod httpMethod, String contentType = "application/json")
     {
         var message = new HttpRequestMessage(httpMethod, url);
         AddAcceptHeader(message);
         AddAuthenticationHeader(message);
 
         var content = new StringContent(json);
-        content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+        content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(contentType);
         await content.LoadIntoBufferAsync(); // HACK: VSTS does not accept chunked transfer-encoding
         message.Content = content;
 
