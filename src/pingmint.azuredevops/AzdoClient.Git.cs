@@ -40,11 +40,11 @@ partial class AzdoClient
 
     public async Task<Model.GitPullRequestStatus> RemovePullRequestStatusesAsync(String repositoryNameOrId, Int32 pullRequestId, Int32 statusId)
     {
-        var json = """
+        var json = $$"""
             [
                 {
                     "op": "remove",
-                    "path": $"/{statusId}",
+                    "path": "/{{statusId}}",
                     "from": null,
                     "value": null
                 }
