@@ -52,7 +52,7 @@ public partial class AzdoClient
         message.Headers.Authorization = header;
     }
 
-    public static T Deserialize<T>(String json, Model.IJsonSerializer<T> serializer)
+    private static T Deserialize<T>(String json, DeserializerDelegate<T> del)
     {
         var bytes = Encoding.UTF8.GetBytes(json);
         var options = new JsonReaderOptions()
@@ -61,10 +61,11 @@ public partial class AzdoClient
         };
         var reader = new Utf8JsonReader(bytes, options);
         if (!reader.Read()) { throw new InvalidOperationException("Unable to start parsing JSON"); }
-        return serializer.Deserialize(ref reader);
+        del(ref reader, out T model);
+        return model;
     }
 
-    public static String Serialize<T>(T model, Model.IJsonSerializer<T> serializer)
+    private static String Serialize<T>(T model)
     {
         var options = new JsonWriterOptions()
         {
@@ -75,7 +76,7 @@ public partial class AzdoClient
         using (var stream = new MemoryStream())
         {
             var writer = new Utf8JsonWriter(stream, options);
-            serializer.Serialize(ref writer, model);
+            JsonSerializer.Serialize(writer, model);
             writer.Dispose();
             stream.Flush();
             return Encoding.UTF8.GetString(stream.ToArray());
@@ -116,10 +117,22 @@ public partial class AzdoClient
         return await response.Content.ReadAsStringAsync();
     }
 
-    private async Task<TResult> GetterAsync<TResult>(Func<UrlHelper, Uri> urlFunc, Model.IJsonSerializer<TResult> serializer)
+    private async Task<TResult> GetterAsync<TResult>(Func<UrlHelper, Uri> urlFunc, DeserializerDelegate<TResult> del)
     {
         var url = urlFunc(urlHelper);
         var json = await GetStringAsync(url);
-        return Deserialize(json, serializer);
+
+        return GetModelFromJson(json, del);
+    }
+
+    private delegate void DeserializerDelegate<T>(ref System.Text.Json.Utf8JsonReader r, out T value);
+
+    private static T GetModelFromJson<T>(String jsonBody, DeserializerDelegate<T> del)
+    {
+        var reader = new System.Text.Json.Utf8JsonReader(System.Text.Encoding.UTF8.GetBytes(jsonBody));
+        if (!reader.Read()) { throw new InvalidOperationException("Reader read failed."); }
+        del(ref reader, out T model);
+        if (model is null) { throw new InvalidOperationException("Model parse failed."); }
+        return model;
     }
 }
