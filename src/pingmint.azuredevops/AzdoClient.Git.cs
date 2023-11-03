@@ -38,7 +38,7 @@ partial class AzdoClient
         return Deserialize(json2, Model.JsonSerializer.GitPullRequestStatus);
     }
 
-    public async Task<Model.GitPullRequestStatus> RemovePullRequestStatusesAsync(String repositoryNameOrId, Int32 pullRequestId, Int32 statusId)
+    public async Task RemovePullRequestStatusesAsync(String repositoryNameOrId, Int32 pullRequestId, Int32 statusId)
     {
         var json = $$"""
             [
@@ -52,6 +52,5 @@ partial class AzdoClient
             """;
         var url = urlHelper.GetPullRequestStatuses(repositoryNameOrId, pullRequestId);
         var json2 = await PatchJsonStringAsync(url, json);
-        return Deserialize(json2, Model.JsonSerializer.GitPullRequestStatus);
     }
 }
