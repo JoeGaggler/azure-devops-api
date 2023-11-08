@@ -77,6 +77,18 @@ GitPullRequest
 - mergeStatus => MergeStatus : String
 - url => Url : String
 - isDraft => IsDraft : bool
+- reviewers => Reviewers : [IdentityRefWithVote]
+
+IdentityRefWithVote
+- id => Id : String
+- displayName => DisplayName : String
+- uniqueName => UniqueName : String
+- url => Url : String
+- imageUrl => ImageUrl : String
+- isContainer => IsContainer : bool
+- isRequired => IsRequired : bool
+- vote => Vote : int
+- reviewerUrl => ReviewerUrl : String
 
 GitPullRequestResponse
 - value => Value : [GitPullRequest]
