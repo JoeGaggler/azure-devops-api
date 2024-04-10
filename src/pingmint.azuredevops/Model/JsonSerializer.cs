@@ -5,63 +5,21 @@ using System.Text.Json;
 
 namespace Pingmint.AzureDevOps.Model;
 
-public partial interface IJsonSerializer<T>
+public static partial class JsonSerializer
 {
-	T Deserialize(ref Utf8JsonReader reader);
-	void Serialize(ref Utf8JsonWriter writer, T value);
-}
-public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOps.Model.GitBranchStats>, IJsonSerializer<Pingmint.AzureDevOps.Model.GitCommit>, IJsonSerializer<Pingmint.AzureDevOps.Model.GitDiffsChangeCounts>, IJsonSerializer<Pingmint.AzureDevOps.Model.GitDiffChange>, IJsonSerializer<Pingmint.AzureDevOps.Model.GitDiffChangeItem>, IJsonSerializer<Pingmint.AzureDevOps.Model.GitDiffs>, IJsonSerializer<Pingmint.AzureDevOps.Model.GitPerson>, IJsonSerializer<Pingmint.AzureDevOps.Model.GitRepository>, IJsonSerializer<Pingmint.AzureDevOps.Model.PipelinesResult>, IJsonSerializer<Pingmint.AzureDevOps.Model.Pipeline>, IJsonSerializer<Pingmint.AzureDevOps.Model.Project>, IJsonSerializer<Pingmint.AzureDevOps.Model.RunsResult>, IJsonSerializer<Pingmint.AzureDevOps.Model.Run>, IJsonSerializer<Pingmint.AzureDevOps.Model.RunResources>, IJsonSerializer<Pingmint.AzureDevOps.Model.PipelineRunResources>, IJsonSerializer<Pingmint.AzureDevOps.Model.PipelineRunResource>, IJsonSerializer<Pingmint.AzureDevOps.Model.RepositoryRunResources>, IJsonSerializer<Pingmint.AzureDevOps.Model.RepositoryRunResource>, IJsonSerializer<Pingmint.AzureDevOps.Model.Respository>, IJsonSerializer<Pingmint.AzureDevOps.Model.PullRequestThreadsResult>, IJsonSerializer<Pingmint.AzureDevOps.Model.PullRequestThread>, IJsonSerializer<Pingmint.AzureDevOps.Model.PullRequestThreadComment>, IJsonSerializer<Pingmint.AzureDevOps.Model.ReleasesResult>, IJsonSerializer<Pingmint.AzureDevOps.Model.Release>, IJsonSerializer<Pingmint.AzureDevOps.Model.ReleaseArtifact>, IJsonSerializer<Pingmint.AzureDevOps.Model.ReleaseArtifactDefinitionReference>, IJsonSerializer<Pingmint.AzureDevOps.Model.ReleaseDefinitionsResult>, IJsonSerializer<Pingmint.AzureDevOps.Model.ReleaseDefinition>, IJsonSerializer<Pingmint.AzureDevOps.Model.ReleaseEnvironment>, IJsonSerializer<Pingmint.AzureDevOps.Model.ReleasePropertiesCollection>, IJsonSerializer<Pingmint.AzureDevOps.Model.IdReference>, IJsonSerializer<Pingmint.AzureDevOps.Model.IdentityRef>, IJsonSerializer<Pingmint.AzureDevOps.Model.ProjectReference>, IJsonSerializer<Pingmint.AzureDevOps.Model.ReferenceLinks>, IJsonSerializer<Pingmint.AzureDevOps.Model.ReferenceLink>, IJsonSerializer<Pingmint.AzureDevOps.Model.Variables>, IJsonSerializer<Pingmint.AzureDevOps.Model.VariableValue>, IJsonSerializer<Pingmint.AzureDevOps.Model.VariableGroups>, IJsonSerializer<Pingmint.AzureDevOps.Model.TemplateParameters>
-{
-	public static readonly IJsonSerializer<GitBranchStats> GitBranchStats = new JsonSerializer();
-	public static readonly IJsonSerializer<GitCommit> GitCommit = new JsonSerializer();
-	public static readonly IJsonSerializer<GitDiffsChangeCounts> GitDiffsChangeCounts = new JsonSerializer();
-	public static readonly IJsonSerializer<GitDiffChange> GitDiffChange = new JsonSerializer();
-	public static readonly IJsonSerializer<GitDiffChangeItem> GitDiffChangeItem = new JsonSerializer();
-	public static readonly IJsonSerializer<GitDiffs> GitDiffs = new JsonSerializer();
-	public static readonly IJsonSerializer<GitPerson> GitPerson = new JsonSerializer();
-	public static readonly IJsonSerializer<GitRepository> GitRepository = new JsonSerializer();
-	public static readonly IJsonSerializer<PipelinesResult> PipelinesResult = new JsonSerializer();
-	public static readonly IJsonSerializer<Pipeline> Pipeline = new JsonSerializer();
-	public static readonly IJsonSerializer<Project> Project = new JsonSerializer();
-	public static readonly IJsonSerializer<RunsResult> RunsResult = new JsonSerializer();
-	public static readonly IJsonSerializer<Run> Run = new JsonSerializer();
-	public static readonly IJsonSerializer<RunResources> RunResources = new JsonSerializer();
-	public static readonly IJsonSerializer<PipelineRunResources> PipelineRunResources = new JsonSerializer();
-	public static readonly IJsonSerializer<PipelineRunResource> PipelineRunResource = new JsonSerializer();
-	public static readonly IJsonSerializer<RepositoryRunResources> RepositoryRunResources = new JsonSerializer();
-	public static readonly IJsonSerializer<RepositoryRunResource> RepositoryRunResource = new JsonSerializer();
-	public static readonly IJsonSerializer<Respository> Respository = new JsonSerializer();
-	public static readonly IJsonSerializer<PullRequestThreadsResult> PullRequestThreadsResult = new JsonSerializer();
-	public static readonly IJsonSerializer<PullRequestThread> PullRequestThread = new JsonSerializer();
-	public static readonly IJsonSerializer<PullRequestThreadComment> PullRequestThreadComment = new JsonSerializer();
-	public static readonly IJsonSerializer<ReleasesResult> ReleasesResult = new JsonSerializer();
-	public static readonly IJsonSerializer<Release> Release = new JsonSerializer();
-	public static readonly IJsonSerializer<ReleaseArtifact> ReleaseArtifact = new JsonSerializer();
-	public static readonly IJsonSerializer<ReleaseArtifactDefinitionReference> ReleaseArtifactDefinitionReference = new JsonSerializer();
-	public static readonly IJsonSerializer<ReleaseDefinitionsResult> ReleaseDefinitionsResult = new JsonSerializer();
-	public static readonly IJsonSerializer<ReleaseDefinition> ReleaseDefinition = new JsonSerializer();
-	public static readonly IJsonSerializer<ReleaseEnvironment> ReleaseEnvironment = new JsonSerializer();
-	public static readonly IJsonSerializer<ReleasePropertiesCollection> ReleasePropertiesCollection = new JsonSerializer();
-	public static readonly IJsonSerializer<IdReference> IdReference = new JsonSerializer();
-	public static readonly IJsonSerializer<IdentityRef> IdentityRef = new JsonSerializer();
-	public static readonly IJsonSerializer<ProjectReference> ProjectReference = new JsonSerializer();
-	public static readonly IJsonSerializer<ReferenceLinks> ReferenceLinks = new JsonSerializer();
-	public static readonly IJsonSerializer<ReferenceLink> ReferenceLink = new JsonSerializer();
-	public static readonly IJsonSerializer<Variables> Variables = new JsonSerializer();
-	public static readonly IJsonSerializer<VariableValue> VariableValue = new JsonSerializer();
-	public static readonly IJsonSerializer<VariableGroups> VariableGroups = new JsonSerializer();
-	public static readonly IJsonSerializer<TemplateParameters> TemplateParameters = new JsonSerializer();
-
 	private static JsonTokenType Next(ref Utf8JsonReader reader) => reader.Read() ? reader.TokenType : throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.GitBranchStats>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.GitBranchStats value)
+	private delegate void DeserializerDelegate<T>(ref Utf8JsonReader r, out T value);
+	private static T GetOutParam<T>(ref Utf8JsonReader reader, DeserializerDelegate<T> func) { func(ref reader, out T value); return value; }
+
+	public static void Serialize(Utf8JsonWriter writer, GitBranchStats value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
 		if (value.Commit is { } localCommit)
 		{
 			writer.WritePropertyName("commit");
-			GitCommit.Serialize(ref writer, localCommit);
+			Serialize(writer, localCommit);
 		}
 		if (value.Name is { } localName)
 		{
@@ -86,9 +44,9 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.GitBranchStats IJsonSerializer<Pingmint.AzureDevOps.Model.GitBranchStats>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out GitBranchStats obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.GitBranchStats();
+		obj = new GitBranchStats();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -100,7 +58,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.Commit = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GitCommit.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<GitCommit>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for Commit: {unexpected} ")
 						};
 						break;
@@ -152,7 +110,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -162,7 +120,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.GitCommit>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.GitCommit value)
+	public static void Serialize(Utf8JsonWriter writer, GitCommit value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -179,12 +137,12 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		if (value.author is { } localauthor)
 		{
 			writer.WritePropertyName("author");
-			GitPerson.Serialize(ref writer, localauthor);
+			Serialize(writer, localauthor);
 		}
 		if (value.committer is { } localcommitter)
 		{
 			writer.WritePropertyName("committer");
-			GitPerson.Serialize(ref writer, localcommitter);
+			Serialize(writer, localcommitter);
 		}
 		if (value.comment is { } localcomment)
 		{
@@ -194,7 +152,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		if (value.Parents is { } localParents)
 		{
 			writer.WritePropertyName("parents");
-			InternalSerializer0.Serialize(ref writer, localParents);
+			Serialize0(writer, localParents);
 		}
 		if (value.url is { } localurl)
 		{
@@ -204,9 +162,9 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.GitCommit IJsonSerializer<Pingmint.AzureDevOps.Model.GitCommit>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out GitCommit obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.GitCommit();
+		obj = new GitCommit();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -238,7 +196,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.author = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GitPerson.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<GitPerson>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for author: {unexpected} ")
 						};
 						break;
@@ -248,7 +206,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.committer = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GitPerson.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<GitPerson>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for committer: {unexpected} ")
 						};
 						break;
@@ -268,7 +226,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.Parents = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => InternalSerializer0.Deserialize(ref reader, obj.Parents ?? new()),
+							JsonTokenType.StartArray => Deserialize0(ref reader, obj.Parents ?? new()),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for Parents: {unexpected} ")
 						};
 						break;
@@ -289,7 +247,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -299,7 +257,69 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.GitDiffsChangeCounts>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.GitDiffsChangeCounts value)
+	public static void Serialize(Utf8JsonWriter writer, GitCommitRef value)
+	{
+		if (value is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartObject();
+		if (value.commitId is { } localcommitId)
+		{
+			writer.WritePropertyName("commitId");
+			writer.WriteStringValue(localcommitId);
+		}
+		if (value.url is { } localurl)
+		{
+			writer.WritePropertyName("url");
+			writer.WriteStringValue(localurl);
+		}
+		writer.WriteEndObject();
+	}
+
+	public static void Deserialize(ref Utf8JsonReader reader, out GitCommitRef obj)
+	{
+		obj = new GitCommitRef();
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.PropertyName:
+				{
+					if (reader.ValueTextEquals("commitId"))
+					{
+						obj.commitId = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for commitId: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("url"))
+					{
+						obj.url = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for url: {unexpected} ")
+						};
+						break;
+					}
+
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.EndObject:
+				{
+					return;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
+	public static void Serialize(Utf8JsonWriter writer, GitDiffsChangeCounts value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -316,9 +336,9 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.GitDiffsChangeCounts IJsonSerializer<Pingmint.AzureDevOps.Model.GitDiffsChangeCounts>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out GitDiffsChangeCounts obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.GitDiffsChangeCounts();
+		obj = new GitDiffsChangeCounts();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -351,7 +371,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -361,14 +381,14 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.GitDiffChange>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.GitDiffChange value)
+	public static void Serialize(Utf8JsonWriter writer, GitDiffChange value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
 		if (value.item is { } localitem)
 		{
 			writer.WritePropertyName("item");
-			GitDiffChangeItem.Serialize(ref writer, localitem);
+			Serialize(writer, localitem);
 		}
 		if (value.changeType is { } localchangeType)
 		{
@@ -378,9 +398,9 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.GitDiffChange IJsonSerializer<Pingmint.AzureDevOps.Model.GitDiffChange>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out GitDiffChange obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.GitDiffChange();
+		obj = new GitDiffChange();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -392,7 +412,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.item = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GitDiffChangeItem.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<GitDiffChangeItem>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for item: {unexpected} ")
 						};
 						break;
@@ -413,7 +433,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -423,7 +443,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.GitDiffChangeItem>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.GitDiffChangeItem value)
+	public static void Serialize(Utf8JsonWriter writer, GitDiffChangeItem value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -465,9 +485,9 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.GitDiffChangeItem IJsonSerializer<Pingmint.AzureDevOps.Model.GitDiffChangeItem>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out GitDiffChangeItem obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.GitDiffChangeItem();
+		obj = new GitDiffChangeItem();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -551,7 +571,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -561,7 +581,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.GitDiffs>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.GitDiffs value)
+	public static void Serialize(Utf8JsonWriter writer, GitDiffs value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -573,12 +593,12 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		if (value.changeCounts is { } localchangeCounts)
 		{
 			writer.WritePropertyName("changeCounts");
-			GitDiffsChangeCounts.Serialize(ref writer, localchangeCounts);
+			Serialize(writer, localchangeCounts);
 		}
 		if (value.changes is { } localchanges)
 		{
 			writer.WritePropertyName("changes");
-			InternalSerializer1.Serialize(ref writer, localchanges);
+			Serialize1(writer, localchanges);
 		}
 		if (value.commonCommit is { } localcommonCommit)
 		{
@@ -608,9 +628,9 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.GitDiffs IJsonSerializer<Pingmint.AzureDevOps.Model.GitDiffs>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out GitDiffs obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.GitDiffs();
+		obj = new GitDiffs();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -633,7 +653,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.changeCounts = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GitDiffsChangeCounts.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<GitDiffsChangeCounts>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for changeCounts: {unexpected} ")
 						};
 						break;
@@ -643,7 +663,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.changes = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => InternalSerializer1.Deserialize(ref reader, obj.changes ?? new()),
+							JsonTokenType.StartArray => Deserialize1(ref reader, obj.changes ?? new()),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for changes: {unexpected} ")
 						};
 						break;
@@ -704,7 +724,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -714,7 +734,208 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.GitPerson>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.GitPerson value)
+	public static void Serialize(Utf8JsonWriter writer, GitMergeRequest value)
+	{
+		if (value is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartObject();
+		if (value.Comment is { } localComment)
+		{
+			writer.WritePropertyName("comment");
+			writer.WriteStringValue(localComment);
+		}
+		if (value.Parents is { } localParents)
+		{
+			writer.WritePropertyName("parents");
+			Serialize2(writer, localParents);
+		}
+		writer.WriteEndObject();
+	}
+
+	public static void Deserialize(ref Utf8JsonReader reader, out GitMergeRequest obj)
+	{
+		obj = new GitMergeRequest();
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.PropertyName:
+				{
+					if (reader.ValueTextEquals("comment"))
+					{
+						obj.Comment = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Comment: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("parents"))
+					{
+						obj.Parents = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.StartArray => Deserialize2(ref reader, obj.Parents ?? new()),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Parents: {unexpected} ")
+						};
+						break;
+					}
+
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.EndObject:
+				{
+					return;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
+	public static void Serialize(Utf8JsonWriter writer, GitMergeResult value)
+	{
+		if (value is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartObject();
+		if (value.Status is { } localStatus)
+		{
+			writer.WritePropertyName("status");
+			writer.WriteStringValue(localStatus);
+		}
+		if (value.MergeOperationId is { } localMergeOperationId)
+		{
+			writer.WritePropertyName("mergeOperationId");
+			writer.WriteNumberValue(localMergeOperationId);
+		}
+		if (value.DetailedStatus is { } localDetailedStatus)
+		{
+			writer.WritePropertyName("detailedStatus");
+			Serialize(writer, localDetailedStatus);
+		}
+		writer.WriteEndObject();
+	}
+
+	public static void Deserialize(ref Utf8JsonReader reader, out GitMergeResult obj)
+	{
+		obj = new GitMergeResult();
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.PropertyName:
+				{
+					if (reader.ValueTextEquals("status"))
+					{
+						obj.Status = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Status: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("mergeOperationId"))
+					{
+						obj.MergeOperationId = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.Number => reader.GetInt32(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for MergeOperationId: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("detailedStatus"))
+					{
+						obj.DetailedStatus = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.StartObject => GetOutParam<GitMergeOperationStatusDetail>(ref reader, Deserialize),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for DetailedStatus: {unexpected} ")
+						};
+						break;
+					}
+
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.EndObject:
+				{
+					return;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
+	public static void Serialize(Utf8JsonWriter writer, GitMergeOperationStatusDetail value)
+	{
+		if (value is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartObject();
+		if (value.MergeCommitId is { } localMergeCommitId)
+		{
+			writer.WritePropertyName("mergeCommitId");
+			writer.WriteStringValue(localMergeCommitId);
+		}
+		if (value.FailureMessage is { } localFailureMessage)
+		{
+			writer.WritePropertyName("failureMessage");
+			writer.WriteStringValue(localFailureMessage);
+		}
+		writer.WriteEndObject();
+	}
+
+	public static void Deserialize(ref Utf8JsonReader reader, out GitMergeOperationStatusDetail obj)
+	{
+		obj = new GitMergeOperationStatusDetail();
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.PropertyName:
+				{
+					if (reader.ValueTextEquals("mergeCommitId"))
+					{
+						obj.MergeCommitId = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for MergeCommitId: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("failureMessage"))
+					{
+						obj.FailureMessage = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for FailureMessage: {unexpected} ")
+						};
+						break;
+					}
+
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.EndObject:
+				{
+					return;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
+	public static void Serialize(Utf8JsonWriter writer, GitPerson value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -736,9 +957,9 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.GitPerson IJsonSerializer<Pingmint.AzureDevOps.Model.GitPerson>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out GitPerson obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.GitPerson();
+		obj = new GitPerson();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -781,7 +1002,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -791,14 +1012,1229 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.GitRepository>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.GitRepository value)
+	public static void Serialize(Utf8JsonWriter writer, GitPullRequest value)
+	{
+		if (value is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartObject();
+		if (value.PullRequestId is { } localPullRequestId)
+		{
+			writer.WritePropertyName("pullRequestId");
+			writer.WriteNumberValue(localPullRequestId);
+		}
+		if (value.Title is { } localTitle)
+		{
+			writer.WritePropertyName("title");
+			writer.WriteStringValue(localTitle);
+		}
+		if (value.Description is { } localDescription)
+		{
+			writer.WritePropertyName("description");
+			writer.WriteStringValue(localDescription);
+		}
+		if (value.Status is { } localStatus)
+		{
+			writer.WritePropertyName("status");
+			writer.WriteStringValue(localStatus);
+		}
+		if (value.SourceRefName is { } localSourceRefName)
+		{
+			writer.WritePropertyName("sourceRefName");
+			writer.WriteStringValue(localSourceRefName);
+		}
+		if (value.TargetRefName is { } localTargetRefName)
+		{
+			writer.WritePropertyName("targetRefName");
+			writer.WriteStringValue(localTargetRefName);
+		}
+		if (value.LastMergeCommit is { } localLastMergeCommit)
+		{
+			writer.WritePropertyName("lastMergeCommit");
+			Serialize(writer, localLastMergeCommit);
+		}
+		if (value.LastMergeSourceCommit is { } localLastMergeSourceCommit)
+		{
+			writer.WritePropertyName("lastMergeSourceCommit");
+			Serialize(writer, localLastMergeSourceCommit);
+		}
+		if (value.LastMergeTargetCommit is { } localLastMergeTargetCommit)
+		{
+			writer.WritePropertyName("lastMergeTargetCommit");
+			Serialize(writer, localLastMergeTargetCommit);
+		}
+		if (value.MergeId is { } localMergeId)
+		{
+			writer.WritePropertyName("mergeId");
+			writer.WriteStringValue(localMergeId);
+		}
+		if (value.MergeStatus is { } localMergeStatus)
+		{
+			writer.WritePropertyName("mergeStatus");
+			writer.WriteStringValue(localMergeStatus);
+		}
+		if (value.Url is { } localUrl)
+		{
+			writer.WritePropertyName("url");
+			writer.WriteStringValue(localUrl);
+		}
+		if (value.IsDraft is { } localIsDraft)
+		{
+			writer.WritePropertyName("isDraft");
+			writer.WriteBooleanValue(localIsDraft);
+		}
+		if (value.Reviewers is { } localReviewers)
+		{
+			writer.WritePropertyName("reviewers");
+			Serialize3(writer, localReviewers);
+		}
+		writer.WriteEndObject();
+	}
+
+	public static void Deserialize(ref Utf8JsonReader reader, out GitPullRequest obj)
+	{
+		obj = new GitPullRequest();
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.PropertyName:
+				{
+					if (reader.ValueTextEquals("pullRequestId"))
+					{
+						obj.PullRequestId = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.Number => reader.GetInt32(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for PullRequestId: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("title"))
+					{
+						obj.Title = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Title: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("description"))
+					{
+						obj.Description = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Description: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("status"))
+					{
+						obj.Status = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Status: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("sourceRefName"))
+					{
+						obj.SourceRefName = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for SourceRefName: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("targetRefName"))
+					{
+						obj.TargetRefName = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for TargetRefName: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("lastMergeCommit"))
+					{
+						obj.LastMergeCommit = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.StartObject => GetOutParam<GitCommitRef>(ref reader, Deserialize),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for LastMergeCommit: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("lastMergeSourceCommit"))
+					{
+						obj.LastMergeSourceCommit = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.StartObject => GetOutParam<GitCommitRef>(ref reader, Deserialize),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for LastMergeSourceCommit: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("lastMergeTargetCommit"))
+					{
+						obj.LastMergeTargetCommit = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.StartObject => GetOutParam<GitCommitRef>(ref reader, Deserialize),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for LastMergeTargetCommit: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("mergeId"))
+					{
+						obj.MergeId = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for MergeId: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("mergeStatus"))
+					{
+						obj.MergeStatus = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for MergeStatus: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("url"))
+					{
+						obj.Url = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Url: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("isDraft"))
+					{
+						obj.IsDraft = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.True => reader.GetBoolean(),
+							JsonTokenType.False => reader.GetBoolean(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for IsDraft: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("reviewers"))
+					{
+						obj.Reviewers = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.StartArray => Deserialize3(ref reader, obj.Reviewers ?? new()),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Reviewers: {unexpected} ")
+						};
+						break;
+					}
+
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.EndObject:
+				{
+					return;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
+	public static void Serialize(Utf8JsonWriter writer, IdentityRefWithVote value)
+	{
+		if (value is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartObject();
+		if (value.Id is { } localId)
+		{
+			writer.WritePropertyName("id");
+			writer.WriteStringValue(localId);
+		}
+		if (value.DisplayName is { } localDisplayName)
+		{
+			writer.WritePropertyName("displayName");
+			writer.WriteStringValue(localDisplayName);
+		}
+		if (value.UniqueName is { } localUniqueName)
+		{
+			writer.WritePropertyName("uniqueName");
+			writer.WriteStringValue(localUniqueName);
+		}
+		if (value.Url is { } localUrl)
+		{
+			writer.WritePropertyName("url");
+			writer.WriteStringValue(localUrl);
+		}
+		if (value.ImageUrl is { } localImageUrl)
+		{
+			writer.WritePropertyName("imageUrl");
+			writer.WriteStringValue(localImageUrl);
+		}
+		if (value.IsContainer is { } localIsContainer)
+		{
+			writer.WritePropertyName("isContainer");
+			writer.WriteBooleanValue(localIsContainer);
+		}
+		if (value.IsRequired is { } localIsRequired)
+		{
+			writer.WritePropertyName("isRequired");
+			writer.WriteBooleanValue(localIsRequired);
+		}
+		if (value.Vote is { } localVote)
+		{
+			writer.WritePropertyName("vote");
+			writer.WriteNumberValue(localVote);
+		}
+		if (value.ReviewerUrl is { } localReviewerUrl)
+		{
+			writer.WritePropertyName("reviewerUrl");
+			writer.WriteStringValue(localReviewerUrl);
+		}
+		writer.WriteEndObject();
+	}
+
+	public static void Deserialize(ref Utf8JsonReader reader, out IdentityRefWithVote obj)
+	{
+		obj = new IdentityRefWithVote();
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.PropertyName:
+				{
+					if (reader.ValueTextEquals("id"))
+					{
+						obj.Id = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Id: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("displayName"))
+					{
+						obj.DisplayName = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for DisplayName: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("uniqueName"))
+					{
+						obj.UniqueName = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for UniqueName: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("url"))
+					{
+						obj.Url = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Url: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("imageUrl"))
+					{
+						obj.ImageUrl = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for ImageUrl: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("isContainer"))
+					{
+						obj.IsContainer = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.True => reader.GetBoolean(),
+							JsonTokenType.False => reader.GetBoolean(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for IsContainer: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("isRequired"))
+					{
+						obj.IsRequired = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.True => reader.GetBoolean(),
+							JsonTokenType.False => reader.GetBoolean(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for IsRequired: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("vote"))
+					{
+						obj.Vote = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.Number => reader.GetInt32(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Vote: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("reviewerUrl"))
+					{
+						obj.ReviewerUrl = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for ReviewerUrl: {unexpected} ")
+						};
+						break;
+					}
+
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.EndObject:
+				{
+					return;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
+	public static void Serialize(Utf8JsonWriter writer, GitPullRequestResponse value)
+	{
+		if (value is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartObject();
+		if (value.Value is { } localValue)
+		{
+			writer.WritePropertyName("value");
+			Serialize4(writer, localValue);
+		}
+		writer.WriteEndObject();
+	}
+
+	public static void Deserialize(ref Utf8JsonReader reader, out GitPullRequestResponse obj)
+	{
+		obj = new GitPullRequestResponse();
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.PropertyName:
+				{
+					if (reader.ValueTextEquals("value"))
+					{
+						obj.Value = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.StartArray => Deserialize4(ref reader, obj.Value ?? new()),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Value: {unexpected} ")
+						};
+						break;
+					}
+
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.EndObject:
+				{
+					return;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
+	public static void Serialize(Utf8JsonWriter writer, CreateGitPullRequestStatusesRequest value)
+	{
+		if (value is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartObject();
+		if (value.Iteration is { } localIteration)
+		{
+			writer.WritePropertyName("iteration");
+			writer.WriteNumberValue(localIteration);
+		}
+		if (value.State is { } localState)
+		{
+			writer.WritePropertyName("state");
+			writer.WriteStringValue(localState);
+		}
+		if (value.Description is { } localDescription)
+		{
+			writer.WritePropertyName("description");
+			writer.WriteStringValue(localDescription);
+		}
+		if (value.Context is { } localContext)
+		{
+			writer.WritePropertyName("context");
+			Serialize(writer, localContext);
+		}
+		if (value.TargetUrl is { } localTargetUrl)
+		{
+			writer.WritePropertyName("targetUrl");
+			writer.WriteStringValue(localTargetUrl);
+		}
+		writer.WriteEndObject();
+	}
+
+	public static void Deserialize(ref Utf8JsonReader reader, out CreateGitPullRequestStatusesRequest obj)
+	{
+		obj = new CreateGitPullRequestStatusesRequest();
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.PropertyName:
+				{
+					if (reader.ValueTextEquals("iteration"))
+					{
+						obj.Iteration = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.Number => reader.GetInt32(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Iteration: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("state"))
+					{
+						obj.State = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for State: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("description"))
+					{
+						obj.Description = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Description: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("context"))
+					{
+						obj.Context = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.StartObject => GetOutParam<GitStatusContext>(ref reader, Deserialize),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Context: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("targetUrl"))
+					{
+						obj.TargetUrl = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for TargetUrl: {unexpected} ")
+						};
+						break;
+					}
+
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.EndObject:
+				{
+					return;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
+	public static void Serialize(Utf8JsonWriter writer, GitPullRequestStatus value)
+	{
+		if (value is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartObject();
+		if (value.Id is { } localId)
+		{
+			writer.WritePropertyName("id");
+			writer.WriteNumberValue(localId);
+		}
+		if (value.State is { } localState)
+		{
+			writer.WritePropertyName("state");
+			writer.WriteStringValue(localState);
+		}
+		if (value.Description is { } localDescription)
+		{
+			writer.WritePropertyName("description");
+			writer.WriteStringValue(localDescription);
+		}
+		if (value.Context is { } localContext)
+		{
+			writer.WritePropertyName("context");
+			Serialize(writer, localContext);
+		}
+		if (value.CreationDate is { } localCreationDate)
+		{
+			writer.WritePropertyName("creationDate");
+			writer.WriteStringValue(localCreationDate);
+		}
+		if (value.UpdatedDate is { } localUpdatedDate)
+		{
+			writer.WritePropertyName("updatedDate");
+			writer.WriteStringValue(localUpdatedDate);
+		}
+		if (value.CreatedBy is { } localCreatedBy)
+		{
+			writer.WritePropertyName("createdBy");
+			Serialize(writer, localCreatedBy);
+		}
+		if (value.TargetUrl is { } localTargetUrl)
+		{
+			writer.WritePropertyName("targetUrl");
+			writer.WriteStringValue(localTargetUrl);
+		}
+		writer.WriteEndObject();
+	}
+
+	public static void Deserialize(ref Utf8JsonReader reader, out GitPullRequestStatus obj)
+	{
+		obj = new GitPullRequestStatus();
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.PropertyName:
+				{
+					if (reader.ValueTextEquals("id"))
+					{
+						obj.Id = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.Number => reader.GetInt32(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Id: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("state"))
+					{
+						obj.State = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for State: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("description"))
+					{
+						obj.Description = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Description: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("context"))
+					{
+						obj.Context = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.StartObject => GetOutParam<GitStatusContext>(ref reader, Deserialize),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Context: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("creationDate"))
+					{
+						obj.CreationDate = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for CreationDate: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("updatedDate"))
+					{
+						obj.UpdatedDate = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for UpdatedDate: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("createdBy"))
+					{
+						obj.CreatedBy = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.StartObject => GetOutParam<IdentityRef>(ref reader, Deserialize),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for CreatedBy: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("targetUrl"))
+					{
+						obj.TargetUrl = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for TargetUrl: {unexpected} ")
+						};
+						break;
+					}
+
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.EndObject:
+				{
+					return;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
+	public static void Serialize(Utf8JsonWriter writer, GitStatusContext value)
+	{
+		if (value is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartObject();
+		if (value.Genre is { } localGenre)
+		{
+			writer.WritePropertyName("genre");
+			writer.WriteStringValue(localGenre);
+		}
+		if (value.Name is { } localName)
+		{
+			writer.WritePropertyName("name");
+			writer.WriteStringValue(localName);
+		}
+		writer.WriteEndObject();
+	}
+
+	public static void Deserialize(ref Utf8JsonReader reader, out GitStatusContext obj)
+	{
+		obj = new GitStatusContext();
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.PropertyName:
+				{
+					if (reader.ValueTextEquals("genre"))
+					{
+						obj.Genre = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Genre: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("name"))
+					{
+						obj.Name = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Name: {unexpected} ")
+						};
+						break;
+					}
+
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.EndObject:
+				{
+					return;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
+	public static void Serialize(Utf8JsonWriter writer, GitPullRequestStatusesResponse value)
+	{
+		if (value is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartObject();
+		if (value.Count is { } localCount)
+		{
+			writer.WritePropertyName("count");
+			writer.WriteNumberValue(localCount);
+		}
+		if (value.Value is { } localValue)
+		{
+			writer.WritePropertyName("value");
+			Serialize5(writer, localValue);
+		}
+		writer.WriteEndObject();
+	}
+
+	public static void Deserialize(ref Utf8JsonReader reader, out GitPullRequestStatusesResponse obj)
+	{
+		obj = new GitPullRequestStatusesResponse();
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.PropertyName:
+				{
+					if (reader.ValueTextEquals("count"))
+					{
+						obj.Count = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.Number => reader.GetInt32(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Count: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("value"))
+					{
+						obj.Value = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.StartArray => Deserialize5(ref reader, obj.Value ?? new()),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Value: {unexpected} ")
+						};
+						break;
+					}
+
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.EndObject:
+				{
+					return;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
+	public static void Serialize(Utf8JsonWriter writer, GitRef value)
+	{
+		if (value is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartObject();
+		if (value.Name is { } localName)
+		{
+			writer.WritePropertyName("name");
+			writer.WriteStringValue(localName);
+		}
+		if (value.ObjectId is { } localObjectId)
+		{
+			writer.WritePropertyName("objectId");
+			writer.WriteStringValue(localObjectId);
+		}
+		writer.WriteEndObject();
+	}
+
+	public static void Deserialize(ref Utf8JsonReader reader, out GitRef obj)
+	{
+		obj = new GitRef();
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.PropertyName:
+				{
+					if (reader.ValueTextEquals("name"))
+					{
+						obj.Name = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Name: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("objectId"))
+					{
+						obj.ObjectId = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for ObjectId: {unexpected} ")
+						};
+						break;
+					}
+
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.EndObject:
+				{
+					return;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
+	public static void Serialize(Utf8JsonWriter writer, GitRefResult value)
+	{
+		if (value is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartObject();
+		if (value.Value is { } localValue)
+		{
+			writer.WritePropertyName("value");
+			Serialize6(writer, localValue);
+		}
+		writer.WriteEndObject();
+	}
+
+	public static void Deserialize(ref Utf8JsonReader reader, out GitRefResult obj)
+	{
+		obj = new GitRefResult();
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.PropertyName:
+				{
+					if (reader.ValueTextEquals("value"))
+					{
+						obj.Value = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.StartArray => Deserialize6(ref reader, obj.Value ?? new()),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Value: {unexpected} ")
+						};
+						break;
+					}
+
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.EndObject:
+				{
+					return;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
+	public static void Serialize(Utf8JsonWriter writer, GitRefUpdate value)
+	{
+		if (value is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartObject();
+		if (value.Name is { } localName)
+		{
+			writer.WritePropertyName("name");
+			writer.WriteStringValue(localName);
+		}
+		if (value.OldObjectId is { } localOldObjectId)
+		{
+			writer.WritePropertyName("oldObjectId");
+			writer.WriteStringValue(localOldObjectId);
+		}
+		if (value.NewObjectId is { } localNewObjectId)
+		{
+			writer.WritePropertyName("newObjectId");
+			writer.WriteStringValue(localNewObjectId);
+		}
+		writer.WriteEndObject();
+	}
+
+	public static void Deserialize(ref Utf8JsonReader reader, out GitRefUpdate obj)
+	{
+		obj = new GitRefUpdate();
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.PropertyName:
+				{
+					if (reader.ValueTextEquals("name"))
+					{
+						obj.Name = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Name: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("oldObjectId"))
+					{
+						obj.OldObjectId = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for OldObjectId: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("newObjectId"))
+					{
+						obj.NewObjectId = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for NewObjectId: {unexpected} ")
+						};
+						break;
+					}
+
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.EndObject:
+				{
+					return;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
+	public static void Serialize(Utf8JsonWriter writer, GitRefUpdateRequest value)
+	{
+		if (value is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartObject();
+		if (value.Value is { } localValue)
+		{
+			writer.WritePropertyName("value");
+			Serialize7(writer, localValue);
+		}
+		writer.WriteEndObject();
+	}
+
+	public static void Deserialize(ref Utf8JsonReader reader, out GitRefUpdateRequest obj)
+	{
+		obj = new GitRefUpdateRequest();
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.PropertyName:
+				{
+					if (reader.ValueTextEquals("value"))
+					{
+						obj.Value = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.StartArray => Deserialize7(ref reader, obj.Value ?? new()),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Value: {unexpected} ")
+						};
+						break;
+					}
+
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.EndObject:
+				{
+					return;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
+	public static void Serialize(Utf8JsonWriter writer, GitRefUpdateResponse value)
+	{
+		if (value is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartObject();
+		if (value.Value is { } localValue)
+		{
+			writer.WritePropertyName("value");
+			Serialize8(writer, localValue);
+		}
+		writer.WriteEndObject();
+	}
+
+	public static void Deserialize(ref Utf8JsonReader reader, out GitRefUpdateResponse obj)
+	{
+		obj = new GitRefUpdateResponse();
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.PropertyName:
+				{
+					if (reader.ValueTextEquals("value"))
+					{
+						obj.Value = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.StartArray => Deserialize8(ref reader, obj.Value ?? new()),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Value: {unexpected} ")
+						};
+						break;
+					}
+
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.EndObject:
+				{
+					return;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
+	public static void Serialize(Utf8JsonWriter writer, GitRefUpdateResult value)
+	{
+		if (value is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartObject();
+		if (value.Name is { } localName)
+		{
+			writer.WritePropertyName("name");
+			writer.WriteStringValue(localName);
+		}
+		if (value.OldObjectId is { } localOldObjectId)
+		{
+			writer.WritePropertyName("oldObjectId");
+			writer.WriteStringValue(localOldObjectId);
+		}
+		if (value.NewObjectId is { } localNewObjectId)
+		{
+			writer.WritePropertyName("newObjectId");
+			writer.WriteStringValue(localNewObjectId);
+		}
+		if (value.WasSuccessful is { } localWasSuccessful)
+		{
+			writer.WritePropertyName("success");
+			writer.WriteBooleanValue(localWasSuccessful);
+		}
+		writer.WriteEndObject();
+	}
+
+	public static void Deserialize(ref Utf8JsonReader reader, out GitRefUpdateResult obj)
+	{
+		obj = new GitRefUpdateResult();
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.PropertyName:
+				{
+					if (reader.ValueTextEquals("name"))
+					{
+						obj.Name = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Name: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("oldObjectId"))
+					{
+						obj.OldObjectId = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for OldObjectId: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("newObjectId"))
+					{
+						obj.NewObjectId = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for NewObjectId: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("success"))
+					{
+						obj.WasSuccessful = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.True => reader.GetBoolean(),
+							JsonTokenType.False => reader.GetBoolean(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for WasSuccessful: {unexpected} ")
+						};
+						break;
+					}
+
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.EndObject:
+				{
+					return;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
+	public static void Serialize(Utf8JsonWriter writer, GitRepository value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
 		if (value.Links is { } localLinks)
 		{
 			writer.WritePropertyName("_links");
-			ReferenceLinks.Serialize(ref writer, localLinks);
+			Serialize(writer, localLinks);
 		}
 		if (value.DefaultBranch is { } localDefaultBranch)
 		{
@@ -823,7 +2259,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		if (value.Project is { } localProject)
 		{
 			writer.WritePropertyName("project");
-			Project.Serialize(ref writer, localProject);
+			Serialize(writer, localProject);
 		}
 		if (value.remoteUrl is { } localremoteUrl)
 		{
@@ -853,9 +2289,9 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.GitRepository IJsonSerializer<Pingmint.AzureDevOps.Model.GitRepository>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out GitRepository obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.GitRepository();
+		obj = new GitRepository();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -867,7 +2303,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.Links = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => ReferenceLinks.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<ReferenceLinks>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for Links: {unexpected} ")
 						};
 						break;
@@ -918,7 +2354,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.Project = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => Project.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<Project>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for Project: {unexpected} ")
 						};
 						break;
@@ -979,7 +2415,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -989,7 +2425,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.PipelinesResult>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.PipelinesResult value)
+	public static void Serialize(Utf8JsonWriter writer, PipelinesResult value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -1001,14 +2437,14 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		if (value.Value is { } localValue)
 		{
 			writer.WritePropertyName("value");
-			InternalSerializer2.Serialize(ref writer, localValue);
+			Serialize9(writer, localValue);
 		}
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.PipelinesResult IJsonSerializer<Pingmint.AzureDevOps.Model.PipelinesResult>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out PipelinesResult obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.PipelinesResult();
+		obj = new PipelinesResult();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -1030,7 +2466,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.Value = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => InternalSerializer2.Deserialize(ref reader, obj.Value ?? new()),
+							JsonTokenType.StartArray => Deserialize9(ref reader, obj.Value ?? new()),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for Value: {unexpected} ")
 						};
 						break;
@@ -1041,7 +2477,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -1051,14 +2487,14 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.Pipeline>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.Pipeline value)
+	public static void Serialize(Utf8JsonWriter writer, Pipeline value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
 		if (value.Links is { } localLinks)
 		{
 			writer.WritePropertyName("_links");
-			ReferenceLinks.Serialize(ref writer, localLinks);
+			Serialize(writer, localLinks);
 		}
 		if (value.Id is { } localId)
 		{
@@ -1088,9 +2524,9 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.Pipeline IJsonSerializer<Pingmint.AzureDevOps.Model.Pipeline>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out Pipeline obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.Pipeline();
+		obj = new Pipeline();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -1102,7 +2538,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.Links = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => ReferenceLinks.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<ReferenceLinks>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for Links: {unexpected} ")
 						};
 						break;
@@ -1163,7 +2599,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -1173,7 +2609,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.Project>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.Project value)
+	public static void Serialize(Utf8JsonWriter writer, Project value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -1215,9 +2651,9 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.Project IJsonSerializer<Pingmint.AzureDevOps.Model.Project>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out Project obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.Project();
+		obj = new Project();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -1300,7 +2736,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -1310,7 +2746,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.RunsResult>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.RunsResult value)
+	public static void Serialize(Utf8JsonWriter writer, RunsResult value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -1322,14 +2758,14 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		if (value.Value is { } localValue)
 		{
 			writer.WritePropertyName("value");
-			InternalSerializer3.Serialize(ref writer, localValue);
+			Serialize10(writer, localValue);
 		}
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.RunsResult IJsonSerializer<Pingmint.AzureDevOps.Model.RunsResult>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out RunsResult obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.RunsResult();
+		obj = new RunsResult();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -1351,7 +2787,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.Value = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => InternalSerializer3.Deserialize(ref reader, obj.Value ?? new()),
+							JsonTokenType.StartArray => Deserialize10(ref reader, obj.Value ?? new()),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for Value: {unexpected} ")
 						};
 						break;
@@ -1362,7 +2798,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -1372,14 +2808,14 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.Run>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.Run value)
+	public static void Serialize(Utf8JsonWriter writer, Run value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
 		if (value.Links is { } localLinks)
 		{
 			writer.WritePropertyName("_links");
-			ReferenceLinks.Serialize(ref writer, localLinks);
+			Serialize(writer, localLinks);
 		}
 		if (value.CreatedDate is { } localCreatedDate)
 		{
@@ -1404,7 +2840,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		if (value.Pipeline is { } localPipeline)
 		{
 			writer.WritePropertyName("pipeline");
-			Pipeline.Serialize(ref writer, localPipeline);
+			Serialize(writer, localPipeline);
 		}
 		if (value.State is { } localState)
 		{
@@ -1414,7 +2850,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		if (value.Resources is { } localResources)
 		{
 			writer.WritePropertyName("resources");
-			RunResources.Serialize(ref writer, localResources);
+			Serialize(writer, localResources);
 		}
 		if (value.Result is { } localResult)
 		{
@@ -1424,7 +2860,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		if (value.TemplateParameters is { } localTemplateParameters)
 		{
 			writer.WritePropertyName("templateParameters");
-			TemplateParameters.Serialize(ref writer, localTemplateParameters);
+			Serialize(writer, localTemplateParameters);
 		}
 		if (value.Url is { } localUrl)
 		{
@@ -1434,14 +2870,14 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		if (value.Variables is { } localVariables)
 		{
 			writer.WritePropertyName("variables");
-			Variables.Serialize(ref writer, localVariables);
+			Serialize(writer, localVariables);
 		}
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.Run IJsonSerializer<Pingmint.AzureDevOps.Model.Run>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out Run obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.Run();
+		obj = new Run();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -1453,7 +2889,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.Links = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => ReferenceLinks.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<ReferenceLinks>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for Links: {unexpected} ")
 						};
 						break;
@@ -1503,7 +2939,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.Pipeline = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => Pipeline.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<Pipeline>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for Pipeline: {unexpected} ")
 						};
 						break;
@@ -1523,7 +2959,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.Resources = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => RunResources.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<RunResources>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for Resources: {unexpected} ")
 						};
 						break;
@@ -1543,7 +2979,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.TemplateParameters = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => TemplateParameters.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<TemplateParameters>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for TemplateParameters: {unexpected} ")
 						};
 						break;
@@ -1563,7 +2999,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.Variables = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => Variables.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<Variables>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for Variables: {unexpected} ")
 						};
 						break;
@@ -1574,7 +3010,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -1584,26 +3020,26 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.RunResources>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.RunResources value)
+	public static void Serialize(Utf8JsonWriter writer, RunResources value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
 		if (value.Pipelines is { } localPipelines)
 		{
 			writer.WritePropertyName("pipelines");
-			PipelineRunResources.Serialize(ref writer, localPipelines);
+			Serialize(writer, localPipelines);
 		}
 		if (value.Repositories is { } localRepositories)
 		{
 			writer.WritePropertyName("repositories");
-			RepositoryRunResources.Serialize(ref writer, localRepositories);
+			Serialize(writer, localRepositories);
 		}
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.RunResources IJsonSerializer<Pingmint.AzureDevOps.Model.RunResources>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out RunResources obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.RunResources();
+		obj = new RunResources();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -1615,7 +3051,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.Pipelines = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => PipelineRunResources.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<PipelineRunResources>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for Pipelines: {unexpected} ")
 						};
 						break;
@@ -1625,7 +3061,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.Repositories = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => RepositoryRunResources.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<RepositoryRunResources>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for Repositories: {unexpected} ")
 						};
 						break;
@@ -1636,7 +3072,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -1646,7 +3082,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.PipelineRunResources>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.PipelineRunResources value)
+	public static void Serialize(Utf8JsonWriter writer, PipelineRunResources value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -1655,15 +3091,15 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			foreach (var (localAllKey, localAllValue) in localAll)
 			{
 				writer.WritePropertyName(localAllKey);
-				PipelineRunResource.Serialize(ref writer, localAllValue);
+				Serialize(writer, localAllValue);
 			}
 		}
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.PipelineRunResources IJsonSerializer<Pingmint.AzureDevOps.Model.PipelineRunResources>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out PipelineRunResources obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.PipelineRunResources();
+		obj = new PipelineRunResources();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -1675,7 +3111,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 					var rhs = Next(ref reader) switch
 					{
 						JsonTokenType.Null => null,
-						JsonTokenType.StartObject => PipelineRunResource.Deserialize(ref reader),
+						JsonTokenType.StartObject => GetOutParam<PipelineRunResource>(ref reader, Deserialize),
 						var unexpected => throw new InvalidOperationException($"unexpected token type for All: {unexpected} ")
 					};
 					obj.All.Add(lhs, rhs);
@@ -1683,7 +3119,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -1693,14 +3129,14 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.PipelineRunResource>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.PipelineRunResource value)
+	public static void Serialize(Utf8JsonWriter writer, PipelineRunResource value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
 		if (value.Pipeline is { } localPipeline)
 		{
 			writer.WritePropertyName("pipeline");
-			Pipeline.Serialize(ref writer, localPipeline);
+			Serialize(writer, localPipeline);
 		}
 		if (value.Version is { } localVersion)
 		{
@@ -1710,9 +3146,9 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.PipelineRunResource IJsonSerializer<Pingmint.AzureDevOps.Model.PipelineRunResource>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out PipelineRunResource obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.PipelineRunResource();
+		obj = new PipelineRunResource();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -1724,7 +3160,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.Pipeline = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => Pipeline.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<Pipeline>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for Pipeline: {unexpected} ")
 						};
 						break;
@@ -1745,7 +3181,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -1755,7 +3191,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.RepositoryRunResources>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.RepositoryRunResources value)
+	public static void Serialize(Utf8JsonWriter writer, RepositoryRunResources value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -1764,15 +3200,15 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			foreach (var (localAllKey, localAllValue) in localAll)
 			{
 				writer.WritePropertyName(localAllKey);
-				RepositoryRunResource.Serialize(ref writer, localAllValue);
+				Serialize(writer, localAllValue);
 			}
 		}
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.RepositoryRunResources IJsonSerializer<Pingmint.AzureDevOps.Model.RepositoryRunResources>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out RepositoryRunResources obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.RepositoryRunResources();
+		obj = new RepositoryRunResources();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -1784,7 +3220,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 					var rhs = Next(ref reader) switch
 					{
 						JsonTokenType.Null => null,
-						JsonTokenType.StartObject => RepositoryRunResource.Deserialize(ref reader),
+						JsonTokenType.StartObject => GetOutParam<RepositoryRunResource>(ref reader, Deserialize),
 						var unexpected => throw new InvalidOperationException($"unexpected token type for All: {unexpected} ")
 					};
 					obj.All.Add(lhs, rhs);
@@ -1792,7 +3228,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -1802,7 +3238,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.RepositoryRunResource>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.RepositoryRunResource value)
+	public static void Serialize(Utf8JsonWriter writer, RepositoryRunResource value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -1814,7 +3250,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		if (value.Repository is { } localRepository)
 		{
 			writer.WritePropertyName("repository");
-			Respository.Serialize(ref writer, localRepository);
+			Serialize(writer, localRepository);
 		}
 		if (value.Version is { } localVersion)
 		{
@@ -1824,9 +3260,9 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.RepositoryRunResource IJsonSerializer<Pingmint.AzureDevOps.Model.RepositoryRunResource>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out RepositoryRunResource obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.RepositoryRunResource();
+		obj = new RepositoryRunResource();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -1848,7 +3284,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.Repository = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => Respository.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<Respository>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for Repository: {unexpected} ")
 						};
 						break;
@@ -1869,7 +3305,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -1879,7 +3315,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.Respository>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.Respository value)
+	public static void Serialize(Utf8JsonWriter writer, Respository value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -1896,9 +3332,9 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.Respository IJsonSerializer<Pingmint.AzureDevOps.Model.Respository>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out Respository obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.Respository();
+		obj = new Respository();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -1931,7 +3367,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -1941,21 +3377,21 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.PullRequestThreadsResult>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.PullRequestThreadsResult value)
+	public static void Serialize(Utf8JsonWriter writer, PullRequestThreadsResult value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
 		if (value.Value is { } localValue)
 		{
 			writer.WritePropertyName("value");
-			InternalSerializer4.Serialize(ref writer, localValue);
+			Serialize11(writer, localValue);
 		}
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.PullRequestThreadsResult IJsonSerializer<Pingmint.AzureDevOps.Model.PullRequestThreadsResult>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out PullRequestThreadsResult obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.PullRequestThreadsResult();
+		obj = new PullRequestThreadsResult();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -1967,7 +3403,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.Value = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => InternalSerializer4.Deserialize(ref reader, obj.Value ?? new()),
+							JsonTokenType.StartArray => Deserialize11(ref reader, obj.Value ?? new()),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for Value: {unexpected} ")
 						};
 						break;
@@ -1978,7 +3414,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -1988,7 +3424,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.PullRequestThread>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.PullRequestThread value)
+	public static void Serialize(Utf8JsonWriter writer, PullRequestThread value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -2005,7 +3441,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		if (value.Comments is { } localComments)
 		{
 			writer.WritePropertyName("comments");
-			InternalSerializer5.Serialize(ref writer, localComments);
+			Serialize12(writer, localComments);
 		}
 		if (value.Status is { } localStatus)
 		{
@@ -2015,9 +3451,9 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.PullRequestThread IJsonSerializer<Pingmint.AzureDevOps.Model.PullRequestThread>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out PullRequestThread obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.PullRequestThread();
+		obj = new PullRequestThread();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -2050,7 +3486,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.Comments = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => InternalSerializer5.Deserialize(ref reader, obj.Comments ?? new()),
+							JsonTokenType.StartArray => Deserialize12(ref reader, obj.Comments ?? new()),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for Comments: {unexpected} ")
 						};
 						break;
@@ -2071,7 +3507,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -2081,7 +3517,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.PullRequestThreadComment>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.PullRequestThreadComment value)
+	public static void Serialize(Utf8JsonWriter writer, PullRequestThreadComment value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -2108,9 +3544,9 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.PullRequestThreadComment IJsonSerializer<Pingmint.AzureDevOps.Model.PullRequestThreadComment>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out PullRequestThreadComment obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.PullRequestThreadComment();
+		obj = new PullRequestThreadComment();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -2163,7 +3599,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -2173,7 +3609,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.ReleasesResult>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.ReleasesResult value)
+	public static void Serialize(Utf8JsonWriter writer, ReleasesResult value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -2185,14 +3621,14 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		if (value.Value is { } localValue)
 		{
 			writer.WritePropertyName("value");
-			InternalSerializer6.Serialize(ref writer, localValue);
+			Serialize13(writer, localValue);
 		}
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.ReleasesResult IJsonSerializer<Pingmint.AzureDevOps.Model.ReleasesResult>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out ReleasesResult obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.ReleasesResult();
+		obj = new ReleasesResult();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -2214,7 +3650,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.Value = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => InternalSerializer6.Deserialize(ref reader, obj.Value ?? new()),
+							JsonTokenType.StartArray => Deserialize13(ref reader, obj.Value ?? new()),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for Value: {unexpected} ")
 						};
 						break;
@@ -2225,7 +3661,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -2235,14 +3671,14 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.Release>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.Release value)
+	public static void Serialize(Utf8JsonWriter writer, Release value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
 		if (value.Links is { } localLinks)
 		{
 			writer.WritePropertyName("_links");
-			ReferenceLinks.Serialize(ref writer, localLinks);
+			Serialize(writer, localLinks);
 		}
 		if (value.Id is { } localId)
 		{
@@ -2267,7 +3703,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		if (value.createdBy is { } localcreatedBy)
 		{
 			writer.WritePropertyName("createdBy");
-			IdentityRef.Serialize(ref writer, localcreatedBy);
+			Serialize(writer, localcreatedBy);
 		}
 		if (value.modifiedOn is { } localmodifiedOn)
 		{
@@ -2277,27 +3713,27 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		if (value.modifiedBy is { } localmodifiedBy)
 		{
 			writer.WritePropertyName("modifiedBy");
-			IdentityRef.Serialize(ref writer, localmodifiedBy);
+			Serialize(writer, localmodifiedBy);
 		}
 		if (value.createdFor is { } localcreatedFor)
 		{
 			writer.WritePropertyName("createdFor");
-			IdentityRef.Serialize(ref writer, localcreatedFor);
+			Serialize(writer, localcreatedFor);
 		}
 		if (value.variables is { } localvariables)
 		{
 			writer.WritePropertyName("variables");
-			Variables.Serialize(ref writer, localvariables);
+			Serialize(writer, localvariables);
 		}
 		if (value.variableGroups is { } localvariableGroups)
 		{
 			writer.WritePropertyName("variableGroups");
-			InternalSerializer7.Serialize(ref writer, localvariableGroups);
+			Serialize14(writer, localvariableGroups);
 		}
 		if (value.releaseDefinition is { } localreleaseDefinition)
 		{
 			writer.WritePropertyName("releaseDefinition");
-			ReleaseDefinition.Serialize(ref writer, localreleaseDefinition);
+			Serialize(writer, localreleaseDefinition);
 		}
 		if (value.releaseDefinitionRevision is { } localreleaseDefinitionRevision)
 		{
@@ -2342,7 +3778,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		if (value.tags is { } localtags)
 		{
 			writer.WritePropertyName("tags");
-			InternalSerializer8.Serialize(ref writer, localtags);
+			Serialize15(writer, localtags);
 		}
 		if (value.triggeringArtifactAlias is { } localtriggeringArtifactAlias)
 		{
@@ -2352,29 +3788,29 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		if (value.projectReference is { } localprojectReference)
 		{
 			writer.WritePropertyName("projectReference");
-			ProjectReference.Serialize(ref writer, localprojectReference);
+			Serialize(writer, localprojectReference);
 		}
 		if (value.properties is { } localproperties)
 		{
 			writer.WritePropertyName("properties");
-			ReleasePropertiesCollection.Serialize(ref writer, localproperties);
+			Serialize(writer, localproperties);
 		}
 		if (value.artifacts is { } localartifacts)
 		{
 			writer.WritePropertyName("artifacts");
-			InternalSerializer9.Serialize(ref writer, localartifacts);
+			Serialize16(writer, localartifacts);
 		}
 		if (value.environments is { } localenvironments)
 		{
 			writer.WritePropertyName("environments");
-			InternalSerializer10.Serialize(ref writer, localenvironments);
+			Serialize17(writer, localenvironments);
 		}
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.Release IJsonSerializer<Pingmint.AzureDevOps.Model.Release>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out Release obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.Release();
+		obj = new Release();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -2386,7 +3822,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.Links = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => ReferenceLinks.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<ReferenceLinks>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for Links: {unexpected} ")
 						};
 						break;
@@ -2436,7 +3872,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.createdBy = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => IdentityRef.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<IdentityRef>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for createdBy: {unexpected} ")
 						};
 						break;
@@ -2456,7 +3892,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.modifiedBy = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => IdentityRef.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<IdentityRef>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for modifiedBy: {unexpected} ")
 						};
 						break;
@@ -2466,7 +3902,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.createdFor = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => IdentityRef.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<IdentityRef>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for createdFor: {unexpected} ")
 						};
 						break;
@@ -2476,7 +3912,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.variables = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => Variables.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<Variables>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for variables: {unexpected} ")
 						};
 						break;
@@ -2486,7 +3922,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.variableGroups = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => InternalSerializer7.Deserialize(ref reader, obj.variableGroups ?? new()),
+							JsonTokenType.StartArray => Deserialize14(ref reader, obj.variableGroups ?? new()),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for variableGroups: {unexpected} ")
 						};
 						break;
@@ -2496,7 +3932,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.releaseDefinition = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => ReleaseDefinition.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<ReleaseDefinition>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for releaseDefinition: {unexpected} ")
 						};
 						break;
@@ -2587,7 +4023,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.tags = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => InternalSerializer8.Deserialize(ref reader, obj.tags ?? new()),
+							JsonTokenType.StartArray => Deserialize15(ref reader, obj.tags ?? new()),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for tags: {unexpected} ")
 						};
 						break;
@@ -2607,7 +4043,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.projectReference = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => ProjectReference.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<ProjectReference>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for projectReference: {unexpected} ")
 						};
 						break;
@@ -2617,7 +4053,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.properties = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => ReleasePropertiesCollection.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<ReleasePropertiesCollection>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for properties: {unexpected} ")
 						};
 						break;
@@ -2627,7 +4063,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.artifacts = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => InternalSerializer9.Deserialize(ref reader, obj.artifacts ?? new()),
+							JsonTokenType.StartArray => Deserialize16(ref reader, obj.artifacts ?? new()),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for artifacts: {unexpected} ")
 						};
 						break;
@@ -2637,7 +4073,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.environments = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => InternalSerializer10.Deserialize(ref reader, obj.environments ?? new()),
+							JsonTokenType.StartArray => Deserialize17(ref reader, obj.environments ?? new()),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for environments: {unexpected} ")
 						};
 						break;
@@ -2648,7 +4084,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -2658,7 +4094,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.ReleaseArtifact>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.ReleaseArtifact value)
+	public static void Serialize(Utf8JsonWriter writer, ReleaseArtifact value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -2670,14 +4106,14 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		if (value.definitionReference is { } localdefinitionReference)
 		{
 			writer.WritePropertyName("definitionReference");
-			ReleaseArtifactDefinitionReference.Serialize(ref writer, localdefinitionReference);
+			Serialize(writer, localdefinitionReference);
 		}
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.ReleaseArtifact IJsonSerializer<Pingmint.AzureDevOps.Model.ReleaseArtifact>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out ReleaseArtifact obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.ReleaseArtifact();
+		obj = new ReleaseArtifact();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -2699,7 +4135,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.definitionReference = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => ReleaseArtifactDefinitionReference.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<ReleaseArtifactDefinitionReference>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for definitionReference: {unexpected} ")
 						};
 						break;
@@ -2710,7 +4146,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -2720,21 +4156,21 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.ReleaseArtifactDefinitionReference>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.ReleaseArtifactDefinitionReference value)
+	public static void Serialize(Utf8JsonWriter writer, ReleaseArtifactDefinitionReference value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
 		if (value.sourceVersion is { } localsourceVersion)
 		{
 			writer.WritePropertyName("sourceVersion");
-			IdReference.Serialize(ref writer, localsourceVersion);
+			Serialize(writer, localsourceVersion);
 		}
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.ReleaseArtifactDefinitionReference IJsonSerializer<Pingmint.AzureDevOps.Model.ReleaseArtifactDefinitionReference>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out ReleaseArtifactDefinitionReference obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.ReleaseArtifactDefinitionReference();
+		obj = new ReleaseArtifactDefinitionReference();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -2746,7 +4182,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.sourceVersion = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => IdReference.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<IdReference>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for sourceVersion: {unexpected} ")
 						};
 						break;
@@ -2757,7 +4193,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -2767,7 +4203,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.ReleaseDefinitionsResult>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.ReleaseDefinitionsResult value)
+	public static void Serialize(Utf8JsonWriter writer, ReleaseDefinitionsResult value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -2779,14 +4215,14 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		if (value.Value is { } localValue)
 		{
 			writer.WritePropertyName("value");
-			InternalSerializer11.Serialize(ref writer, localValue);
+			Serialize18(writer, localValue);
 		}
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.ReleaseDefinitionsResult IJsonSerializer<Pingmint.AzureDevOps.Model.ReleaseDefinitionsResult>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out ReleaseDefinitionsResult obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.ReleaseDefinitionsResult();
+		obj = new ReleaseDefinitionsResult();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -2808,7 +4244,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.Value = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => InternalSerializer11.Deserialize(ref reader, obj.Value ?? new()),
+							JsonTokenType.StartArray => Deserialize18(ref reader, obj.Value ?? new()),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for Value: {unexpected} ")
 						};
 						break;
@@ -2819,7 +4255,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -2829,14 +4265,14 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.ReleaseDefinition>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.ReleaseDefinition value)
+	public static void Serialize(Utf8JsonWriter writer, ReleaseDefinition value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
 		if (value.Links is { } localLinks)
 		{
 			writer.WritePropertyName("_links");
-			ReferenceLinks.Serialize(ref writer, localLinks);
+			Serialize(writer, localLinks);
 		}
 		if (value.source is { } localsource)
 		{
@@ -2856,7 +4292,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		if (value.createdBy is { } localcreatedBy)
 		{
 			writer.WritePropertyName("createdBy");
-			IdentityRef.Serialize(ref writer, localcreatedBy);
+			Serialize(writer, localcreatedBy);
 		}
 		if (value.createdOn is { } localcreatedOn)
 		{
@@ -2866,7 +4302,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		if (value.modifiedBy is { } localmodifiedBy)
 		{
 			writer.WritePropertyName("modifiedBy");
-			IdentityRef.Serialize(ref writer, localmodifiedBy);
+			Serialize(writer, localmodifiedBy);
 		}
 		if (value.modifiedOn is { } localmodifiedOn)
 		{
@@ -2881,7 +4317,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		if (value.variableGroups is { } localvariableGroups)
 		{
 			writer.WritePropertyName("variableGroups");
-			InternalSerializer12.Serialize(ref writer, localvariableGroups);
+			Serialize19(writer, localvariableGroups);
 		}
 		if (value.releaseNameFormat is { } localreleaseNameFormat)
 		{
@@ -2891,7 +4327,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		if (value.properties is { } localproperties)
 		{
 			writer.WritePropertyName("properties");
-			ReleasePropertiesCollection.Serialize(ref writer, localproperties);
+			Serialize(writer, localproperties);
 		}
 		if (value.Id is { } localId)
 		{
@@ -2911,7 +4347,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		if (value.projectReference is { } localprojectReference)
 		{
 			writer.WritePropertyName("projectReference");
-			ProjectReference.Serialize(ref writer, localprojectReference);
+			Serialize(writer, localprojectReference);
 		}
 		if (value.url is { } localurl)
 		{
@@ -2921,9 +4357,9 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.ReleaseDefinition IJsonSerializer<Pingmint.AzureDevOps.Model.ReleaseDefinition>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out ReleaseDefinition obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.ReleaseDefinition();
+		obj = new ReleaseDefinition();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -2935,7 +4371,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.Links = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => ReferenceLinks.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<ReferenceLinks>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for Links: {unexpected} ")
 						};
 						break;
@@ -2975,7 +4411,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.createdBy = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => IdentityRef.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<IdentityRef>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for createdBy: {unexpected} ")
 						};
 						break;
@@ -2995,7 +4431,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.modifiedBy = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => IdentityRef.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<IdentityRef>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for modifiedBy: {unexpected} ")
 						};
 						break;
@@ -3026,7 +4462,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.variableGroups = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => InternalSerializer12.Deserialize(ref reader, obj.variableGroups ?? new()),
+							JsonTokenType.StartArray => Deserialize19(ref reader, obj.variableGroups ?? new()),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for variableGroups: {unexpected} ")
 						};
 						break;
@@ -3046,7 +4482,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.properties = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => ReleasePropertiesCollection.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<ReleasePropertiesCollection>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for properties: {unexpected} ")
 						};
 						break;
@@ -3086,7 +4522,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.projectReference = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => ProjectReference.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<ProjectReference>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for projectReference: {unexpected} ")
 						};
 						break;
@@ -3107,7 +4543,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -3117,7 +4553,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.ReleaseEnvironment>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.ReleaseEnvironment value)
+	public static void Serialize(Utf8JsonWriter writer, ReleaseEnvironment value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -3144,9 +4580,9 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.ReleaseEnvironment IJsonSerializer<Pingmint.AzureDevOps.Model.ReleaseEnvironment>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out ReleaseEnvironment obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.ReleaseEnvironment();
+		obj = new ReleaseEnvironment();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -3199,7 +4635,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -3209,23 +4645,23 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.ReleasePropertiesCollection>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.ReleasePropertiesCollection value)
+	public static void Serialize(Utf8JsonWriter writer, ReleasePropertiesCollection value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.ReleasePropertiesCollection IJsonSerializer<Pingmint.AzureDevOps.Model.ReleasePropertiesCollection>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out ReleasePropertiesCollection obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.ReleasePropertiesCollection();
+		obj = new ReleasePropertiesCollection();
 		while (true)
 		{
 			switch (Next(ref reader))
 			{
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -3235,7 +4671,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.IdReference>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.IdReference value)
+	public static void Serialize(Utf8JsonWriter writer, IdReference value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -3252,9 +4688,9 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.IdReference IJsonSerializer<Pingmint.AzureDevOps.Model.IdReference>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out IdReference obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.IdReference();
+		obj = new IdReference();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -3287,7 +4723,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -3297,14 +4733,14 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.IdentityRef>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.IdentityRef value)
+	public static void Serialize(Utf8JsonWriter writer, IdentityRef value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
 		if (value.Links is { } localLinks)
 		{
 			writer.WritePropertyName("_links");
-			ReferenceLinks.Serialize(ref writer, localLinks);
+			Serialize(writer, localLinks);
 		}
 		if (value.displayName is { } localdisplayName)
 		{
@@ -3339,9 +4775,9 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.IdentityRef IJsonSerializer<Pingmint.AzureDevOps.Model.IdentityRef>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out IdentityRef obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.IdentityRef();
+		obj = new IdentityRef();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -3353,7 +4789,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.Links = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => ReferenceLinks.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<ReferenceLinks>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for Links: {unexpected} ")
 						};
 						break;
@@ -3424,7 +4860,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -3434,7 +4870,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.ProjectReference>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.ProjectReference value)
+	public static void Serialize(Utf8JsonWriter writer, ProjectReference value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -3451,9 +4887,9 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.ProjectReference IJsonSerializer<Pingmint.AzureDevOps.Model.ProjectReference>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out ProjectReference obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.ProjectReference();
+		obj = new ProjectReference();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -3486,7 +4922,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -3496,34 +4932,34 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.ReferenceLinks>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.ReferenceLinks value)
+	public static void Serialize(Utf8JsonWriter writer, ReferenceLinks value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
 		if (value.Self is { } localSelf)
 		{
 			writer.WritePropertyName("self");
-			ReferenceLink.Serialize(ref writer, localSelf);
+			Serialize(writer, localSelf);
 		}
 		if (value.Web is { } localWeb)
 		{
 			writer.WritePropertyName("web");
-			ReferenceLink.Serialize(ref writer, localWeb);
+			Serialize(writer, localWeb);
 		}
 		if (value.All is { } localAll)
 		{
 			foreach (var (localAllKey, localAllValue) in localAll)
 			{
 				writer.WritePropertyName(localAllKey);
-				ReferenceLink.Serialize(ref writer, localAllValue);
+				Serialize(writer, localAllValue);
 			}
 		}
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.ReferenceLinks IJsonSerializer<Pingmint.AzureDevOps.Model.ReferenceLinks>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out ReferenceLinks obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.ReferenceLinks();
+		obj = new ReferenceLinks();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -3535,7 +4971,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.Self = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => ReferenceLink.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<ReferenceLink>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for Self: {unexpected} ")
 						};
 						break;
@@ -3545,7 +4981,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 						obj.Web = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => ReferenceLink.Deserialize(ref reader),
+							JsonTokenType.StartObject => GetOutParam<ReferenceLink>(ref reader, Deserialize),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for Web: {unexpected} ")
 						};
 						break;
@@ -3555,7 +4991,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 					var rhs = Next(ref reader) switch
 					{
 						JsonTokenType.Null => null,
-						JsonTokenType.StartObject => ReferenceLink.Deserialize(ref reader),
+						JsonTokenType.StartObject => GetOutParam<ReferenceLink>(ref reader, Deserialize),
 						var unexpected => throw new InvalidOperationException($"unexpected token type for All: {unexpected} ")
 					};
 					obj.All.Add(lhs, rhs);
@@ -3563,7 +4999,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -3573,7 +5009,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.ReferenceLink>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.ReferenceLink value)
+	public static void Serialize(Utf8JsonWriter writer, ReferenceLink value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -3585,9 +5021,9 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.ReferenceLink IJsonSerializer<Pingmint.AzureDevOps.Model.ReferenceLink>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out ReferenceLink obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.ReferenceLink();
+		obj = new ReferenceLink();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -3610,7 +5046,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -3620,7 +5056,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.Variables>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.Variables value)
+	public static void Serialize(Utf8JsonWriter writer, Variables value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -3629,15 +5065,15 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			foreach (var (localAllKey, localAllValue) in localAll)
 			{
 				writer.WritePropertyName(localAllKey);
-				VariableValue.Serialize(ref writer, localAllValue);
+				Serialize(writer, localAllValue);
 			}
 		}
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.Variables IJsonSerializer<Pingmint.AzureDevOps.Model.Variables>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out Variables obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.Variables();
+		obj = new Variables();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -3649,7 +5085,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 					var rhs = Next(ref reader) switch
 					{
 						JsonTokenType.Null => null,
-						JsonTokenType.StartObject => VariableValue.Deserialize(ref reader),
+						JsonTokenType.StartObject => GetOutParam<VariableValue>(ref reader, Deserialize),
 						var unexpected => throw new InvalidOperationException($"unexpected token type for All: {unexpected} ")
 					};
 					obj.All.Add(lhs, rhs);
@@ -3657,7 +5093,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -3667,7 +5103,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.VariableValue>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.VariableValue value)
+	public static void Serialize(Utf8JsonWriter writer, VariableValue value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -3679,9 +5115,9 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.VariableValue IJsonSerializer<Pingmint.AzureDevOps.Model.VariableValue>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out VariableValue obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.VariableValue();
+		obj = new VariableValue();
 		while (true)
 		{
 			switch (Next(ref reader))
@@ -3704,7 +5140,7 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 				}
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -3714,23 +5150,23 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.VariableGroups>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.VariableGroups value)
+	public static void Serialize(Utf8JsonWriter writer, VariableGroups value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.VariableGroups IJsonSerializer<Pingmint.AzureDevOps.Model.VariableGroups>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out VariableGroups obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.VariableGroups();
+		obj = new VariableGroups();
 		while (true)
 		{
 			switch (Next(ref reader))
 			{
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -3740,23 +5176,23 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	void IJsonSerializer<Pingmint.AzureDevOps.Model.TemplateParameters>.Serialize(ref Utf8JsonWriter writer, Pingmint.AzureDevOps.Model.TemplateParameters value)
+	public static void Serialize(Utf8JsonWriter writer, TemplateParameters value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
 		writer.WriteEndObject();
 	}
 
-	Pingmint.AzureDevOps.Model.TemplateParameters IJsonSerializer<Pingmint.AzureDevOps.Model.TemplateParameters>.Deserialize(ref Utf8JsonReader reader)
+	public static void Deserialize(ref Utf8JsonReader reader, out TemplateParameters obj)
 	{
-		var obj = new Pingmint.AzureDevOps.Model.TemplateParameters();
+		obj = new TemplateParameters();
 		while (true)
 		{
 			switch (Next(ref reader))
 			{
 				case JsonTokenType.EndObject:
 				{
-					return obj;
+					return;
 				}
 				default:
 				{
@@ -3766,561 +5202,819 @@ public sealed partial class JsonSerializer : IJsonSerializer<Pingmint.AzureDevOp
 			}
 		}
 	}
-	private static class InternalSerializer0
+	private static void Serialize0<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<String>
 	{
-		public static void Serialize<TArray>(ref Utf8JsonWriter writer, TArray array) where TArray : ICollection<String>
+		if (array is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartArray();
+		foreach (var item in array)
 		{
-			if (array is null) { writer.WriteNullValue(); return; }
-			writer.WriteStartArray();
-			foreach (var item in array)
-			{
-				writer.WriteStringValue(item);
-			}
-			writer.WriteEndArray();
+			writer.WriteStringValue(item);
 		}
+		writer.WriteEndArray();
+	}
 
-		public static TArray Deserialize<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<String>
+	private static TArray Deserialize0<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<String>
+	{
+		while (true)
 		{
-			while (true)
+			switch (Next(ref reader))
 			{
-				switch (Next(ref reader))
+				case JsonTokenType.Null:
 				{
-					case JsonTokenType.Null:
-					{
-						reader.Skip();
-						break;
-					}
-					case JsonTokenType.String:
-					{
-						var item = reader.GetString();
-						array.Add(item);
-						break;
-					}
-					case JsonTokenType.EndArray:
-					{
-						return array;
-					}
-					default:
-					{
-						reader.Skip();
-						break;
-					}
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.String:
+				{
+					var item = reader.GetString();
+					array.Add(item);
+					break;
+				}
+				case JsonTokenType.EndArray:
+				{
+					return array;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
 				}
 			}
 		}
 	}
-	private static class InternalSerializer1
+	private static void Serialize1<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<GitDiffChange>
 	{
-		public static void Serialize<TArray>(ref Utf8JsonWriter writer, TArray array) where TArray : ICollection<GitDiffChange>
+		if (array is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartArray();
+		foreach (var item in array)
 		{
-			if (array is null) { writer.WriteNullValue(); return; }
-			writer.WriteStartArray();
-			foreach (var item in array)
-			{
-				GitDiffChange.Serialize(ref writer, item);
-			}
-			writer.WriteEndArray();
+			Serialize(writer, item);
 		}
+		writer.WriteEndArray();
+	}
 
-		public static TArray Deserialize<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<GitDiffChange>
+	private static TArray Deserialize1<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<GitDiffChange>
+	{
+		while (true)
 		{
-			while (true)
+			switch (Next(ref reader))
 			{
-				switch (Next(ref reader))
+				case JsonTokenType.Null:
 				{
-					case JsonTokenType.Null:
-					{
-						reader.Skip();
-						break;
-					}
-					case JsonTokenType.StartObject:
-					{
-						var item = GitDiffChange.Deserialize(ref reader);
-						array.Add(item);
-						break;
-					}
-					case JsonTokenType.EndArray:
-					{
-						return array;
-					}
-					default:
-					{
-						reader.Skip();
-						break;
-					}
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.StartObject:
+				{
+					Deserialize(ref reader, out GitDiffChange value);
+					var item = value;
+					array.Add(item);
+					break;
+				}
+				case JsonTokenType.EndArray:
+				{
+					return array;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
 				}
 			}
 		}
 	}
-	private static class InternalSerializer2
+	private static void Serialize2<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<String>
 	{
-		public static void Serialize<TArray>(ref Utf8JsonWriter writer, TArray array) where TArray : ICollection<Pipeline>
+		if (array is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartArray();
+		foreach (var item in array)
 		{
-			if (array is null) { writer.WriteNullValue(); return; }
-			writer.WriteStartArray();
-			foreach (var item in array)
-			{
-				Pipeline.Serialize(ref writer, item);
-			}
-			writer.WriteEndArray();
+			writer.WriteStringValue(item);
 		}
+		writer.WriteEndArray();
+	}
 
-		public static TArray Deserialize<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<Pipeline>
+	private static TArray Deserialize2<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<String>
+	{
+		while (true)
 		{
-			while (true)
+			switch (Next(ref reader))
 			{
-				switch (Next(ref reader))
+				case JsonTokenType.Null:
 				{
-					case JsonTokenType.Null:
-					{
-						reader.Skip();
-						break;
-					}
-					case JsonTokenType.StartObject:
-					{
-						var item = Pipeline.Deserialize(ref reader);
-						array.Add(item);
-						break;
-					}
-					case JsonTokenType.EndArray:
-					{
-						return array;
-					}
-					default:
-					{
-						reader.Skip();
-						break;
-					}
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.String:
+				{
+					var item = reader.GetString();
+					array.Add(item);
+					break;
+				}
+				case JsonTokenType.EndArray:
+				{
+					return array;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
 				}
 			}
 		}
 	}
-	private static class InternalSerializer3
+	private static void Serialize3<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<IdentityRefWithVote>
 	{
-		public static void Serialize<TArray>(ref Utf8JsonWriter writer, TArray array) where TArray : ICollection<Run>
+		if (array is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartArray();
+		foreach (var item in array)
 		{
-			if (array is null) { writer.WriteNullValue(); return; }
-			writer.WriteStartArray();
-			foreach (var item in array)
-			{
-				Run.Serialize(ref writer, item);
-			}
-			writer.WriteEndArray();
+			Serialize(writer, item);
 		}
+		writer.WriteEndArray();
+	}
 
-		public static TArray Deserialize<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<Run>
+	private static TArray Deserialize3<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<IdentityRefWithVote>
+	{
+		while (true)
 		{
-			while (true)
+			switch (Next(ref reader))
 			{
-				switch (Next(ref reader))
+				case JsonTokenType.Null:
 				{
-					case JsonTokenType.Null:
-					{
-						reader.Skip();
-						break;
-					}
-					case JsonTokenType.StartObject:
-					{
-						var item = Run.Deserialize(ref reader);
-						array.Add(item);
-						break;
-					}
-					case JsonTokenType.EndArray:
-					{
-						return array;
-					}
-					default:
-					{
-						reader.Skip();
-						break;
-					}
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.StartObject:
+				{
+					Deserialize(ref reader, out IdentityRefWithVote value);
+					var item = value;
+					array.Add(item);
+					break;
+				}
+				case JsonTokenType.EndArray:
+				{
+					return array;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
 				}
 			}
 		}
 	}
-	private static class InternalSerializer4
+	private static void Serialize4<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<GitPullRequest>
 	{
-		public static void Serialize<TArray>(ref Utf8JsonWriter writer, TArray array) where TArray : ICollection<PullRequestThread>
+		if (array is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartArray();
+		foreach (var item in array)
 		{
-			if (array is null) { writer.WriteNullValue(); return; }
-			writer.WriteStartArray();
-			foreach (var item in array)
-			{
-				PullRequestThread.Serialize(ref writer, item);
-			}
-			writer.WriteEndArray();
+			Serialize(writer, item);
 		}
+		writer.WriteEndArray();
+	}
 
-		public static TArray Deserialize<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<PullRequestThread>
+	private static TArray Deserialize4<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<GitPullRequest>
+	{
+		while (true)
 		{
-			while (true)
+			switch (Next(ref reader))
 			{
-				switch (Next(ref reader))
+				case JsonTokenType.Null:
 				{
-					case JsonTokenType.Null:
-					{
-						reader.Skip();
-						break;
-					}
-					case JsonTokenType.StartObject:
-					{
-						var item = PullRequestThread.Deserialize(ref reader);
-						array.Add(item);
-						break;
-					}
-					case JsonTokenType.EndArray:
-					{
-						return array;
-					}
-					default:
-					{
-						reader.Skip();
-						break;
-					}
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.StartObject:
+				{
+					Deserialize(ref reader, out GitPullRequest value);
+					var item = value;
+					array.Add(item);
+					break;
+				}
+				case JsonTokenType.EndArray:
+				{
+					return array;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
 				}
 			}
 		}
 	}
-	private static class InternalSerializer5
+	private static void Serialize5<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<GitPullRequestStatus>
 	{
-		public static void Serialize<TArray>(ref Utf8JsonWriter writer, TArray array) where TArray : ICollection<PullRequestThreadComment>
+		if (array is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartArray();
+		foreach (var item in array)
 		{
-			if (array is null) { writer.WriteNullValue(); return; }
-			writer.WriteStartArray();
-			foreach (var item in array)
-			{
-				PullRequestThreadComment.Serialize(ref writer, item);
-			}
-			writer.WriteEndArray();
+			Serialize(writer, item);
 		}
+		writer.WriteEndArray();
+	}
 
-		public static TArray Deserialize<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<PullRequestThreadComment>
+	private static TArray Deserialize5<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<GitPullRequestStatus>
+	{
+		while (true)
 		{
-			while (true)
+			switch (Next(ref reader))
 			{
-				switch (Next(ref reader))
+				case JsonTokenType.Null:
 				{
-					case JsonTokenType.Null:
-					{
-						reader.Skip();
-						break;
-					}
-					case JsonTokenType.StartObject:
-					{
-						var item = PullRequestThreadComment.Deserialize(ref reader);
-						array.Add(item);
-						break;
-					}
-					case JsonTokenType.EndArray:
-					{
-						return array;
-					}
-					default:
-					{
-						reader.Skip();
-						break;
-					}
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.StartObject:
+				{
+					Deserialize(ref reader, out GitPullRequestStatus value);
+					var item = value;
+					array.Add(item);
+					break;
+				}
+				case JsonTokenType.EndArray:
+				{
+					return array;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
 				}
 			}
 		}
 	}
-	private static class InternalSerializer6
+	private static void Serialize6<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<GitRef>
 	{
-		public static void Serialize<TArray>(ref Utf8JsonWriter writer, TArray array) where TArray : ICollection<Release>
+		if (array is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartArray();
+		foreach (var item in array)
 		{
-			if (array is null) { writer.WriteNullValue(); return; }
-			writer.WriteStartArray();
-			foreach (var item in array)
-			{
-				Release.Serialize(ref writer, item);
-			}
-			writer.WriteEndArray();
+			Serialize(writer, item);
 		}
+		writer.WriteEndArray();
+	}
 
-		public static TArray Deserialize<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<Release>
+	private static TArray Deserialize6<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<GitRef>
+	{
+		while (true)
 		{
-			while (true)
+			switch (Next(ref reader))
 			{
-				switch (Next(ref reader))
+				case JsonTokenType.Null:
 				{
-					case JsonTokenType.Null:
-					{
-						reader.Skip();
-						break;
-					}
-					case JsonTokenType.StartObject:
-					{
-						var item = Release.Deserialize(ref reader);
-						array.Add(item);
-						break;
-					}
-					case JsonTokenType.EndArray:
-					{
-						return array;
-					}
-					default:
-					{
-						reader.Skip();
-						break;
-					}
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.StartObject:
+				{
+					Deserialize(ref reader, out GitRef value);
+					var item = value;
+					array.Add(item);
+					break;
+				}
+				case JsonTokenType.EndArray:
+				{
+					return array;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
 				}
 			}
 		}
 	}
-	private static class InternalSerializer7
+	private static void Serialize7<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<GitRefUpdate>
 	{
-		public static void Serialize<TArray>(ref Utf8JsonWriter writer, TArray array) where TArray : ICollection<VariableGroups>
+		if (array is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartArray();
+		foreach (var item in array)
 		{
-			if (array is null) { writer.WriteNullValue(); return; }
-			writer.WriteStartArray();
-			foreach (var item in array)
-			{
-				VariableGroups.Serialize(ref writer, item);
-			}
-			writer.WriteEndArray();
+			Serialize(writer, item);
 		}
+		writer.WriteEndArray();
+	}
 
-		public static TArray Deserialize<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<VariableGroups>
+	private static TArray Deserialize7<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<GitRefUpdate>
+	{
+		while (true)
 		{
-			while (true)
+			switch (Next(ref reader))
 			{
-				switch (Next(ref reader))
+				case JsonTokenType.Null:
 				{
-					case JsonTokenType.Null:
-					{
-						reader.Skip();
-						break;
-					}
-					case JsonTokenType.StartObject:
-					{
-						var item = VariableGroups.Deserialize(ref reader);
-						array.Add(item);
-						break;
-					}
-					case JsonTokenType.EndArray:
-					{
-						return array;
-					}
-					default:
-					{
-						reader.Skip();
-						break;
-					}
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.StartObject:
+				{
+					Deserialize(ref reader, out GitRefUpdate value);
+					var item = value;
+					array.Add(item);
+					break;
+				}
+				case JsonTokenType.EndArray:
+				{
+					return array;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
 				}
 			}
 		}
 	}
-	private static class InternalSerializer8
+	private static void Serialize8<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<GitRefUpdateResult>
 	{
-		public static void Serialize<TArray>(ref Utf8JsonWriter writer, TArray array) where TArray : ICollection<String>
+		if (array is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartArray();
+		foreach (var item in array)
 		{
-			if (array is null) { writer.WriteNullValue(); return; }
-			writer.WriteStartArray();
-			foreach (var item in array)
-			{
-				writer.WriteStringValue(item);
-			}
-			writer.WriteEndArray();
+			Serialize(writer, item);
 		}
+		writer.WriteEndArray();
+	}
 
-		public static TArray Deserialize<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<String>
+	private static TArray Deserialize8<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<GitRefUpdateResult>
+	{
+		while (true)
 		{
-			while (true)
+			switch (Next(ref reader))
 			{
-				switch (Next(ref reader))
+				case JsonTokenType.Null:
 				{
-					case JsonTokenType.Null:
-					{
-						reader.Skip();
-						break;
-					}
-					case JsonTokenType.String:
-					{
-						var item = reader.GetString();
-						array.Add(item);
-						break;
-					}
-					case JsonTokenType.EndArray:
-					{
-						return array;
-					}
-					default:
-					{
-						reader.Skip();
-						break;
-					}
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.StartObject:
+				{
+					Deserialize(ref reader, out GitRefUpdateResult value);
+					var item = value;
+					array.Add(item);
+					break;
+				}
+				case JsonTokenType.EndArray:
+				{
+					return array;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
 				}
 			}
 		}
 	}
-	private static class InternalSerializer9
+	private static void Serialize9<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<Pipeline>
 	{
-		public static void Serialize<TArray>(ref Utf8JsonWriter writer, TArray array) where TArray : ICollection<ReleaseArtifact>
+		if (array is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartArray();
+		foreach (var item in array)
 		{
-			if (array is null) { writer.WriteNullValue(); return; }
-			writer.WriteStartArray();
-			foreach (var item in array)
-			{
-				ReleaseArtifact.Serialize(ref writer, item);
-			}
-			writer.WriteEndArray();
+			Serialize(writer, item);
 		}
+		writer.WriteEndArray();
+	}
 
-		public static TArray Deserialize<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<ReleaseArtifact>
+	private static TArray Deserialize9<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<Pipeline>
+	{
+		while (true)
 		{
-			while (true)
+			switch (Next(ref reader))
 			{
-				switch (Next(ref reader))
+				case JsonTokenType.Null:
 				{
-					case JsonTokenType.Null:
-					{
-						reader.Skip();
-						break;
-					}
-					case JsonTokenType.StartObject:
-					{
-						var item = ReleaseArtifact.Deserialize(ref reader);
-						array.Add(item);
-						break;
-					}
-					case JsonTokenType.EndArray:
-					{
-						return array;
-					}
-					default:
-					{
-						reader.Skip();
-						break;
-					}
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.StartObject:
+				{
+					Deserialize(ref reader, out Pipeline value);
+					var item = value;
+					array.Add(item);
+					break;
+				}
+				case JsonTokenType.EndArray:
+				{
+					return array;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
 				}
 			}
 		}
 	}
-	private static class InternalSerializer10
+	private static void Serialize10<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<Run>
 	{
-		public static void Serialize<TArray>(ref Utf8JsonWriter writer, TArray array) where TArray : ICollection<ReleaseEnvironment>
+		if (array is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartArray();
+		foreach (var item in array)
 		{
-			if (array is null) { writer.WriteNullValue(); return; }
-			writer.WriteStartArray();
-			foreach (var item in array)
-			{
-				ReleaseEnvironment.Serialize(ref writer, item);
-			}
-			writer.WriteEndArray();
+			Serialize(writer, item);
 		}
+		writer.WriteEndArray();
+	}
 
-		public static TArray Deserialize<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<ReleaseEnvironment>
+	private static TArray Deserialize10<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<Run>
+	{
+		while (true)
 		{
-			while (true)
+			switch (Next(ref reader))
 			{
-				switch (Next(ref reader))
+				case JsonTokenType.Null:
 				{
-					case JsonTokenType.Null:
-					{
-						reader.Skip();
-						break;
-					}
-					case JsonTokenType.StartObject:
-					{
-						var item = ReleaseEnvironment.Deserialize(ref reader);
-						array.Add(item);
-						break;
-					}
-					case JsonTokenType.EndArray:
-					{
-						return array;
-					}
-					default:
-					{
-						reader.Skip();
-						break;
-					}
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.StartObject:
+				{
+					Deserialize(ref reader, out Run value);
+					var item = value;
+					array.Add(item);
+					break;
+				}
+				case JsonTokenType.EndArray:
+				{
+					return array;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
 				}
 			}
 		}
 	}
-	private static class InternalSerializer11
+	private static void Serialize11<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<PullRequestThread>
 	{
-		public static void Serialize<TArray>(ref Utf8JsonWriter writer, TArray array) where TArray : ICollection<ReleaseDefinition>
+		if (array is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartArray();
+		foreach (var item in array)
 		{
-			if (array is null) { writer.WriteNullValue(); return; }
-			writer.WriteStartArray();
-			foreach (var item in array)
-			{
-				ReleaseDefinition.Serialize(ref writer, item);
-			}
-			writer.WriteEndArray();
+			Serialize(writer, item);
 		}
+		writer.WriteEndArray();
+	}
 
-		public static TArray Deserialize<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<ReleaseDefinition>
+	private static TArray Deserialize11<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<PullRequestThread>
+	{
+		while (true)
 		{
-			while (true)
+			switch (Next(ref reader))
 			{
-				switch (Next(ref reader))
+				case JsonTokenType.Null:
 				{
-					case JsonTokenType.Null:
-					{
-						reader.Skip();
-						break;
-					}
-					case JsonTokenType.StartObject:
-					{
-						var item = ReleaseDefinition.Deserialize(ref reader);
-						array.Add(item);
-						break;
-					}
-					case JsonTokenType.EndArray:
-					{
-						return array;
-					}
-					default:
-					{
-						reader.Skip();
-						break;
-					}
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.StartObject:
+				{
+					Deserialize(ref reader, out PullRequestThread value);
+					var item = value;
+					array.Add(item);
+					break;
+				}
+				case JsonTokenType.EndArray:
+				{
+					return array;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
 				}
 			}
 		}
 	}
-	private static class InternalSerializer12
+	private static void Serialize12<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<PullRequestThreadComment>
 	{
-		public static void Serialize<TArray>(ref Utf8JsonWriter writer, TArray array) where TArray : ICollection<VariableGroups>
+		if (array is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartArray();
+		foreach (var item in array)
 		{
-			if (array is null) { writer.WriteNullValue(); return; }
-			writer.WriteStartArray();
-			foreach (var item in array)
-			{
-				VariableGroups.Serialize(ref writer, item);
-			}
-			writer.WriteEndArray();
+			Serialize(writer, item);
 		}
+		writer.WriteEndArray();
+	}
 
-		public static TArray Deserialize<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<VariableGroups>
+	private static TArray Deserialize12<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<PullRequestThreadComment>
+	{
+		while (true)
 		{
-			while (true)
+			switch (Next(ref reader))
 			{
-				switch (Next(ref reader))
+				case JsonTokenType.Null:
 				{
-					case JsonTokenType.Null:
-					{
-						reader.Skip();
-						break;
-					}
-					case JsonTokenType.StartObject:
-					{
-						var item = VariableGroups.Deserialize(ref reader);
-						array.Add(item);
-						break;
-					}
-					case JsonTokenType.EndArray:
-					{
-						return array;
-					}
-					default:
-					{
-						reader.Skip();
-						break;
-					}
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.StartObject:
+				{
+					Deserialize(ref reader, out PullRequestThreadComment value);
+					var item = value;
+					array.Add(item);
+					break;
+				}
+				case JsonTokenType.EndArray:
+				{
+					return array;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
+	private static void Serialize13<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<Release>
+	{
+		if (array is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartArray();
+		foreach (var item in array)
+		{
+			Serialize(writer, item);
+		}
+		writer.WriteEndArray();
+	}
+
+	private static TArray Deserialize13<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<Release>
+	{
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.Null:
+				{
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.StartObject:
+				{
+					Deserialize(ref reader, out Release value);
+					var item = value;
+					array.Add(item);
+					break;
+				}
+				case JsonTokenType.EndArray:
+				{
+					return array;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
+	private static void Serialize14<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<VariableGroups>
+	{
+		if (array is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartArray();
+		foreach (var item in array)
+		{
+			Serialize(writer, item);
+		}
+		writer.WriteEndArray();
+	}
+
+	private static TArray Deserialize14<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<VariableGroups>
+	{
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.Null:
+				{
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.StartObject:
+				{
+					Deserialize(ref reader, out VariableGroups value);
+					var item = value;
+					array.Add(item);
+					break;
+				}
+				case JsonTokenType.EndArray:
+				{
+					return array;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
+	private static void Serialize15<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<String>
+	{
+		if (array is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartArray();
+		foreach (var item in array)
+		{
+			writer.WriteStringValue(item);
+		}
+		writer.WriteEndArray();
+	}
+
+	private static TArray Deserialize15<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<String>
+	{
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.Null:
+				{
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.String:
+				{
+					var item = reader.GetString();
+					array.Add(item);
+					break;
+				}
+				case JsonTokenType.EndArray:
+				{
+					return array;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
+	private static void Serialize16<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<ReleaseArtifact>
+	{
+		if (array is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartArray();
+		foreach (var item in array)
+		{
+			Serialize(writer, item);
+		}
+		writer.WriteEndArray();
+	}
+
+	private static TArray Deserialize16<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<ReleaseArtifact>
+	{
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.Null:
+				{
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.StartObject:
+				{
+					Deserialize(ref reader, out ReleaseArtifact value);
+					var item = value;
+					array.Add(item);
+					break;
+				}
+				case JsonTokenType.EndArray:
+				{
+					return array;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
+	private static void Serialize17<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<ReleaseEnvironment>
+	{
+		if (array is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartArray();
+		foreach (var item in array)
+		{
+			Serialize(writer, item);
+		}
+		writer.WriteEndArray();
+	}
+
+	private static TArray Deserialize17<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<ReleaseEnvironment>
+	{
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.Null:
+				{
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.StartObject:
+				{
+					Deserialize(ref reader, out ReleaseEnvironment value);
+					var item = value;
+					array.Add(item);
+					break;
+				}
+				case JsonTokenType.EndArray:
+				{
+					return array;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
+	private static void Serialize18<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<ReleaseDefinition>
+	{
+		if (array is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartArray();
+		foreach (var item in array)
+		{
+			Serialize(writer, item);
+		}
+		writer.WriteEndArray();
+	}
+
+	private static TArray Deserialize18<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<ReleaseDefinition>
+	{
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.Null:
+				{
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.StartObject:
+				{
+					Deserialize(ref reader, out ReleaseDefinition value);
+					var item = value;
+					array.Add(item);
+					break;
+				}
+				case JsonTokenType.EndArray:
+				{
+					return array;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
+	private static void Serialize19<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<VariableGroups>
+	{
+		if (array is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartArray();
+		foreach (var item in array)
+		{
+			Serialize(writer, item);
+		}
+		writer.WriteEndArray();
+	}
+
+	private static TArray Deserialize19<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<VariableGroups>
+	{
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.Null:
+				{
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.StartObject:
+				{
+					Deserialize(ref reader, out VariableGroups value);
+					var item = value;
+					array.Add(item);
+					break;
+				}
+				case JsonTokenType.EndArray:
+				{
+					return array;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
 				}
 			}
 		}
@@ -4342,6 +6036,11 @@ public sealed partial class GitCommit
 	public GitPerson? committer { get; set; }
 	public String? comment { get; set; }
 	public List<String>? Parents { get; set; }
+	public String? url { get; set; }
+}
+public sealed partial class GitCommitRef
+{
+	public String? commitId { get; set; }
 	public String? url { get; set; }
 }
 public sealed partial class GitDiffsChangeCounts
@@ -4375,11 +6074,119 @@ public sealed partial class GitDiffs
 	public int? aheadCount { get; set; }
 	public int? behindCount { get; set; }
 }
+public sealed partial class GitMergeRequest
+{
+	public String? Comment { get; set; }
+	public List<String>? Parents { get; set; }
+}
+public sealed partial class GitMergeResult
+{
+	public String? Status { get; set; }
+	public int? MergeOperationId { get; set; }
+	public GitMergeOperationStatusDetail? DetailedStatus { get; set; }
+}
+public sealed partial class GitMergeOperationStatusDetail
+{
+	public String? MergeCommitId { get; set; }
+	public String? FailureMessage { get; set; }
+}
 public sealed partial class GitPerson
 {
 	public String? name { get; set; }
 	public String? email { get; set; }
 	public String? date { get; set; }
+}
+public sealed partial class GitPullRequest
+{
+	public int? PullRequestId { get; set; }
+	public String? Title { get; set; }
+	public String? Description { get; set; }
+	public String? Status { get; set; }
+	public String? SourceRefName { get; set; }
+	public String? TargetRefName { get; set; }
+	public GitCommitRef? LastMergeCommit { get; set; }
+	public GitCommitRef? LastMergeSourceCommit { get; set; }
+	public GitCommitRef? LastMergeTargetCommit { get; set; }
+	public String? MergeId { get; set; }
+	public String? MergeStatus { get; set; }
+	public String? Url { get; set; }
+	public bool? IsDraft { get; set; }
+	public List<IdentityRefWithVote>? Reviewers { get; set; }
+}
+public sealed partial class IdentityRefWithVote
+{
+	public String? Id { get; set; }
+	public String? DisplayName { get; set; }
+	public String? UniqueName { get; set; }
+	public String? Url { get; set; }
+	public String? ImageUrl { get; set; }
+	public bool? IsContainer { get; set; }
+	public bool? IsRequired { get; set; }
+	public int? Vote { get; set; }
+	public String? ReviewerUrl { get; set; }
+}
+public sealed partial class GitPullRequestResponse
+{
+	public List<GitPullRequest>? Value { get; set; }
+}
+public sealed partial class CreateGitPullRequestStatusesRequest
+{
+	public int? Iteration { get; set; }
+	public String? State { get; set; }
+	public String? Description { get; set; }
+	public GitStatusContext? Context { get; set; }
+	public String? TargetUrl { get; set; }
+}
+public sealed partial class GitPullRequestStatus
+{
+	public int? Id { get; set; }
+	public String? State { get; set; }
+	public String? Description { get; set; }
+	public GitStatusContext? Context { get; set; }
+	public String? CreationDate { get; set; }
+	public String? UpdatedDate { get; set; }
+	public IdentityRef? CreatedBy { get; set; }
+	public String? TargetUrl { get; set; }
+}
+public sealed partial class GitStatusContext
+{
+	public String? Genre { get; set; }
+	public String? Name { get; set; }
+}
+public sealed partial class GitPullRequestStatusesResponse
+{
+	public int? Count { get; set; }
+	public List<GitPullRequestStatus>? Value { get; set; }
+}
+public sealed partial class GitRef
+{
+	public String? Name { get; set; }
+	public String? ObjectId { get; set; }
+}
+public sealed partial class GitRefResult
+{
+	public List<GitRef>? Value { get; set; }
+}
+public sealed partial class GitRefUpdate
+{
+	public String? Name { get; set; }
+	public String? OldObjectId { get; set; }
+	public String? NewObjectId { get; set; }
+}
+public sealed partial class GitRefUpdateRequest
+{
+	public List<GitRefUpdate>? Value { get; set; }
+}
+public sealed partial class GitRefUpdateResponse
+{
+	public List<GitRefUpdateResult>? Value { get; set; }
+}
+public sealed partial class GitRefUpdateResult
+{
+	public String? Name { get; set; }
+	public String? OldObjectId { get; set; }
+	public String? NewObjectId { get; set; }
+	public bool? WasSuccessful { get; set; }
 }
 public sealed partial class GitRepository : ILinks
 {

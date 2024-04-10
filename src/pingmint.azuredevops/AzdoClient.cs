@@ -7,7 +7,7 @@ public partial class AzdoClient
 {
     private readonly String organization;
     private readonly String project;
-    private readonly String apikey;
+    private readonly System.Net.Http.Headers.AuthenticationHeaderValue authenticationHeaderValue;
     private readonly UrlHelper urlHelper;
     private readonly HttpClient httpClient;
 
@@ -17,7 +17,19 @@ public partial class AzdoClient
     {
         this.organization = organization;
         this.project = project;
-        this.apikey = apikey;
+
+        var parameter = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes("user:" + apikey));
+        this.authenticationHeaderValue = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", parameter);
+
+        this.urlHelper = new UrlHelper(organization, project);
+        this.httpClient = CreateHttpClient();
+    }
+
+    public AzdoClient(String organization, String project, System.Net.Http.Headers.AuthenticationHeaderValue authenticationHeaderValue)
+    {
+        this.organization = organization;
+        this.project = project;
+        this.authenticationHeaderValue = authenticationHeaderValue;
         this.urlHelper = new UrlHelper(organization, project);
         this.httpClient = CreateHttpClient();
     }
@@ -47,12 +59,10 @@ public partial class AzdoClient
 
     private void AddAuthenticationHeader(HttpRequestMessage message)
     {
-        var parameter = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes("user:" + apikey));
-        var header = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", parameter);
-        message.Headers.Authorization = header;
+        message.Headers.Authorization = this.authenticationHeaderValue;
     }
 
-    public static T Deserialize<T>(String json, Model.IJsonSerializer<T> serializer)
+    private static T Deserialize<T>(String json, DeserializerDelegate<T> del)
     {
         var bytes = Encoding.UTF8.GetBytes(json);
         var options = new JsonReaderOptions()
@@ -61,10 +71,11 @@ public partial class AzdoClient
         };
         var reader = new Utf8JsonReader(bytes, options);
         if (!reader.Read()) { throw new InvalidOperationException("Unable to start parsing JSON"); }
-        return serializer.Deserialize(ref reader);
+        del(ref reader, out T model);
+        return model;
     }
 
-    public static String Serialize<T>(T model, Model.IJsonSerializer<T> serializer)
+    private static String Serialize<T>(T model)
     {
         var options = new JsonWriterOptions()
         {
@@ -75,7 +86,7 @@ public partial class AzdoClient
         using (var stream = new MemoryStream())
         {
             var writer = new Utf8JsonWriter(stream, options);
-            serializer.Serialize(ref writer, model);
+            JsonSerializer.Serialize(writer, model);
             writer.Dispose();
             stream.Flush();
             return Encoding.UTF8.GetString(stream.ToArray());
@@ -91,18 +102,23 @@ public partial class AzdoClient
         return await httpClient.SendAsync(message);
     }
 
-    public async Task<HttpResponseMessage> SendJsonAsync(Uri url, String json, HttpMethod method)
+    public async Task<String> PostJsonStringAsync(Uri url, String json) => await SendJsonStringAsync(url, json, HttpMethod.Post);
+
+    public async Task<String> PatchJsonStringAsync(Uri url, String payload) => await SendJsonStringAsync(url, payload, HttpMethod.Patch, "application/json-patch+json");
+
+    public async Task<String> SendJsonStringAsync(Uri url, String json, HttpMethod httpMethod, String contentType = "application/json")
     {
-        var message = new HttpRequestMessage(method, url);
+        var message = new HttpRequestMessage(httpMethod, url);
         AddAcceptHeader(message);
         AddAuthenticationHeader(message);
 
         var content = new StringContent(json);
-        content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+        content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(contentType);
         await content.LoadIntoBufferAsync(); // HACK: VSTS does not accept chunked transfer-encoding
         message.Content = content;
 
-        return await httpClient.SendAsync(message);
+        var response = await httpClient.SendAsync(message);
+        return await response.Content.ReadAsStringAsync();
     }
 
     public async Task<String> GetStringAsync(Uri uri)
@@ -111,10 +127,22 @@ public partial class AzdoClient
         return await response.Content.ReadAsStringAsync();
     }
 
-    private async Task<TResult> GetterAsync<TResult>(Func<UrlHelper, Uri> urlFunc, Model.IJsonSerializer<TResult> serializer)
+    private async Task<TResult> GetterAsync<TResult>(Func<UrlHelper, Uri> urlFunc, DeserializerDelegate<TResult> del)
     {
         var url = urlFunc(urlHelper);
         var json = await GetStringAsync(url);
-        return Deserialize(json, serializer);
+
+        return GetModelFromJson(json, del);
+    }
+
+    private delegate void DeserializerDelegate<T>(ref System.Text.Json.Utf8JsonReader r, out T value);
+
+    private static T GetModelFromJson<T>(String jsonBody, DeserializerDelegate<T> del)
+    {
+        var reader = new System.Text.Json.Utf8JsonReader(System.Text.Encoding.UTF8.GetBytes(jsonBody));
+        if (!reader.Read()) { throw new InvalidOperationException("Reader read failed."); }
+        del(ref reader, out T model);
+        if (model is null) { throw new InvalidOperationException("Model parse failed."); }
+        return model;
     }
 }
