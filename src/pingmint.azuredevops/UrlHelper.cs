@@ -26,6 +26,12 @@ public partial class UrlHelper
 
     public Uri Pipelines(int? top = null, String apiVersion = DefaultApiVersion) => new($"{DevAzureUrlString}/_apis/pipelines?api-version={apiVersion}{Parameters.Top(top)}");
 
+    public Uri PullRequestThreads(String repositoryId, int pullRequestId, String apiVersion = DefaultApiVersion) => new($"{DevAzureUrlString}/_apis/git/repositories/{repositoryId}/pullRequests/{pullRequestId}/threads?api-version={apiVersion}");
+
+    public Uri PullRequestThread(String repositoryId, int pullRequestId, int threadId, String apiVersion = DefaultApiVersion) => new($"{DevAzureUrlString}/_apis/git/repositories/{repositoryId}/pullRequests/{pullRequestId}/threads/{threadId}?api-version={apiVersion}");
+
+    public Uri PullRequestThreadComments(String repositoryId, int pullRequestId, int threadId, String apiVersion = DefaultApiVersion) => new($"{DevAzureUrlString}/_apis/git/repositories/{repositoryId}/pullRequests/{pullRequestId}/threads/{threadId}/comments?api-version={apiVersion}");
+
     public Uri Releases(int? definitionId = null, String apiVersion = DefaultApiVersion) =>
         new($"{ReleaseMgmtUrlString}/_apis/release/releases?$expand=environments,artifacts&{apiVersion}{Parameters.DefinitionId(definitionId)}");
 

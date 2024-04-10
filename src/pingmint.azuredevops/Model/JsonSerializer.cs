@@ -3377,6 +3377,238 @@ public static partial class JsonSerializer
 			}
 		}
 	}
+	public static void Serialize(Utf8JsonWriter writer, PullRequestThreadsResult value)
+	{
+		if (value is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartObject();
+		if (value.Value is { } localValue)
+		{
+			writer.WritePropertyName("value");
+			Serialize11(writer, localValue);
+		}
+		writer.WriteEndObject();
+	}
+
+	public static void Deserialize(ref Utf8JsonReader reader, out PullRequestThreadsResult obj)
+	{
+		obj = new PullRequestThreadsResult();
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.PropertyName:
+				{
+					if (reader.ValueTextEquals("value"))
+					{
+						obj.Value = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.StartArray => Deserialize11(ref reader, obj.Value ?? new()),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Value: {unexpected} ")
+						};
+						break;
+					}
+
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.EndObject:
+				{
+					return;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
+	public static void Serialize(Utf8JsonWriter writer, PullRequestThread value)
+	{
+		if (value is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartObject();
+		if (value.Id is { } localId)
+		{
+			writer.WritePropertyName("id");
+			writer.WriteNumberValue(localId);
+		}
+		if (value.IsDeleted is { } localIsDeleted)
+		{
+			writer.WritePropertyName("isDeleted");
+			writer.WriteBooleanValue(localIsDeleted);
+		}
+		if (value.Comments is { } localComments)
+		{
+			writer.WritePropertyName("comments");
+			Serialize12(writer, localComments);
+		}
+		if (value.Status is { } localStatus)
+		{
+			writer.WritePropertyName("status");
+			writer.WriteStringValue(localStatus);
+		}
+		writer.WriteEndObject();
+	}
+
+	public static void Deserialize(ref Utf8JsonReader reader, out PullRequestThread obj)
+	{
+		obj = new PullRequestThread();
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.PropertyName:
+				{
+					if (reader.ValueTextEquals("id"))
+					{
+						obj.Id = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.Number => reader.GetInt32(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Id: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("isDeleted"))
+					{
+						obj.IsDeleted = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.True => reader.GetBoolean(),
+							JsonTokenType.False => reader.GetBoolean(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for IsDeleted: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("comments"))
+					{
+						obj.Comments = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.StartArray => Deserialize12(ref reader, obj.Comments ?? new()),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Comments: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("status"))
+					{
+						obj.Status = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Status: {unexpected} ")
+						};
+						break;
+					}
+
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.EndObject:
+				{
+					return;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
+	public static void Serialize(Utf8JsonWriter writer, PullRequestThreadComment value)
+	{
+		if (value is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartObject();
+		if (value.Id is { } localId)
+		{
+			writer.WritePropertyName("id");
+			writer.WriteNumberValue(localId);
+		}
+		if (value.Content is { } localContent)
+		{
+			writer.WritePropertyName("content");
+			writer.WriteStringValue(localContent);
+		}
+		if (value.CommentType is { } localCommentType)
+		{
+			writer.WritePropertyName("commentType");
+			writer.WriteStringValue(localCommentType);
+		}
+		if (value.ParentCommentId is { } localParentCommentId)
+		{
+			writer.WritePropertyName("parentCommentId");
+			writer.WriteNumberValue(localParentCommentId);
+		}
+		writer.WriteEndObject();
+	}
+
+	public static void Deserialize(ref Utf8JsonReader reader, out PullRequestThreadComment obj)
+	{
+		obj = new PullRequestThreadComment();
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.PropertyName:
+				{
+					if (reader.ValueTextEquals("id"))
+					{
+						obj.Id = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.Number => reader.GetInt32(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Id: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("content"))
+					{
+						obj.Content = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Content: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("commentType"))
+					{
+						obj.CommentType = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for CommentType: {unexpected} ")
+						};
+						break;
+					}
+					else if (reader.ValueTextEquals("parentCommentId"))
+					{
+						obj.ParentCommentId = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.Number => reader.GetInt32(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for ParentCommentId: {unexpected} ")
+						};
+						break;
+					}
+
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.EndObject:
+				{
+					return;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
 	public static void Serialize(Utf8JsonWriter writer, ReleasesResult value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
@@ -3389,7 +3621,7 @@ public static partial class JsonSerializer
 		if (value.Value is { } localValue)
 		{
 			writer.WritePropertyName("value");
-			Serialize11(writer, localValue);
+			Serialize13(writer, localValue);
 		}
 		writer.WriteEndObject();
 	}
@@ -3418,7 +3650,7 @@ public static partial class JsonSerializer
 						obj.Value = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => Deserialize11(ref reader, obj.Value ?? new()),
+							JsonTokenType.StartArray => Deserialize13(ref reader, obj.Value ?? new()),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for Value: {unexpected} ")
 						};
 						break;
@@ -3496,7 +3728,7 @@ public static partial class JsonSerializer
 		if (value.variableGroups is { } localvariableGroups)
 		{
 			writer.WritePropertyName("variableGroups");
-			Serialize12(writer, localvariableGroups);
+			Serialize14(writer, localvariableGroups);
 		}
 		if (value.releaseDefinition is { } localreleaseDefinition)
 		{
@@ -3546,7 +3778,7 @@ public static partial class JsonSerializer
 		if (value.tags is { } localtags)
 		{
 			writer.WritePropertyName("tags");
-			Serialize13(writer, localtags);
+			Serialize15(writer, localtags);
 		}
 		if (value.triggeringArtifactAlias is { } localtriggeringArtifactAlias)
 		{
@@ -3566,12 +3798,12 @@ public static partial class JsonSerializer
 		if (value.artifacts is { } localartifacts)
 		{
 			writer.WritePropertyName("artifacts");
-			Serialize14(writer, localartifacts);
+			Serialize16(writer, localartifacts);
 		}
 		if (value.environments is { } localenvironments)
 		{
 			writer.WritePropertyName("environments");
-			Serialize15(writer, localenvironments);
+			Serialize17(writer, localenvironments);
 		}
 		writer.WriteEndObject();
 	}
@@ -3690,7 +3922,7 @@ public static partial class JsonSerializer
 						obj.variableGroups = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => Deserialize12(ref reader, obj.variableGroups ?? new()),
+							JsonTokenType.StartArray => Deserialize14(ref reader, obj.variableGroups ?? new()),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for variableGroups: {unexpected} ")
 						};
 						break;
@@ -3791,7 +4023,7 @@ public static partial class JsonSerializer
 						obj.tags = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => Deserialize13(ref reader, obj.tags ?? new()),
+							JsonTokenType.StartArray => Deserialize15(ref reader, obj.tags ?? new()),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for tags: {unexpected} ")
 						};
 						break;
@@ -3831,7 +4063,7 @@ public static partial class JsonSerializer
 						obj.artifacts = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => Deserialize14(ref reader, obj.artifacts ?? new()),
+							JsonTokenType.StartArray => Deserialize16(ref reader, obj.artifacts ?? new()),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for artifacts: {unexpected} ")
 						};
 						break;
@@ -3841,7 +4073,7 @@ public static partial class JsonSerializer
 						obj.environments = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => Deserialize15(ref reader, obj.environments ?? new()),
+							JsonTokenType.StartArray => Deserialize17(ref reader, obj.environments ?? new()),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for environments: {unexpected} ")
 						};
 						break;
@@ -3983,7 +4215,7 @@ public static partial class JsonSerializer
 		if (value.Value is { } localValue)
 		{
 			writer.WritePropertyName("value");
-			Serialize16(writer, localValue);
+			Serialize18(writer, localValue);
 		}
 		writer.WriteEndObject();
 	}
@@ -4012,7 +4244,7 @@ public static partial class JsonSerializer
 						obj.Value = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => Deserialize16(ref reader, obj.Value ?? new()),
+							JsonTokenType.StartArray => Deserialize18(ref reader, obj.Value ?? new()),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for Value: {unexpected} ")
 						};
 						break;
@@ -4085,7 +4317,7 @@ public static partial class JsonSerializer
 		if (value.variableGroups is { } localvariableGroups)
 		{
 			writer.WritePropertyName("variableGroups");
-			Serialize17(writer, localvariableGroups);
+			Serialize19(writer, localvariableGroups);
 		}
 		if (value.releaseNameFormat is { } localreleaseNameFormat)
 		{
@@ -4230,7 +4462,7 @@ public static partial class JsonSerializer
 						obj.variableGroups = Next(ref reader) switch
 						{
 							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => Deserialize17(ref reader, obj.variableGroups ?? new()),
+							JsonTokenType.StartArray => Deserialize19(ref reader, obj.variableGroups ?? new()),
 							var unexpected => throw new InvalidOperationException($"unexpected token type for variableGroups: {unexpected} ")
 						};
 						break;
@@ -5419,7 +5651,7 @@ public static partial class JsonSerializer
 			}
 		}
 	}
-	private static void Serialize11<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<Release>
+	private static void Serialize11<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<PullRequestThread>
 	{
 		if (array is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartArray();
@@ -5430,7 +5662,89 @@ public static partial class JsonSerializer
 		writer.WriteEndArray();
 	}
 
-	private static TArray Deserialize11<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<Release>
+	private static TArray Deserialize11<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<PullRequestThread>
+	{
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.Null:
+				{
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.StartObject:
+				{
+					Deserialize(ref reader, out PullRequestThread value);
+					var item = value;
+					array.Add(item);
+					break;
+				}
+				case JsonTokenType.EndArray:
+				{
+					return array;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
+	private static void Serialize12<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<PullRequestThreadComment>
+	{
+		if (array is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartArray();
+		foreach (var item in array)
+		{
+			Serialize(writer, item);
+		}
+		writer.WriteEndArray();
+	}
+
+	private static TArray Deserialize12<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<PullRequestThreadComment>
+	{
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.Null:
+				{
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.StartObject:
+				{
+					Deserialize(ref reader, out PullRequestThreadComment value);
+					var item = value;
+					array.Add(item);
+					break;
+				}
+				case JsonTokenType.EndArray:
+				{
+					return array;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
+	private static void Serialize13<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<Release>
+	{
+		if (array is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartArray();
+		foreach (var item in array)
+		{
+			Serialize(writer, item);
+		}
+		writer.WriteEndArray();
+	}
+
+	private static TArray Deserialize13<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<Release>
 	{
 		while (true)
 		{
@@ -5460,7 +5774,7 @@ public static partial class JsonSerializer
 			}
 		}
 	}
-	private static void Serialize12<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<VariableGroups>
+	private static void Serialize14<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<VariableGroups>
 	{
 		if (array is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartArray();
@@ -5471,7 +5785,7 @@ public static partial class JsonSerializer
 		writer.WriteEndArray();
 	}
 
-	private static TArray Deserialize12<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<VariableGroups>
+	private static TArray Deserialize14<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<VariableGroups>
 	{
 		while (true)
 		{
@@ -5501,7 +5815,7 @@ public static partial class JsonSerializer
 			}
 		}
 	}
-	private static void Serialize13<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<String>
+	private static void Serialize15<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<String>
 	{
 		if (array is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartArray();
@@ -5512,7 +5826,7 @@ public static partial class JsonSerializer
 		writer.WriteEndArray();
 	}
 
-	private static TArray Deserialize13<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<String>
+	private static TArray Deserialize15<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<String>
 	{
 		while (true)
 		{
@@ -5541,7 +5855,7 @@ public static partial class JsonSerializer
 			}
 		}
 	}
-	private static void Serialize14<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<ReleaseArtifact>
+	private static void Serialize16<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<ReleaseArtifact>
 	{
 		if (array is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartArray();
@@ -5552,7 +5866,7 @@ public static partial class JsonSerializer
 		writer.WriteEndArray();
 	}
 
-	private static TArray Deserialize14<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<ReleaseArtifact>
+	private static TArray Deserialize16<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<ReleaseArtifact>
 	{
 		while (true)
 		{
@@ -5582,7 +5896,7 @@ public static partial class JsonSerializer
 			}
 		}
 	}
-	private static void Serialize15<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<ReleaseEnvironment>
+	private static void Serialize17<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<ReleaseEnvironment>
 	{
 		if (array is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartArray();
@@ -5593,7 +5907,7 @@ public static partial class JsonSerializer
 		writer.WriteEndArray();
 	}
 
-	private static TArray Deserialize15<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<ReleaseEnvironment>
+	private static TArray Deserialize17<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<ReleaseEnvironment>
 	{
 		while (true)
 		{
@@ -5623,7 +5937,7 @@ public static partial class JsonSerializer
 			}
 		}
 	}
-	private static void Serialize16<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<ReleaseDefinition>
+	private static void Serialize18<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<ReleaseDefinition>
 	{
 		if (array is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartArray();
@@ -5634,7 +5948,7 @@ public static partial class JsonSerializer
 		writer.WriteEndArray();
 	}
 
-	private static TArray Deserialize16<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<ReleaseDefinition>
+	private static TArray Deserialize18<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<ReleaseDefinition>
 	{
 		while (true)
 		{
@@ -5664,7 +5978,7 @@ public static partial class JsonSerializer
 			}
 		}
 	}
-	private static void Serialize17<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<VariableGroups>
+	private static void Serialize19<TArray>(Utf8JsonWriter writer, TArray array) where TArray : ICollection<VariableGroups>
 	{
 		if (array is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartArray();
@@ -5675,7 +5989,7 @@ public static partial class JsonSerializer
 		writer.WriteEndArray();
 	}
 
-	private static TArray Deserialize17<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<VariableGroups>
+	private static TArray Deserialize19<TArray>(ref Utf8JsonReader reader, TArray array) where TArray : ICollection<VariableGroups>
 	{
 		while (true)
 		{
@@ -5960,6 +6274,24 @@ public sealed partial class Respository
 {
 	public String? Id { get; set; }
 	public String? Type { get; set; }
+}
+public sealed partial class PullRequestThreadsResult
+{
+	public List<PullRequestThread>? Value { get; set; }
+}
+public sealed partial class PullRequestThread
+{
+	public int? Id { get; set; }
+	public bool? IsDeleted { get; set; }
+	public List<PullRequestThreadComment>? Comments { get; set; }
+	public String? Status { get; set; }
+}
+public sealed partial class PullRequestThreadComment
+{
+	public int? Id { get; set; }
+	public String? Content { get; set; }
+	public String? CommentType { get; set; }
+	public int? ParentCommentId { get; set; }
 }
 public sealed partial class ReleasesResult
 {

@@ -119,7 +119,7 @@ public partial class AzdoClient
 
         var response = await httpClient.SendAsync(message);
         return await response.Content.ReadAsStringAsync();
-    }    
+    }
 
     public async Task<String> GetStringAsync(Uri uri)
     {
