@@ -7,7 +7,7 @@ public partial class AzdoClient
 {
     private readonly String organization;
     private readonly String project;
-    private readonly String apikey;
+    private readonly System.Net.Http.Headers.AuthenticationHeaderValue authenticationHeaderValue;
     private readonly UrlHelper urlHelper;
     private readonly HttpClient httpClient;
 
@@ -17,7 +17,19 @@ public partial class AzdoClient
     {
         this.organization = organization;
         this.project = project;
-        this.apikey = apikey;
+
+        var parameter = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes("user:" + apikey));
+        this.authenticationHeaderValue = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", parameter);
+
+        this.urlHelper = new UrlHelper(organization, project);
+        this.httpClient = CreateHttpClient();
+    }
+
+    public AzdoClient(String organization, String project, System.Net.Http.Headers.AuthenticationHeaderValue authenticationHeaderValue)
+    {
+        this.organization = organization;
+        this.project = project;
+        this.authenticationHeaderValue = authenticationHeaderValue;
         this.urlHelper = new UrlHelper(organization, project);
         this.httpClient = CreateHttpClient();
     }
@@ -47,9 +59,7 @@ public partial class AzdoClient
 
     private void AddAuthenticationHeader(HttpRequestMessage message)
     {
-        var parameter = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes("user:" + apikey));
-        var header = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", parameter);
-        message.Headers.Authorization = header;
+        message.Headers.Authorization = this.authenticationHeaderValue;
     }
 
     public static T Deserialize<T>(String json, Model.IJsonSerializer<T> serializer)
