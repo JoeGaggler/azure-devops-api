@@ -154,6 +154,10 @@ GitRepository : ILinks
 - url => Url : String
 - webUrl : String
 
+PipelineRunRequest
+- stagesToSkip => StagesToSkip : [String]
+- resources => Resources : RunResources
+
 PipelinesResult
 - count => Count : int
 - value => Value : [Pipeline]

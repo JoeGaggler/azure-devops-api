@@ -93,6 +93,16 @@ public partial class AzdoClient
         }
     }
 
+    public static String SerializeToString<T>(T value, Action<Utf8JsonWriter, T> func, JsonWriterOptions options = default)
+    {
+        var buffer = new System.Buffers.ArrayBufferWriter<Byte>();
+        using (var writer = new Utf8JsonWriter(buffer, options))
+        {
+            func(writer, value);
+        }
+        return Encoding.UTF8.GetString(buffer.WrittenSpan);
+    }
+
     private async Task<HttpResponseMessage> GetAsync(Uri url)
     {
         var message = new HttpRequestMessage(HttpMethod.Get, url);
@@ -151,6 +161,14 @@ public partial class AzdoClient
     {
         var url = urlFunc(urlHelper);
         var json = await GetStringAsync(url);
+
+        return GetModelFromJson(json, del);
+    }
+
+    private async Task<TResult> PostJsonForJsonAsync<TResult>(Func<UrlHelper, Uri> urlFunc, String jsonRequest, DeserializerDelegate<TResult> del)
+    {
+        var url = urlFunc(urlHelper);
+        var json = await SendJsonStringAsync(url, jsonRequest, HttpMethod.Post);
 
         return GetModelFromJson(json, del);
     }
