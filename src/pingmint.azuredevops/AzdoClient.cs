@@ -127,6 +127,12 @@ public partial class AzdoClient
         return await response.Content.ReadAsStringAsync();
     }
 
+    private async Task<TResult> GetterAsync<TResult>(Uri url, DeserializerDelegate<TResult> del)
+    {
+        var json = await GetStringAsync(url);
+        return GetModelFromJson(json, del);
+    }
+
     private async Task<TResult> GetterAsync<TResult>(Func<UrlHelper, Uri> urlFunc, DeserializerDelegate<TResult> del)
     {
         var url = urlFunc(urlHelper);
