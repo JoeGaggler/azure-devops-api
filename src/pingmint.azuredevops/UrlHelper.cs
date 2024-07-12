@@ -24,6 +24,8 @@ public partial class UrlHelper
 
     public Uri GitRepository(String repositoryId, String apiVersion = DefaultApiVersion) => new($"{DevAzureUrlString}/_apis/git/repositories/{repositoryId}?api-version={apiVersion}");
 
+    public Uri Pipeline(int? pipelineId, String apiVersion = DefaultApiVersion) => new($"{DevAzureUrlString}/_apis/pipelines/{pipelineId}?api-version={apiVersion}");
+
     public Uri Pipelines(int? top = null, String apiVersion = DefaultApiVersion) => new($"{DevAzureUrlString}/_apis/pipelines?api-version={apiVersion}{Parameters.Top(top)}");
 
     public Uri PullRequestThreads(String repositoryId, int pullRequestId, String apiVersion = DefaultApiVersion) => new($"{DevAzureUrlString}/_apis/git/repositories/{repositoryId}/pullRequests/{pullRequestId}/threads?api-version={apiVersion}");

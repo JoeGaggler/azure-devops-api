@@ -2,6 +2,7 @@ namespace Pingmint.AzureDevOps;
 
 partial class AzdoClient
 {
+    public async Task<Model.Pipeline> GetPipelineAsync(int pipelineId) => await GetterAsync<Model.Pipeline>(u => u.Pipeline(pipelineId), Model.JsonSerializer.Deserialize);
     public async Task<Model.PipelinesResult> GetPipelinesAsync() => await GetterAsync<Model.PipelinesResult>(u => u.Pipelines(top: null), Model.JsonSerializer.Deserialize);
 
     public async Task<Model.Run> GetRunAsync(Uri uri) => await GetterAsync<Model.Run>(uri, Model.JsonSerializer.Deserialize);
