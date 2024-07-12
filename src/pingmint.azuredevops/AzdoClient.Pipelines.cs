@@ -6,11 +6,11 @@ partial class AzdoClient
 
     public async Task<Model.Run> GetRunAsync(Uri uri) => await GetterAsync<Model.Run>(uri, Model.JsonSerializer.Deserialize);
     public async Task<Model.Run> GetRunAsync(int pipelineId, int runId) => await GetterAsync<Model.Run>(u => u.Run(pipelineId, runId), Model.JsonSerializer.Deserialize);
+    public async Task<Model.Run> StartRunAsync(int pipelineId, Model.PipelineRunRequest request) =>
+        await PostJsonForJsonAsync<Model.Run>(u => u.Runs(pipelineId), SerializeToString(request, Model.JsonSerializer.Serialize), Model.JsonSerializer.Deserialize);
 
     public async Task<Model.RunsResult> GetRunsAsync(Uri uri) => await GetterAsync<Model.RunsResult>(uri, Model.JsonSerializer.Deserialize);
     public async Task<Model.RunsResult> GetRunsAsync(int pipelineId) => await GetterAsync<Model.RunsResult>(u => u.Runs(pipelineId), Model.JsonSerializer.Deserialize);
-    public async Task<Model.RunsResult> StartRunAsync(int pipelineId, Model.PipelineRunRequest request) =>
-        await PostJsonForJsonAsync<Model.RunsResult>(u => u.Runs(pipelineId), SerializeToString(request, Model.JsonSerializer.Serialize), Model.JsonSerializer.Deserialize);
 
     public async Task<Model.GitRepository> GetGitRepositoryAsync(String repositoryId) => await GetterAsync<Model.GitRepository>(u => u.GitRepository(repositoryId), Model.JsonSerializer.Deserialize);
 
