@@ -4,6 +4,7 @@ partial class AzdoClient
 {
     public async Task<Model.PipelinesResult> GetPipelinesAsync() => await GetterAsync<Model.PipelinesResult>(u => u.Pipelines(top: null), Model.JsonSerializer.Deserialize);
 
+    public async Task<Model.Run> GetRunAsync(Uri uri) => await GetterAsync<Model.Run>(uri, Model.JsonSerializer.Deserialize);
     public async Task<Model.Run> GetRunAsync(int pipelineId, int runId) => await GetterAsync<Model.Run>(u => u.Run(pipelineId, runId), Model.JsonSerializer.Deserialize);
 
     public async Task<Model.RunsResult> GetRunsAsync(Uri uri) => await GetterAsync<Model.RunsResult>(uri, Model.JsonSerializer.Deserialize);
