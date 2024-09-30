@@ -1,3 +1,6 @@
+BuildResult
+- reason => Reason : String
+
 GitBranchStats
 - commit => Commit : GitCommit
 - name => Name : String

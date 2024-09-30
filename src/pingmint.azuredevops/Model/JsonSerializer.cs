@@ -12,6 +12,53 @@ public static partial class JsonSerializer
 	private delegate void DeserializerDelegate<T>(ref Utf8JsonReader r, out T value);
 	private static T GetOutParam<T>(ref Utf8JsonReader reader, DeserializerDelegate<T> func) { func(ref reader, out T value); return value; }
 
+	public static void Serialize(Utf8JsonWriter writer, BuildResult value)
+	{
+		if (value is null) { writer.WriteNullValue(); return; }
+		writer.WriteStartObject();
+		if (value.Reason is { } localReason)
+		{
+			writer.WritePropertyName("reason");
+			writer.WriteStringValue(localReason);
+		}
+		writer.WriteEndObject();
+	}
+
+	public static void Deserialize(ref Utf8JsonReader reader, out BuildResult obj)
+	{
+		obj = new BuildResult();
+		while (true)
+		{
+			switch (Next(ref reader))
+			{
+				case JsonTokenType.PropertyName:
+				{
+					if (reader.ValueTextEquals("reason"))
+					{
+						obj.Reason = Next(ref reader) switch
+						{
+							JsonTokenType.Null => null,
+							JsonTokenType.String => reader.GetString(),
+							var unexpected => throw new InvalidOperationException($"unexpected token type for Reason: {unexpected} ")
+						};
+						break;
+					}
+
+					reader.Skip();
+					break;
+				}
+				case JsonTokenType.EndObject:
+				{
+					return;
+				}
+				default:
+				{
+					reader.Skip();
+					break;
+				}
+			}
+		}
+	}
 	public static void Serialize(Utf8JsonWriter writer, GitBranchStats value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
@@ -6121,6 +6168,10 @@ public static partial class JsonSerializer
 			}
 		}
 	}
+}
+public sealed partial class BuildResult
+{
+	public String? Reason { get; set; }
 }
 public sealed partial class GitBranchStats
 {

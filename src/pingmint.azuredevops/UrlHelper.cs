@@ -4,6 +4,7 @@ public partial class UrlHelper
 {
     private const String DefaultApiVersion = "7.1-preview.1";
     private const String Version72preview1 = "7.2-preview.1";
+    private const String Version72preview7 = "7.2-preview.7";
     private readonly String organization;
     private readonly String project;
 
@@ -16,6 +17,8 @@ public partial class UrlHelper
     public String DevAzureUrlString => $"https://dev.azure.com/{organization}/{project}";
 
     public String ReleaseMgmtUrlString => $"https://vsrm.dev.azure.com/{organization}/{project}";
+
+    public Uri Build(int buildId, String apiVersion = Version72preview7) => new($"{DevAzureUrlString}/_apis/build/builds/{buildId}?api-version={apiVersion}");
 
     public Uri GitBranchStats(String repositoryId, String branchName, String apiVersion = DefaultApiVersion) => new($"{DevAzureUrlString}/_apis/git/repositories/{repositoryId}/stats/branches?name={branchName}&api-version={apiVersion}");
 
