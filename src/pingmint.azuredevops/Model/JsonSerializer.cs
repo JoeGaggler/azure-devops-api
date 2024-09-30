@@ -5,14 +5,73 @@ using System.Text.Json;
 
 namespace Pingmint.AzureDevOps.Model;
 
-public static partial class JsonSerializer
+public partial class JsonSerializer :
+    JsonSerializer.ISerializes<BuildResult>,
+    JsonSerializer.ISerializes<GitBranchStats>,
+    JsonSerializer.ISerializes<GitCommit>,
+    JsonSerializer.ISerializes<GitCommitRef>,
+    JsonSerializer.ISerializes<GitDiffsChangeCounts>,
+    JsonSerializer.ISerializes<GitDiffChange>,
+    JsonSerializer.ISerializes<GitDiffChangeItem>,
+    JsonSerializer.ISerializes<GitDiffs>,
+    JsonSerializer.ISerializes<GitMergeRequest>,
+    JsonSerializer.ISerializes<GitMergeResult>,
+    JsonSerializer.ISerializes<GitMergeOperationStatusDetail>,
+    JsonSerializer.ISerializes<GitPerson>,
+    JsonSerializer.ISerializes<GitPullRequest>,
+    JsonSerializer.ISerializes<IdentityRefWithVote>,
+    JsonSerializer.ISerializes<GitPullRequestResponse>,
+    JsonSerializer.ISerializes<CreateGitPullRequestStatusesRequest>,
+    JsonSerializer.ISerializes<GitPullRequestStatus>,
+    JsonSerializer.ISerializes<GitStatusContext>,
+    JsonSerializer.ISerializes<GitPullRequestStatusesResponse>,
+    JsonSerializer.ISerializes<GitRef>,
+    JsonSerializer.ISerializes<GitRefResult>,
+    JsonSerializer.ISerializes<GitRefUpdate>,
+    JsonSerializer.ISerializes<GitRefUpdateRequest>,
+    JsonSerializer.ISerializes<GitRefUpdateResponse>,
+    JsonSerializer.ISerializes<GitRefUpdateResult>,
+    JsonSerializer.ISerializes<GitRepository>,
+    JsonSerializer.ISerializes<PipelineRunRequest>,
+    JsonSerializer.ISerializes<PipelinesResult>,
+    JsonSerializer.ISerializes<Pipeline>,
+    JsonSerializer.ISerializes<Project>,
+    JsonSerializer.ISerializes<RunsResult>,
+    JsonSerializer.ISerializes<Run>,
+    JsonSerializer.ISerializes<RunResources>,
+    JsonSerializer.ISerializes<PipelineRunResources>,
+    JsonSerializer.ISerializes<PipelineRunResource>,
+    JsonSerializer.ISerializes<RepositoryRunResources>,
+    JsonSerializer.ISerializes<RepositoryRunResource>,
+    JsonSerializer.ISerializes<Respository>,
+    JsonSerializer.ISerializes<PullRequestThreadsResult>,
+    JsonSerializer.ISerializes<PullRequestThread>,
+    JsonSerializer.ISerializes<PullRequestThreadComment>,
+    JsonSerializer.ISerializes<ReleasesResult>,
+    JsonSerializer.ISerializes<Release>,
+    JsonSerializer.ISerializes<ReleaseArtifact>,
+    JsonSerializer.ISerializes<ReleaseArtifactDefinitionReference>,
+    JsonSerializer.ISerializes<ReleaseDefinitionsResult>,
+    JsonSerializer.ISerializes<ReleaseDefinition>,
+    JsonSerializer.ISerializes<ReleaseEnvironment>,
+    JsonSerializer.ISerializes<ReleasePropertiesCollection>,
+    JsonSerializer.ISerializes<IdReference>,
+    JsonSerializer.ISerializes<IdentityRef>,
+    JsonSerializer.ISerializes<ProjectReference>,
+    JsonSerializer.ISerializes<ReferenceLinks>,
+    JsonSerializer.ISerializes<ReferenceLink>,
+    JsonSerializer.ISerializes<Variables>,
+    JsonSerializer.ISerializes<VariableValue>,
+    JsonSerializer.ISerializes<VariableGroups>,
+    JsonSerializer.ISerializes<TemplateParameters>
 {
-	private static JsonTokenType Next(ref Utf8JsonReader reader) => reader.Read() ? reader.TokenType : throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+	public interface ISerializes<T> where T : notnull
+	{
+		static abstract void Serialize(Utf8JsonWriter writer, T? value);
+		static abstract void Deserialize(ref Utf8JsonReader reader, T value);
+	}
 
-	private delegate void DeserializerDelegate<T>(ref Utf8JsonReader r, out T value);
-	private static T GetOutParam<T>(ref Utf8JsonReader reader, DeserializerDelegate<T> func) { func(ref reader, out T value); return value; }
-
-	public static void Serialize(Utf8JsonWriter writer, BuildResult value)
+	public static void Serialize(Utf8JsonWriter writer, BuildResult? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -24,42 +83,33 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out BuildResult obj)
+	public static void Deserialize(ref Utf8JsonReader reader, BuildResult obj)
 	{
-		obj = new BuildResult();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("reason"))
 					{
-						obj.Reason = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Reason: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Reason = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Reason = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Reason: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, GitBranchStats value)
+	public static void Serialize(Utf8JsonWriter writer, GitBranchStats? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -91,83 +141,62 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out GitBranchStats obj)
+	public static void Deserialize(ref Utf8JsonReader reader, GitBranchStats obj)
 	{
-		obj = new GitBranchStats();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("commit"))
 					{
-						obj.Commit = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<GitCommit>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Commit: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Commit = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.Commit = new(); Deserialize(ref reader, obj.Commit); break; }
+						throw new InvalidOperationException($"unexpected token type for Commit: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("name"))
 					{
-						obj.Name = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Name: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Name = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Name = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Name: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("aheadCount"))
 					{
-						obj.aheadCount = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for aheadCount: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.aheadCount = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.aheadCount = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for aheadCount: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("behindCount"))
 					{
-						obj.behindCount = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for behindCount: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.behindCount = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.behindCount = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for behindCount: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("isBaseVersion"))
 					{
-						obj.isBaseVersion = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.True => reader.GetBoolean(),
-							JsonTokenType.False => reader.GetBoolean(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for isBaseVersion: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.isBaseVersion = null; break; }
+						if (reader.TokenType == JsonTokenType.True) { obj.isBaseVersion = true; break; }
+						if (reader.TokenType == JsonTokenType.False) { obj.isBaseVersion = false; break; }
+						throw new InvalidOperationException($"unexpected token type for isBaseVersion: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, GitCommit value)
+	public static void Serialize(Utf8JsonWriter writer, GitCommit? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -209,102 +238,75 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out GitCommit obj)
+	public static void Deserialize(ref Utf8JsonReader reader, GitCommit obj)
 	{
-		obj = new GitCommit();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("treeId"))
 					{
-						obj.treeId = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for treeId: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.treeId = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.treeId = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for treeId: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("commitId"))
 					{
-						obj.commitId = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for commitId: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.commitId = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.commitId = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for commitId: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("author"))
 					{
-						obj.author = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<GitPerson>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for author: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.author = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.author = new(); Deserialize(ref reader, obj.author); break; }
+						throw new InvalidOperationException($"unexpected token type for author: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("committer"))
 					{
-						obj.committer = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<GitPerson>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for committer: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.committer = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.committer = new(); Deserialize(ref reader, obj.committer); break; }
+						throw new InvalidOperationException($"unexpected token type for committer: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("comment"))
 					{
-						obj.comment = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for comment: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.comment = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.comment = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for comment: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("parents"))
 					{
-						obj.Parents = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => Deserialize0(ref reader, obj.Parents ?? new()),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Parents: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Parents = null; break; }
+						if (reader.TokenType == JsonTokenType.StartArray) { obj.Parents = Deserialize0(ref reader, obj.Parents ?? new()); break; }
+						throw new InvalidOperationException($"unexpected token type for Parents: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("url"))
 					{
-						obj.url = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for url: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.url = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.url = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for url: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, GitCommitRef value)
+	public static void Serialize(Utf8JsonWriter writer, GitCommitRef? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -321,52 +323,40 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out GitCommitRef obj)
+	public static void Deserialize(ref Utf8JsonReader reader, GitCommitRef obj)
 	{
-		obj = new GitCommitRef();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("commitId"))
 					{
-						obj.commitId = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for commitId: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.commitId = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.commitId = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for commitId: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("url"))
 					{
-						obj.url = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for url: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.url = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.url = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for url: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, GitDiffsChangeCounts value)
+	public static void Serialize(Utf8JsonWriter writer, GitDiffsChangeCounts? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -383,52 +373,40 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out GitDiffsChangeCounts obj)
+	public static void Deserialize(ref Utf8JsonReader reader, GitDiffsChangeCounts obj)
 	{
-		obj = new GitDiffsChangeCounts();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("Add"))
 					{
-						obj.Add = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Add: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Add = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.Add = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for Add: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("Edit"))
 					{
-						obj.Edit = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Edit: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Edit = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.Edit = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for Edit: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, GitDiffChange value)
+	public static void Serialize(Utf8JsonWriter writer, GitDiffChange? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -445,52 +423,40 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out GitDiffChange obj)
+	public static void Deserialize(ref Utf8JsonReader reader, GitDiffChange obj)
 	{
-		obj = new GitDiffChange();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("item"))
 					{
-						obj.item = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<GitDiffChangeItem>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for item: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.item = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.item = new(); Deserialize(ref reader, obj.item); break; }
+						throw new InvalidOperationException($"unexpected token type for item: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("changeType"))
 					{
-						obj.changeType = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for changeType: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.changeType = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.changeType = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for changeType: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, GitDiffChangeItem value)
+	public static void Serialize(Utf8JsonWriter writer, GitDiffChangeItem? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -532,103 +498,76 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out GitDiffChangeItem obj)
+	public static void Deserialize(ref Utf8JsonReader reader, GitDiffChangeItem obj)
 	{
-		obj = new GitDiffChangeItem();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("objectId"))
 					{
-						obj.objectId = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for objectId: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.objectId = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.objectId = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for objectId: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("originalObjectId"))
 					{
-						obj.originalObjectId = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for originalObjectId: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.originalObjectId = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.originalObjectId = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for originalObjectId: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("gitObjectType"))
 					{
-						obj.gitObjectType = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for gitObjectType: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.gitObjectType = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.gitObjectType = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for gitObjectType: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("commitId"))
 					{
-						obj.commitId = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for commitId: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.commitId = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.commitId = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for commitId: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("path"))
 					{
-						obj.path = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for path: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.path = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.path = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for path: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("isFolder"))
 					{
-						obj.isFolder = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.True => reader.GetBoolean(),
-							JsonTokenType.False => reader.GetBoolean(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for isFolder: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.isFolder = null; break; }
+						if (reader.TokenType == JsonTokenType.True) { obj.isFolder = true; break; }
+						if (reader.TokenType == JsonTokenType.False) { obj.isFolder = false; break; }
+						throw new InvalidOperationException($"unexpected token type for isFolder: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("url"))
 					{
-						obj.url = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for url: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.url = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.url = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for url: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, GitDiffs value)
+	public static void Serialize(Utf8JsonWriter writer, GitDiffs? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -675,113 +614,83 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out GitDiffs obj)
+	public static void Deserialize(ref Utf8JsonReader reader, GitDiffs obj)
 	{
-		obj = new GitDiffs();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("allChangesIncluded"))
 					{
-						obj.allChangesIncluded = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.True => reader.GetBoolean(),
-							JsonTokenType.False => reader.GetBoolean(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for allChangesIncluded: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.allChangesIncluded = null; break; }
+						if (reader.TokenType == JsonTokenType.True) { obj.allChangesIncluded = true; break; }
+						if (reader.TokenType == JsonTokenType.False) { obj.allChangesIncluded = false; break; }
+						throw new InvalidOperationException($"unexpected token type for allChangesIncluded: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("changeCounts"))
 					{
-						obj.changeCounts = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<GitDiffsChangeCounts>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for changeCounts: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.changeCounts = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.changeCounts = new(); Deserialize(ref reader, obj.changeCounts); break; }
+						throw new InvalidOperationException($"unexpected token type for changeCounts: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("changes"))
 					{
-						obj.changes = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => Deserialize1(ref reader, obj.changes ?? new()),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for changes: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.changes = null; break; }
+						if (reader.TokenType == JsonTokenType.StartArray) { obj.changes = Deserialize1(ref reader, obj.changes ?? new()); break; }
+						throw new InvalidOperationException($"unexpected token type for changes: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("commonCommit"))
 					{
-						obj.commonCommit = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for commonCommit: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.commonCommit = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.commonCommit = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for commonCommit: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("baseCommit"))
 					{
-						obj.baseCommit = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for baseCommit: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.baseCommit = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.baseCommit = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for baseCommit: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("targetCommit"))
 					{
-						obj.targetCommit = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for targetCommit: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.targetCommit = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.targetCommit = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for targetCommit: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("aheadCount"))
 					{
-						obj.aheadCount = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for aheadCount: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.aheadCount = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.aheadCount = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for aheadCount: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("behindCount"))
 					{
-						obj.behindCount = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for behindCount: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.behindCount = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.behindCount = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for behindCount: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, GitMergeRequest value)
+	public static void Serialize(Utf8JsonWriter writer, GitMergeRequest? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -798,52 +707,40 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out GitMergeRequest obj)
+	public static void Deserialize(ref Utf8JsonReader reader, GitMergeRequest obj)
 	{
-		obj = new GitMergeRequest();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("comment"))
 					{
-						obj.Comment = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Comment: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Comment = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Comment = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Comment: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("parents"))
 					{
-						obj.Parents = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => Deserialize2(ref reader, obj.Parents ?? new()),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Parents: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Parents = null; break; }
+						if (reader.TokenType == JsonTokenType.StartArray) { obj.Parents = Deserialize2(ref reader, obj.Parents ?? new()); break; }
+						throw new InvalidOperationException($"unexpected token type for Parents: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, GitMergeResult value)
+	public static void Serialize(Utf8JsonWriter writer, GitMergeResult? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -865,62 +762,47 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out GitMergeResult obj)
+	public static void Deserialize(ref Utf8JsonReader reader, GitMergeResult obj)
 	{
-		obj = new GitMergeResult();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("status"))
 					{
-						obj.Status = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Status: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Status = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Status = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Status: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("mergeOperationId"))
 					{
-						obj.MergeOperationId = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for MergeOperationId: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.MergeOperationId = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.MergeOperationId = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for MergeOperationId: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("detailedStatus"))
 					{
-						obj.DetailedStatus = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<GitMergeOperationStatusDetail>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for DetailedStatus: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.DetailedStatus = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.DetailedStatus = new(); Deserialize(ref reader, obj.DetailedStatus); break; }
+						throw new InvalidOperationException($"unexpected token type for DetailedStatus: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, GitMergeOperationStatusDetail value)
+	public static void Serialize(Utf8JsonWriter writer, GitMergeOperationStatusDetail? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -937,52 +819,40 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out GitMergeOperationStatusDetail obj)
+	public static void Deserialize(ref Utf8JsonReader reader, GitMergeOperationStatusDetail obj)
 	{
-		obj = new GitMergeOperationStatusDetail();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("mergeCommitId"))
 					{
-						obj.MergeCommitId = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for MergeCommitId: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.MergeCommitId = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.MergeCommitId = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for MergeCommitId: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("failureMessage"))
 					{
-						obj.FailureMessage = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for FailureMessage: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.FailureMessage = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.FailureMessage = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for FailureMessage: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, GitPerson value)
+	public static void Serialize(Utf8JsonWriter writer, GitPerson? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -1004,62 +874,47 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out GitPerson obj)
+	public static void Deserialize(ref Utf8JsonReader reader, GitPerson obj)
 	{
-		obj = new GitPerson();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("name"))
 					{
-						obj.name = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for name: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.name = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.name = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for name: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("email"))
 					{
-						obj.email = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for email: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.email = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.email = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for email: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("date"))
 					{
-						obj.date = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for date: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.date = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.date = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for date: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, GitPullRequest value)
+	public static void Serialize(Utf8JsonWriter writer, GitPullRequest? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -1136,173 +991,125 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out GitPullRequest obj)
+	public static void Deserialize(ref Utf8JsonReader reader, GitPullRequest obj)
 	{
-		obj = new GitPullRequest();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("pullRequestId"))
 					{
-						obj.PullRequestId = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for PullRequestId: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.PullRequestId = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.PullRequestId = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for PullRequestId: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("title"))
 					{
-						obj.Title = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Title: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Title = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Title = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Title: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("description"))
 					{
-						obj.Description = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Description: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Description = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Description = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Description: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("status"))
 					{
-						obj.Status = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Status: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Status = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Status = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Status: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("sourceRefName"))
 					{
-						obj.SourceRefName = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for SourceRefName: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.SourceRefName = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.SourceRefName = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for SourceRefName: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("targetRefName"))
 					{
-						obj.TargetRefName = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for TargetRefName: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.TargetRefName = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.TargetRefName = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for TargetRefName: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("lastMergeCommit"))
 					{
-						obj.LastMergeCommit = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<GitCommitRef>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for LastMergeCommit: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.LastMergeCommit = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.LastMergeCommit = new(); Deserialize(ref reader, obj.LastMergeCommit); break; }
+						throw new InvalidOperationException($"unexpected token type for LastMergeCommit: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("lastMergeSourceCommit"))
 					{
-						obj.LastMergeSourceCommit = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<GitCommitRef>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for LastMergeSourceCommit: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.LastMergeSourceCommit = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.LastMergeSourceCommit = new(); Deserialize(ref reader, obj.LastMergeSourceCommit); break; }
+						throw new InvalidOperationException($"unexpected token type for LastMergeSourceCommit: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("lastMergeTargetCommit"))
 					{
-						obj.LastMergeTargetCommit = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<GitCommitRef>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for LastMergeTargetCommit: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.LastMergeTargetCommit = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.LastMergeTargetCommit = new(); Deserialize(ref reader, obj.LastMergeTargetCommit); break; }
+						throw new InvalidOperationException($"unexpected token type for LastMergeTargetCommit: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("mergeId"))
 					{
-						obj.MergeId = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for MergeId: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.MergeId = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.MergeId = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for MergeId: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("mergeStatus"))
 					{
-						obj.MergeStatus = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for MergeStatus: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.MergeStatus = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.MergeStatus = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for MergeStatus: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("url"))
 					{
-						obj.Url = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Url: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Url = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Url = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Url: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("isDraft"))
 					{
-						obj.IsDraft = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.True => reader.GetBoolean(),
-							JsonTokenType.False => reader.GetBoolean(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for IsDraft: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.IsDraft = null; break; }
+						if (reader.TokenType == JsonTokenType.True) { obj.IsDraft = true; break; }
+						if (reader.TokenType == JsonTokenType.False) { obj.IsDraft = false; break; }
+						throw new InvalidOperationException($"unexpected token type for IsDraft: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("reviewers"))
 					{
-						obj.Reviewers = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => Deserialize3(ref reader, obj.Reviewers ?? new()),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Reviewers: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Reviewers = null; break; }
+						if (reader.TokenType == JsonTokenType.StartArray) { obj.Reviewers = Deserialize3(ref reader, obj.Reviewers ?? new()); break; }
+						throw new InvalidOperationException($"unexpected token type for Reviewers: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, IdentityRefWithVote value)
+	public static void Serialize(Utf8JsonWriter writer, IdentityRefWithVote? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -1354,124 +1161,91 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out IdentityRefWithVote obj)
+	public static void Deserialize(ref Utf8JsonReader reader, IdentityRefWithVote obj)
 	{
-		obj = new IdentityRefWithVote();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("id"))
 					{
-						obj.Id = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Id: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Id = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Id = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Id: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("displayName"))
 					{
-						obj.DisplayName = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for DisplayName: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.DisplayName = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.DisplayName = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for DisplayName: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("uniqueName"))
 					{
-						obj.UniqueName = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for UniqueName: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.UniqueName = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.UniqueName = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for UniqueName: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("url"))
 					{
-						obj.Url = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Url: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Url = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Url = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Url: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("imageUrl"))
 					{
-						obj.ImageUrl = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for ImageUrl: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.ImageUrl = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.ImageUrl = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for ImageUrl: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("isContainer"))
 					{
-						obj.IsContainer = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.True => reader.GetBoolean(),
-							JsonTokenType.False => reader.GetBoolean(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for IsContainer: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.IsContainer = null; break; }
+						if (reader.TokenType == JsonTokenType.True) { obj.IsContainer = true; break; }
+						if (reader.TokenType == JsonTokenType.False) { obj.IsContainer = false; break; }
+						throw new InvalidOperationException($"unexpected token type for IsContainer: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("isRequired"))
 					{
-						obj.IsRequired = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.True => reader.GetBoolean(),
-							JsonTokenType.False => reader.GetBoolean(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for IsRequired: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.IsRequired = null; break; }
+						if (reader.TokenType == JsonTokenType.True) { obj.IsRequired = true; break; }
+						if (reader.TokenType == JsonTokenType.False) { obj.IsRequired = false; break; }
+						throw new InvalidOperationException($"unexpected token type for IsRequired: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("vote"))
 					{
-						obj.Vote = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Vote: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Vote = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.Vote = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for Vote: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("reviewerUrl"))
 					{
-						obj.ReviewerUrl = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for ReviewerUrl: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.ReviewerUrl = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.ReviewerUrl = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for ReviewerUrl: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, GitPullRequestResponse value)
+	public static void Serialize(Utf8JsonWriter writer, GitPullRequestResponse? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -1483,42 +1257,33 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out GitPullRequestResponse obj)
+	public static void Deserialize(ref Utf8JsonReader reader, GitPullRequestResponse obj)
 	{
-		obj = new GitPullRequestResponse();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("value"))
 					{
-						obj.Value = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => Deserialize4(ref reader, obj.Value ?? new()),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Value: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Value = null; break; }
+						if (reader.TokenType == JsonTokenType.StartArray) { obj.Value = Deserialize4(ref reader, obj.Value ?? new()); break; }
+						throw new InvalidOperationException($"unexpected token type for Value: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, CreateGitPullRequestStatusesRequest value)
+	public static void Serialize(Utf8JsonWriter writer, CreateGitPullRequestStatusesRequest? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -1550,82 +1315,61 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out CreateGitPullRequestStatusesRequest obj)
+	public static void Deserialize(ref Utf8JsonReader reader, CreateGitPullRequestStatusesRequest obj)
 	{
-		obj = new CreateGitPullRequestStatusesRequest();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("iteration"))
 					{
-						obj.Iteration = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Iteration: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Iteration = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.Iteration = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for Iteration: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("state"))
 					{
-						obj.State = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for State: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.State = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.State = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for State: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("description"))
 					{
-						obj.Description = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Description: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Description = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Description = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Description: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("context"))
 					{
-						obj.Context = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<GitStatusContext>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Context: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Context = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.Context = new(); Deserialize(ref reader, obj.Context); break; }
+						throw new InvalidOperationException($"unexpected token type for Context: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("targetUrl"))
 					{
-						obj.TargetUrl = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for TargetUrl: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.TargetUrl = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.TargetUrl = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for TargetUrl: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, GitPullRequestStatus value)
+	public static void Serialize(Utf8JsonWriter writer, GitPullRequestStatus? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -1672,112 +1416,82 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out GitPullRequestStatus obj)
+	public static void Deserialize(ref Utf8JsonReader reader, GitPullRequestStatus obj)
 	{
-		obj = new GitPullRequestStatus();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("id"))
 					{
-						obj.Id = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Id: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Id = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.Id = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for Id: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("state"))
 					{
-						obj.State = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for State: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.State = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.State = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for State: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("description"))
 					{
-						obj.Description = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Description: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Description = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Description = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Description: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("context"))
 					{
-						obj.Context = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<GitStatusContext>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Context: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Context = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.Context = new(); Deserialize(ref reader, obj.Context); break; }
+						throw new InvalidOperationException($"unexpected token type for Context: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("creationDate"))
 					{
-						obj.CreationDate = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for CreationDate: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.CreationDate = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.CreationDate = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for CreationDate: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("updatedDate"))
 					{
-						obj.UpdatedDate = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for UpdatedDate: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.UpdatedDate = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.UpdatedDate = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for UpdatedDate: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("createdBy"))
 					{
-						obj.CreatedBy = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<IdentityRef>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for CreatedBy: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.CreatedBy = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.CreatedBy = new(); Deserialize(ref reader, obj.CreatedBy); break; }
+						throw new InvalidOperationException($"unexpected token type for CreatedBy: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("targetUrl"))
 					{
-						obj.TargetUrl = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for TargetUrl: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.TargetUrl = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.TargetUrl = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for TargetUrl: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, GitStatusContext value)
+	public static void Serialize(Utf8JsonWriter writer, GitStatusContext? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -1794,52 +1508,40 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out GitStatusContext obj)
+	public static void Deserialize(ref Utf8JsonReader reader, GitStatusContext obj)
 	{
-		obj = new GitStatusContext();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("genre"))
 					{
-						obj.Genre = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Genre: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Genre = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Genre = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Genre: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("name"))
 					{
-						obj.Name = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Name: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Name = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Name = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Name: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, GitPullRequestStatusesResponse value)
+	public static void Serialize(Utf8JsonWriter writer, GitPullRequestStatusesResponse? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -1856,52 +1558,40 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out GitPullRequestStatusesResponse obj)
+	public static void Deserialize(ref Utf8JsonReader reader, GitPullRequestStatusesResponse obj)
 	{
-		obj = new GitPullRequestStatusesResponse();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("count"))
 					{
-						obj.Count = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Count: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Count = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.Count = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for Count: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("value"))
 					{
-						obj.Value = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => Deserialize5(ref reader, obj.Value ?? new()),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Value: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Value = null; break; }
+						if (reader.TokenType == JsonTokenType.StartArray) { obj.Value = Deserialize5(ref reader, obj.Value ?? new()); break; }
+						throw new InvalidOperationException($"unexpected token type for Value: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, GitRef value)
+	public static void Serialize(Utf8JsonWriter writer, GitRef? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -1918,52 +1608,40 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out GitRef obj)
+	public static void Deserialize(ref Utf8JsonReader reader, GitRef obj)
 	{
-		obj = new GitRef();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("name"))
 					{
-						obj.Name = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Name: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Name = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Name = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Name: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("objectId"))
 					{
-						obj.ObjectId = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for ObjectId: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.ObjectId = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.ObjectId = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for ObjectId: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, GitRefResult value)
+	public static void Serialize(Utf8JsonWriter writer, GitRefResult? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -1975,42 +1653,33 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out GitRefResult obj)
+	public static void Deserialize(ref Utf8JsonReader reader, GitRefResult obj)
 	{
-		obj = new GitRefResult();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("value"))
 					{
-						obj.Value = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => Deserialize6(ref reader, obj.Value ?? new()),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Value: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Value = null; break; }
+						if (reader.TokenType == JsonTokenType.StartArray) { obj.Value = Deserialize6(ref reader, obj.Value ?? new()); break; }
+						throw new InvalidOperationException($"unexpected token type for Value: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, GitRefUpdate value)
+	public static void Serialize(Utf8JsonWriter writer, GitRefUpdate? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -2032,62 +1701,47 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out GitRefUpdate obj)
+	public static void Deserialize(ref Utf8JsonReader reader, GitRefUpdate obj)
 	{
-		obj = new GitRefUpdate();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("name"))
 					{
-						obj.Name = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Name: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Name = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Name = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Name: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("oldObjectId"))
 					{
-						obj.OldObjectId = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for OldObjectId: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.OldObjectId = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.OldObjectId = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for OldObjectId: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("newObjectId"))
 					{
-						obj.NewObjectId = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for NewObjectId: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.NewObjectId = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.NewObjectId = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for NewObjectId: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, GitRefUpdateRequest value)
+	public static void Serialize(Utf8JsonWriter writer, GitRefUpdateRequest? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -2099,42 +1753,33 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out GitRefUpdateRequest obj)
+	public static void Deserialize(ref Utf8JsonReader reader, GitRefUpdateRequest obj)
 	{
-		obj = new GitRefUpdateRequest();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("value"))
 					{
-						obj.Value = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => Deserialize7(ref reader, obj.Value ?? new()),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Value: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Value = null; break; }
+						if (reader.TokenType == JsonTokenType.StartArray) { obj.Value = Deserialize7(ref reader, obj.Value ?? new()); break; }
+						throw new InvalidOperationException($"unexpected token type for Value: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, GitRefUpdateResponse value)
+	public static void Serialize(Utf8JsonWriter writer, GitRefUpdateResponse? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -2146,42 +1791,33 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out GitRefUpdateResponse obj)
+	public static void Deserialize(ref Utf8JsonReader reader, GitRefUpdateResponse obj)
 	{
-		obj = new GitRefUpdateResponse();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("value"))
 					{
-						obj.Value = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => Deserialize8(ref reader, obj.Value ?? new()),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Value: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Value = null; break; }
+						if (reader.TokenType == JsonTokenType.StartArray) { obj.Value = Deserialize8(ref reader, obj.Value ?? new()); break; }
+						throw new InvalidOperationException($"unexpected token type for Value: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, GitRefUpdateResult value)
+	public static void Serialize(Utf8JsonWriter writer, GitRefUpdateResult? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -2208,73 +1844,55 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out GitRefUpdateResult obj)
+	public static void Deserialize(ref Utf8JsonReader reader, GitRefUpdateResult obj)
 	{
-		obj = new GitRefUpdateResult();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("name"))
 					{
-						obj.Name = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Name: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Name = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Name = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Name: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("oldObjectId"))
 					{
-						obj.OldObjectId = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for OldObjectId: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.OldObjectId = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.OldObjectId = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for OldObjectId: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("newObjectId"))
 					{
-						obj.NewObjectId = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for NewObjectId: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.NewObjectId = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.NewObjectId = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for NewObjectId: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("success"))
 					{
-						obj.WasSuccessful = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.True => reader.GetBoolean(),
-							JsonTokenType.False => reader.GetBoolean(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for WasSuccessful: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.WasSuccessful = null; break; }
+						if (reader.TokenType == JsonTokenType.True) { obj.WasSuccessful = true; break; }
+						if (reader.TokenType == JsonTokenType.False) { obj.WasSuccessful = false; break; }
+						throw new InvalidOperationException($"unexpected token type for WasSuccessful: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, GitRepository value)
+	public static void Serialize(Utf8JsonWriter writer, GitRepository? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -2336,143 +1954,104 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out GitRepository obj)
+	public static void Deserialize(ref Utf8JsonReader reader, GitRepository obj)
 	{
-		obj = new GitRepository();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("_links"))
 					{
-						obj.Links = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<ReferenceLinks>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Links: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Links = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.Links = new(); Deserialize(ref reader, obj.Links); break; }
+						throw new InvalidOperationException($"unexpected token type for Links: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("defaultBranch"))
 					{
-						obj.DefaultBranch = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for DefaultBranch: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.DefaultBranch = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.DefaultBranch = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for DefaultBranch: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("id"))
 					{
-						obj.Id = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Id: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Id = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Id = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Id: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("isDisabled"))
 					{
-						obj.isDisabled = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.True => reader.GetBoolean(),
-							JsonTokenType.False => reader.GetBoolean(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for isDisabled: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.isDisabled = null; break; }
+						if (reader.TokenType == JsonTokenType.True) { obj.isDisabled = true; break; }
+						if (reader.TokenType == JsonTokenType.False) { obj.isDisabled = false; break; }
+						throw new InvalidOperationException($"unexpected token type for isDisabled: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("name"))
 					{
-						obj.Name = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Name: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Name = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Name = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Name: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("project"))
 					{
-						obj.Project = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<Project>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Project: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Project = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.Project = new(); Deserialize(ref reader, obj.Project); break; }
+						throw new InvalidOperationException($"unexpected token type for Project: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("remoteUrl"))
 					{
-						obj.remoteUrl = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for remoteUrl: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.remoteUrl = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.remoteUrl = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for remoteUrl: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("size"))
 					{
-						obj.Size = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Size: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Size = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.Size = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for Size: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("sshUrl"))
 					{
-						obj.sshUrl = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for sshUrl: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.sshUrl = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.sshUrl = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for sshUrl: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("url"))
 					{
-						obj.Url = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Url: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Url = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Url = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Url: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("webUrl"))
 					{
-						obj.webUrl = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for webUrl: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.webUrl = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.webUrl = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for webUrl: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, PipelineRunRequest value)
+	public static void Serialize(Utf8JsonWriter writer, PipelineRunRequest? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -2489,52 +2068,40 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out PipelineRunRequest obj)
+	public static void Deserialize(ref Utf8JsonReader reader, PipelineRunRequest obj)
 	{
-		obj = new PipelineRunRequest();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("stagesToSkip"))
 					{
-						obj.StagesToSkip = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => Deserialize9(ref reader, obj.StagesToSkip ?? new()),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for StagesToSkip: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.StagesToSkip = null; break; }
+						if (reader.TokenType == JsonTokenType.StartArray) { obj.StagesToSkip = Deserialize9(ref reader, obj.StagesToSkip ?? new()); break; }
+						throw new InvalidOperationException($"unexpected token type for StagesToSkip: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("resources"))
 					{
-						obj.Resources = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<RunResources>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Resources: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Resources = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.Resources = new(); Deserialize(ref reader, obj.Resources); break; }
+						throw new InvalidOperationException($"unexpected token type for Resources: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, PipelinesResult value)
+	public static void Serialize(Utf8JsonWriter writer, PipelinesResult? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -2551,52 +2118,40 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out PipelinesResult obj)
+	public static void Deserialize(ref Utf8JsonReader reader, PipelinesResult obj)
 	{
-		obj = new PipelinesResult();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("count"))
 					{
-						obj.Count = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Count: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Count = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.Count = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for Count: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("value"))
 					{
-						obj.Value = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => Deserialize10(ref reader, obj.Value ?? new()),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Value: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Value = null; break; }
+						if (reader.TokenType == JsonTokenType.StartArray) { obj.Value = Deserialize10(ref reader, obj.Value ?? new()); break; }
+						throw new InvalidOperationException($"unexpected token type for Value: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, Pipeline value)
+	public static void Serialize(Utf8JsonWriter writer, Pipeline? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -2633,92 +2188,68 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out Pipeline obj)
+	public static void Deserialize(ref Utf8JsonReader reader, Pipeline obj)
 	{
-		obj = new Pipeline();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("_links"))
 					{
-						obj.Links = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<ReferenceLinks>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Links: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Links = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.Links = new(); Deserialize(ref reader, obj.Links); break; }
+						throw new InvalidOperationException($"unexpected token type for Links: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("id"))
 					{
-						obj.Id = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Id: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Id = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.Id = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for Id: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("folder"))
 					{
-						obj.Folder = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Folder: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Folder = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Folder = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Folder: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("name"))
 					{
-						obj.Name = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Name: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Name = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Name = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Name: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("revision"))
 					{
-						obj.Revision = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Revision: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Revision = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.Revision = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for Revision: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("url"))
 					{
-						obj.Url = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Url: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Url = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Url = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Url: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, Project value)
+	public static void Serialize(Utf8JsonWriter writer, Project? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -2760,102 +2291,75 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out Project obj)
+	public static void Deserialize(ref Utf8JsonReader reader, Project obj)
 	{
-		obj = new Project();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("id"))
 					{
-						obj.Id = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Id: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Id = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Id = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Id: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("name"))
 					{
-						obj.Name = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Name: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Name = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Name = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Name: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("url"))
 					{
-						obj.Url = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Url: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Url = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Url = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Url: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("state"))
 					{
-						obj.State = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for State: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.State = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.State = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for State: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("revision"))
 					{
-						obj.Revision = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Revision: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Revision = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.Revision = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for Revision: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("visibility"))
 					{
-						obj.Visibility = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Visibility: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Visibility = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Visibility = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Visibility: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("lastUpdateTime"))
 					{
-						obj.LastUpdateTime = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for LastUpdateTime: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.LastUpdateTime = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.LastUpdateTime = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for LastUpdateTime: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, RunsResult value)
+	public static void Serialize(Utf8JsonWriter writer, RunsResult? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -2872,52 +2376,40 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out RunsResult obj)
+	public static void Deserialize(ref Utf8JsonReader reader, RunsResult obj)
 	{
-		obj = new RunsResult();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("count"))
 					{
-						obj.Count = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Count: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Count = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.Count = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for Count: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("value"))
 					{
-						obj.Value = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => Deserialize11(ref reader, obj.Value ?? new()),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Value: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Value = null; break; }
+						if (reader.TokenType == JsonTokenType.StartArray) { obj.Value = Deserialize11(ref reader, obj.Value ?? new()); break; }
+						throw new InvalidOperationException($"unexpected token type for Value: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, Run value)
+	public static void Serialize(Utf8JsonWriter writer, Run? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -2984,152 +2476,110 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out Run obj)
+	public static void Deserialize(ref Utf8JsonReader reader, Run obj)
 	{
-		obj = new Run();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("_links"))
 					{
-						obj.Links = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<ReferenceLinks>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Links: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Links = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.Links = new(); Deserialize(ref reader, obj.Links); break; }
+						throw new InvalidOperationException($"unexpected token type for Links: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("createdDate"))
 					{
-						obj.CreatedDate = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for CreatedDate: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.CreatedDate = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.CreatedDate = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for CreatedDate: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("finishedDate"))
 					{
-						obj.FinishedDate = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for FinishedDate: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.FinishedDate = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.FinishedDate = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for FinishedDate: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("id"))
 					{
-						obj.Id = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Id: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Id = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.Id = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for Id: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("name"))
 					{
-						obj.Name = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Name: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Name = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Name = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Name: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("pipeline"))
 					{
-						obj.Pipeline = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<Pipeline>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Pipeline: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Pipeline = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.Pipeline = new(); Deserialize(ref reader, obj.Pipeline); break; }
+						throw new InvalidOperationException($"unexpected token type for Pipeline: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("state"))
 					{
-						obj.State = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for State: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.State = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.State = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for State: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("resources"))
 					{
-						obj.Resources = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<RunResources>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Resources: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Resources = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.Resources = new(); Deserialize(ref reader, obj.Resources); break; }
+						throw new InvalidOperationException($"unexpected token type for Resources: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("result"))
 					{
-						obj.Result = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Result: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Result = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Result = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Result: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("templateParameters"))
 					{
-						obj.TemplateParameters = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<TemplateParameters>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for TemplateParameters: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.TemplateParameters = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.TemplateParameters = new(); Deserialize(ref reader, obj.TemplateParameters); break; }
+						throw new InvalidOperationException($"unexpected token type for TemplateParameters: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("url"))
 					{
-						obj.Url = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Url: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Url = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Url = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Url: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("variables"))
 					{
-						obj.Variables = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<Variables>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Variables: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Variables = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.Variables = new(); Deserialize(ref reader, obj.Variables); break; }
+						throw new InvalidOperationException($"unexpected token type for Variables: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, RunResources value)
+	public static void Serialize(Utf8JsonWriter writer, RunResources? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -3146,52 +2596,40 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out RunResources obj)
+	public static void Deserialize(ref Utf8JsonReader reader, RunResources obj)
 	{
-		obj = new RunResources();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("pipelines"))
 					{
-						obj.Pipelines = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<PipelineRunResources>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Pipelines: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Pipelines = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.Pipelines = new(); Deserialize(ref reader, obj.Pipelines); break; }
+						throw new InvalidOperationException($"unexpected token type for Pipelines: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("repositories"))
 					{
-						obj.Repositories = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<RepositoryRunResources>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Repositories: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Repositories = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.Repositories = new(); Deserialize(ref reader, obj.Repositories); break; }
+						throw new InvalidOperationException($"unexpected token type for Repositories: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, PipelineRunResources value)
+	public static void Serialize(Utf8JsonWriter writer, PipelineRunResources? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -3206,39 +2644,31 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out PipelineRunResources obj)
+	public static void Deserialize(ref Utf8JsonReader reader, PipelineRunResources obj)
 	{
-		obj = new PipelineRunResources();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					obj.All ??= new();
 					var lhs = reader.GetString() ?? throw new NullReferenceException();
-					var rhs = Next(ref reader) switch
-					{
-						JsonTokenType.Null => null,
-						JsonTokenType.StartObject => GetOutParam<PipelineRunResource>(ref reader, Deserialize),
-						var unexpected => throw new InvalidOperationException($"unexpected token type for All: {unexpected} ")
-					};
+					if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+					PipelineRunResource rhs;
+					if (reader.TokenType == JsonTokenType.Null) { break; }
+					else if (reader.TokenType == JsonTokenType.StartObject) { rhs = new(); Deserialize(ref reader, rhs); }
+					else throw new InvalidOperationException($"unexpected token type for All: {reader.TokenType} ");
 					obj.All.Add(lhs, rhs);
 					break;
 				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, PipelineRunResource value)
+	public static void Serialize(Utf8JsonWriter writer, PipelineRunResource? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -3255,52 +2685,40 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out PipelineRunResource obj)
+	public static void Deserialize(ref Utf8JsonReader reader, PipelineRunResource obj)
 	{
-		obj = new PipelineRunResource();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("pipeline"))
 					{
-						obj.Pipeline = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<Pipeline>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Pipeline: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Pipeline = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.Pipeline = new(); Deserialize(ref reader, obj.Pipeline); break; }
+						throw new InvalidOperationException($"unexpected token type for Pipeline: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("version"))
 					{
-						obj.Version = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Version: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Version = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Version = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Version: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, RepositoryRunResources value)
+	public static void Serialize(Utf8JsonWriter writer, RepositoryRunResources? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -3315,39 +2733,31 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out RepositoryRunResources obj)
+	public static void Deserialize(ref Utf8JsonReader reader, RepositoryRunResources obj)
 	{
-		obj = new RepositoryRunResources();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					obj.All ??= new();
 					var lhs = reader.GetString() ?? throw new NullReferenceException();
-					var rhs = Next(ref reader) switch
-					{
-						JsonTokenType.Null => null,
-						JsonTokenType.StartObject => GetOutParam<RepositoryRunResource>(ref reader, Deserialize),
-						var unexpected => throw new InvalidOperationException($"unexpected token type for All: {unexpected} ")
-					};
+					if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+					RepositoryRunResource rhs;
+					if (reader.TokenType == JsonTokenType.Null) { break; }
+					else if (reader.TokenType == JsonTokenType.StartObject) { rhs = new(); Deserialize(ref reader, rhs); }
+					else throw new InvalidOperationException($"unexpected token type for All: {reader.TokenType} ");
 					obj.All.Add(lhs, rhs);
 					break;
 				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, RepositoryRunResource value)
+	public static void Serialize(Utf8JsonWriter writer, RepositoryRunResource? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -3369,62 +2779,47 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out RepositoryRunResource obj)
+	public static void Deserialize(ref Utf8JsonReader reader, RepositoryRunResource obj)
 	{
-		obj = new RepositoryRunResource();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("refName"))
 					{
-						obj.RefName = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for RefName: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.RefName = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.RefName = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for RefName: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("repository"))
 					{
-						obj.Repository = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<Respository>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Repository: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Repository = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.Repository = new(); Deserialize(ref reader, obj.Repository); break; }
+						throw new InvalidOperationException($"unexpected token type for Repository: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("version"))
 					{
-						obj.Version = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Version: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Version = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Version = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Version: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, Respository value)
+	public static void Serialize(Utf8JsonWriter writer, Respository? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -3441,52 +2836,40 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out Respository obj)
+	public static void Deserialize(ref Utf8JsonReader reader, Respository obj)
 	{
-		obj = new Respository();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("id"))
 					{
-						obj.Id = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Id: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Id = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Id = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Id: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("type"))
 					{
-						obj.Type = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Type: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Type = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Type = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Type: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, PullRequestThreadsResult value)
+	public static void Serialize(Utf8JsonWriter writer, PullRequestThreadsResult? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -3498,42 +2881,33 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out PullRequestThreadsResult obj)
+	public static void Deserialize(ref Utf8JsonReader reader, PullRequestThreadsResult obj)
 	{
-		obj = new PullRequestThreadsResult();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("value"))
 					{
-						obj.Value = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => Deserialize12(ref reader, obj.Value ?? new()),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Value: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Value = null; break; }
+						if (reader.TokenType == JsonTokenType.StartArray) { obj.Value = Deserialize12(ref reader, obj.Value ?? new()); break; }
+						throw new InvalidOperationException($"unexpected token type for Value: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, PullRequestThread value)
+	public static void Serialize(Utf8JsonWriter writer, PullRequestThread? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -3560,73 +2934,55 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out PullRequestThread obj)
+	public static void Deserialize(ref Utf8JsonReader reader, PullRequestThread obj)
 	{
-		obj = new PullRequestThread();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("id"))
 					{
-						obj.Id = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Id: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Id = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.Id = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for Id: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("isDeleted"))
 					{
-						obj.IsDeleted = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.True => reader.GetBoolean(),
-							JsonTokenType.False => reader.GetBoolean(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for IsDeleted: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.IsDeleted = null; break; }
+						if (reader.TokenType == JsonTokenType.True) { obj.IsDeleted = true; break; }
+						if (reader.TokenType == JsonTokenType.False) { obj.IsDeleted = false; break; }
+						throw new InvalidOperationException($"unexpected token type for IsDeleted: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("comments"))
 					{
-						obj.Comments = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => Deserialize13(ref reader, obj.Comments ?? new()),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Comments: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Comments = null; break; }
+						if (reader.TokenType == JsonTokenType.StartArray) { obj.Comments = Deserialize13(ref reader, obj.Comments ?? new()); break; }
+						throw new InvalidOperationException($"unexpected token type for Comments: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("status"))
 					{
-						obj.Status = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Status: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Status = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Status = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Status: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, PullRequestThreadComment value)
+	public static void Serialize(Utf8JsonWriter writer, PullRequestThreadComment? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -3653,72 +3009,54 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out PullRequestThreadComment obj)
+	public static void Deserialize(ref Utf8JsonReader reader, PullRequestThreadComment obj)
 	{
-		obj = new PullRequestThreadComment();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("id"))
 					{
-						obj.Id = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Id: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Id = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.Id = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for Id: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("content"))
 					{
-						obj.Content = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Content: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Content = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Content = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Content: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("commentType"))
 					{
-						obj.CommentType = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for CommentType: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.CommentType = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.CommentType = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for CommentType: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("parentCommentId"))
 					{
-						obj.ParentCommentId = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for ParentCommentId: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.ParentCommentId = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.ParentCommentId = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for ParentCommentId: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, ReleasesResult value)
+	public static void Serialize(Utf8JsonWriter writer, ReleasesResult? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -3735,52 +3073,40 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out ReleasesResult obj)
+	public static void Deserialize(ref Utf8JsonReader reader, ReleasesResult obj)
 	{
-		obj = new ReleasesResult();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("count"))
 					{
-						obj.Count = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Count: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Count = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.Count = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for Count: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("value"))
 					{
-						obj.Value = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => Deserialize14(ref reader, obj.Value ?? new()),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Value: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Value = null; break; }
+						if (reader.TokenType == JsonTokenType.StartArray) { obj.Value = Deserialize14(ref reader, obj.Value ?? new()); break; }
+						throw new InvalidOperationException($"unexpected token type for Value: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, Release value)
+	public static void Serialize(Utf8JsonWriter writer, Release? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -3917,293 +3243,209 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out Release obj)
+	public static void Deserialize(ref Utf8JsonReader reader, Release obj)
 	{
-		obj = new Release();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("_links"))
 					{
-						obj.Links = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<ReferenceLinks>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Links: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Links = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.Links = new(); Deserialize(ref reader, obj.Links); break; }
+						throw new InvalidOperationException($"unexpected token type for Links: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("id"))
 					{
-						obj.Id = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Id: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Id = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.Id = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for Id: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("name"))
 					{
-						obj.name = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for name: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.name = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.name = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for name: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("status"))
 					{
-						obj.status = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for status: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.status = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.status = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for status: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("createdOn"))
 					{
-						obj.createdOn = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for createdOn: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.createdOn = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.createdOn = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for createdOn: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("createdBy"))
 					{
-						obj.createdBy = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<IdentityRef>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for createdBy: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.createdBy = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.createdBy = new(); Deserialize(ref reader, obj.createdBy); break; }
+						throw new InvalidOperationException($"unexpected token type for createdBy: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("modifiedOn"))
 					{
-						obj.modifiedOn = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for modifiedOn: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.modifiedOn = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.modifiedOn = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for modifiedOn: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("modifiedBy"))
 					{
-						obj.modifiedBy = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<IdentityRef>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for modifiedBy: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.modifiedBy = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.modifiedBy = new(); Deserialize(ref reader, obj.modifiedBy); break; }
+						throw new InvalidOperationException($"unexpected token type for modifiedBy: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("createdFor"))
 					{
-						obj.createdFor = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<IdentityRef>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for createdFor: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.createdFor = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.createdFor = new(); Deserialize(ref reader, obj.createdFor); break; }
+						throw new InvalidOperationException($"unexpected token type for createdFor: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("variables"))
 					{
-						obj.variables = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<Variables>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for variables: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.variables = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.variables = new(); Deserialize(ref reader, obj.variables); break; }
+						throw new InvalidOperationException($"unexpected token type for variables: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("variableGroups"))
 					{
-						obj.variableGroups = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => Deserialize15(ref reader, obj.variableGroups ?? new()),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for variableGroups: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.variableGroups = null; break; }
+						if (reader.TokenType == JsonTokenType.StartArray) { obj.variableGroups = Deserialize15(ref reader, obj.variableGroups ?? new()); break; }
+						throw new InvalidOperationException($"unexpected token type for variableGroups: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("releaseDefinition"))
 					{
-						obj.releaseDefinition = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<ReleaseDefinition>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for releaseDefinition: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.releaseDefinition = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.releaseDefinition = new(); Deserialize(ref reader, obj.releaseDefinition); break; }
+						throw new InvalidOperationException($"unexpected token type for releaseDefinition: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("releaseDefinitionRevision"))
 					{
-						obj.releaseDefinitionRevision = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for releaseDefinitionRevision: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.releaseDefinitionRevision = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.releaseDefinitionRevision = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for releaseDefinitionRevision: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("description"))
 					{
-						obj.description = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for description: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.description = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.description = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for description: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("reason"))
 					{
-						obj.reason = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for reason: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.reason = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.reason = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for reason: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("releaseNameFormat"))
 					{
-						obj.releaseNameFormat = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for releaseNameFormat: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.releaseNameFormat = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.releaseNameFormat = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for releaseNameFormat: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("keepForever"))
 					{
-						obj.keepForever = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.True => reader.GetBoolean(),
-							JsonTokenType.False => reader.GetBoolean(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for keepForever: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.keepForever = null; break; }
+						if (reader.TokenType == JsonTokenType.True) { obj.keepForever = true; break; }
+						if (reader.TokenType == JsonTokenType.False) { obj.keepForever = false; break; }
+						throw new InvalidOperationException($"unexpected token type for keepForever: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("definitionSnapshotRevision"))
 					{
-						obj.definitionSnapshotRevision = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for definitionSnapshotRevision: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.definitionSnapshotRevision = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.definitionSnapshotRevision = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for definitionSnapshotRevision: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("logsContainerUrl"))
 					{
-						obj.logsContainerUrl = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for logsContainerUrl: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.logsContainerUrl = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.logsContainerUrl = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for logsContainerUrl: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("url"))
 					{
-						obj.url = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for url: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.url = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.url = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for url: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("tags"))
 					{
-						obj.tags = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => Deserialize16(ref reader, obj.tags ?? new()),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for tags: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.tags = null; break; }
+						if (reader.TokenType == JsonTokenType.StartArray) { obj.tags = Deserialize16(ref reader, obj.tags ?? new()); break; }
+						throw new InvalidOperationException($"unexpected token type for tags: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("triggeringArtifactAlias"))
 					{
-						obj.triggeringArtifactAlias = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for triggeringArtifactAlias: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.triggeringArtifactAlias = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.triggeringArtifactAlias = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for triggeringArtifactAlias: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("projectReference"))
 					{
-						obj.projectReference = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<ProjectReference>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for projectReference: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.projectReference = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.projectReference = new(); Deserialize(ref reader, obj.projectReference); break; }
+						throw new InvalidOperationException($"unexpected token type for projectReference: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("properties"))
 					{
-						obj.properties = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<ReleasePropertiesCollection>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for properties: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.properties = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.properties = new(); Deserialize(ref reader, obj.properties); break; }
+						throw new InvalidOperationException($"unexpected token type for properties: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("artifacts"))
 					{
-						obj.artifacts = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => Deserialize17(ref reader, obj.artifacts ?? new()),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for artifacts: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.artifacts = null; break; }
+						if (reader.TokenType == JsonTokenType.StartArray) { obj.artifacts = Deserialize17(ref reader, obj.artifacts ?? new()); break; }
+						throw new InvalidOperationException($"unexpected token type for artifacts: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("environments"))
 					{
-						obj.environments = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => Deserialize18(ref reader, obj.environments ?? new()),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for environments: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.environments = null; break; }
+						if (reader.TokenType == JsonTokenType.StartArray) { obj.environments = Deserialize18(ref reader, obj.environments ?? new()); break; }
+						throw new InvalidOperationException($"unexpected token type for environments: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, ReleaseArtifact value)
+	public static void Serialize(Utf8JsonWriter writer, ReleaseArtifact? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -4220,52 +3462,40 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out ReleaseArtifact obj)
+	public static void Deserialize(ref Utf8JsonReader reader, ReleaseArtifact obj)
 	{
-		obj = new ReleaseArtifact();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("alias"))
 					{
-						obj.alias = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for alias: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.alias = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.alias = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for alias: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("definitionReference"))
 					{
-						obj.definitionReference = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<ReleaseArtifactDefinitionReference>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for definitionReference: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.definitionReference = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.definitionReference = new(); Deserialize(ref reader, obj.definitionReference); break; }
+						throw new InvalidOperationException($"unexpected token type for definitionReference: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, ReleaseArtifactDefinitionReference value)
+	public static void Serialize(Utf8JsonWriter writer, ReleaseArtifactDefinitionReference? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -4277,42 +3507,33 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out ReleaseArtifactDefinitionReference obj)
+	public static void Deserialize(ref Utf8JsonReader reader, ReleaseArtifactDefinitionReference obj)
 	{
-		obj = new ReleaseArtifactDefinitionReference();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("sourceVersion"))
 					{
-						obj.sourceVersion = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<IdReference>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for sourceVersion: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.sourceVersion = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.sourceVersion = new(); Deserialize(ref reader, obj.sourceVersion); break; }
+						throw new InvalidOperationException($"unexpected token type for sourceVersion: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, ReleaseDefinitionsResult value)
+	public static void Serialize(Utf8JsonWriter writer, ReleaseDefinitionsResult? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -4329,52 +3550,40 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out ReleaseDefinitionsResult obj)
+	public static void Deserialize(ref Utf8JsonReader reader, ReleaseDefinitionsResult obj)
 	{
-		obj = new ReleaseDefinitionsResult();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("count"))
 					{
-						obj.Count = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Count: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Count = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.Count = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for Count: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("value"))
 					{
-						obj.Value = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => Deserialize19(ref reader, obj.Value ?? new()),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Value: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Value = null; break; }
+						if (reader.TokenType == JsonTokenType.StartArray) { obj.Value = Deserialize19(ref reader, obj.Value ?? new()); break; }
+						throw new InvalidOperationException($"unexpected token type for Value: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, ReleaseDefinition value)
+	public static void Serialize(Utf8JsonWriter writer, ReleaseDefinition? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -4466,203 +3675,146 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out ReleaseDefinition obj)
+	public static void Deserialize(ref Utf8JsonReader reader, ReleaseDefinition obj)
 	{
-		obj = new ReleaseDefinition();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("_links"))
 					{
-						obj.Links = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<ReferenceLinks>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Links: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Links = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.Links = new(); Deserialize(ref reader, obj.Links); break; }
+						throw new InvalidOperationException($"unexpected token type for Links: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("source"))
 					{
-						obj.source = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for source: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.source = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.source = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for source: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("revision"))
 					{
-						obj.Revision = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Revision: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Revision = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.Revision = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for Revision: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("description"))
 					{
-						obj.description = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for description: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.description = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.description = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for description: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("createdBy"))
 					{
-						obj.createdBy = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<IdentityRef>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for createdBy: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.createdBy = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.createdBy = new(); Deserialize(ref reader, obj.createdBy); break; }
+						throw new InvalidOperationException($"unexpected token type for createdBy: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("createdOn"))
 					{
-						obj.createdOn = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for createdOn: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.createdOn = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.createdOn = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for createdOn: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("modifiedBy"))
 					{
-						obj.modifiedBy = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<IdentityRef>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for modifiedBy: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.modifiedBy = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.modifiedBy = new(); Deserialize(ref reader, obj.modifiedBy); break; }
+						throw new InvalidOperationException($"unexpected token type for modifiedBy: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("modifiedOn"))
 					{
-						obj.modifiedOn = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for modifiedOn: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.modifiedOn = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.modifiedOn = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for modifiedOn: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("isDeleted"))
 					{
-						obj.isDeleted = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.True => reader.GetBoolean(),
-							JsonTokenType.False => reader.GetBoolean(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for isDeleted: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.isDeleted = null; break; }
+						if (reader.TokenType == JsonTokenType.True) { obj.isDeleted = true; break; }
+						if (reader.TokenType == JsonTokenType.False) { obj.isDeleted = false; break; }
+						throw new InvalidOperationException($"unexpected token type for isDeleted: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("variableGroups"))
 					{
-						obj.variableGroups = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartArray => Deserialize20(ref reader, obj.variableGroups ?? new()),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for variableGroups: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.variableGroups = null; break; }
+						if (reader.TokenType == JsonTokenType.StartArray) { obj.variableGroups = Deserialize20(ref reader, obj.variableGroups ?? new()); break; }
+						throw new InvalidOperationException($"unexpected token type for variableGroups: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("releaseNameFormat"))
 					{
-						obj.releaseNameFormat = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for releaseNameFormat: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.releaseNameFormat = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.releaseNameFormat = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for releaseNameFormat: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("properties"))
 					{
-						obj.properties = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<ReleasePropertiesCollection>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for properties: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.properties = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.properties = new(); Deserialize(ref reader, obj.properties); break; }
+						throw new InvalidOperationException($"unexpected token type for properties: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("id"))
 					{
-						obj.Id = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Id: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Id = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.Id = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for Id: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("name"))
 					{
-						obj.name = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for name: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.name = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.name = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for name: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("path"))
 					{
-						obj.path = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for path: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.path = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.path = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for path: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("projectReference"))
 					{
-						obj.projectReference = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<ProjectReference>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for projectReference: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.projectReference = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.projectReference = new(); Deserialize(ref reader, obj.projectReference); break; }
+						throw new InvalidOperationException($"unexpected token type for projectReference: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("url"))
 					{
-						obj.url = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for url: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.url = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.url = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for url: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, ReleaseEnvironment value)
+	public static void Serialize(Utf8JsonWriter writer, ReleaseEnvironment? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -4689,98 +3841,73 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out ReleaseEnvironment obj)
+	public static void Deserialize(ref Utf8JsonReader reader, ReleaseEnvironment obj)
 	{
-		obj = new ReleaseEnvironment();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("id"))
 					{
-						obj.id = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for id: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.id = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.id = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for id: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("name"))
 					{
-						obj.name = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for name: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.name = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.name = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for name: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("status"))
 					{
-						obj.status = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for status: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.status = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.status = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for status: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("definitionEnvironmentId"))
 					{
-						obj.definitionEnvironmentId = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.Number => reader.GetInt32(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for definitionEnvironmentId: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.definitionEnvironmentId = null; break; }
+						if (reader.TokenType == JsonTokenType.Number) { obj.definitionEnvironmentId = reader.GetInt32(); break; }
+						throw new InvalidOperationException($"unexpected token type for definitionEnvironmentId: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, ReleasePropertiesCollection value)
+	public static void Serialize(Utf8JsonWriter writer, ReleasePropertiesCollection? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out ReleasePropertiesCollection obj)
+	public static void Deserialize(ref Utf8JsonReader reader, ReleasePropertiesCollection obj)
 	{
-		obj = new ReleasePropertiesCollection();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, IdReference value)
+	public static void Serialize(Utf8JsonWriter writer, IdReference? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -4797,52 +3924,40 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out IdReference obj)
+	public static void Deserialize(ref Utf8JsonReader reader, IdReference obj)
 	{
-		obj = new IdReference();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("id"))
 					{
-						obj.id = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for id: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.id = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.id = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for id: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("name"))
 					{
-						obj.name = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for name: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.name = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.name = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for name: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, IdentityRef value)
+	public static void Serialize(Utf8JsonWriter writer, IdentityRef? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -4884,102 +3999,75 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out IdentityRef obj)
+	public static void Deserialize(ref Utf8JsonReader reader, IdentityRef obj)
 	{
-		obj = new IdentityRef();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("_links"))
 					{
-						obj.Links = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<ReferenceLinks>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Links: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Links = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.Links = new(); Deserialize(ref reader, obj.Links); break; }
+						throw new InvalidOperationException($"unexpected token type for Links: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("displayName"))
 					{
-						obj.displayName = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for displayName: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.displayName = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.displayName = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for displayName: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("url"))
 					{
-						obj.url = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for url: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.url = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.url = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for url: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("id"))
 					{
-						obj.id = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for id: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.id = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.id = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for id: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("uniqueName"))
 					{
-						obj.uniqueName = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for uniqueName: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.uniqueName = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.uniqueName = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for uniqueName: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("imageUrl"))
 					{
-						obj.imageUrl = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for imageUrl: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.imageUrl = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.imageUrl = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for imageUrl: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("descriptor"))
 					{
-						obj.descriptor = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for descriptor: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.descriptor = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.descriptor = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for descriptor: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, ProjectReference value)
+	public static void Serialize(Utf8JsonWriter writer, ProjectReference? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -4996,52 +4084,40 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out ProjectReference obj)
+	public static void Deserialize(ref Utf8JsonReader reader, ProjectReference obj)
 	{
-		obj = new ProjectReference();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("id"))
 					{
-						obj.id = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for id: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.id = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.id = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for id: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("name"))
 					{
-						obj.name = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for name: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.name = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.name = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for name: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, ReferenceLinks value)
+	public static void Serialize(Utf8JsonWriter writer, ReferenceLinks? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -5066,59 +4142,45 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out ReferenceLinks obj)
+	public static void Deserialize(ref Utf8JsonReader reader, ReferenceLinks obj)
 	{
-		obj = new ReferenceLinks();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("self"))
 					{
-						obj.Self = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<ReferenceLink>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Self: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Self = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.Self = new(); Deserialize(ref reader, obj.Self); break; }
+						throw new InvalidOperationException($"unexpected token type for Self: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("web"))
 					{
-						obj.Web = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.StartObject => GetOutParam<ReferenceLink>(ref reader, Deserialize),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Web: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Web = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.Web = new(); Deserialize(ref reader, obj.Web); break; }
+						throw new InvalidOperationException($"unexpected token type for Web: {reader.TokenType} ");
 					}
 					obj.All ??= new();
 					var lhs = reader.GetString() ?? throw new NullReferenceException();
-					var rhs = Next(ref reader) switch
-					{
-						JsonTokenType.Null => null,
-						JsonTokenType.StartObject => GetOutParam<ReferenceLink>(ref reader, Deserialize),
-						var unexpected => throw new InvalidOperationException($"unexpected token type for All: {unexpected} ")
-					};
+					if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+					ReferenceLink rhs;
+					if (reader.TokenType == JsonTokenType.Null) { break; }
+					else if (reader.TokenType == JsonTokenType.StartObject) { rhs = new(); Deserialize(ref reader, rhs); }
+					else throw new InvalidOperationException($"unexpected token type for All: {reader.TokenType} ");
 					obj.All.Add(lhs, rhs);
 					break;
 				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, ReferenceLink value)
+	public static void Serialize(Utf8JsonWriter writer, ReferenceLink? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -5130,42 +4192,33 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out ReferenceLink obj)
+	public static void Deserialize(ref Utf8JsonReader reader, ReferenceLink obj)
 	{
-		obj = new ReferenceLink();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("href"))
 					{
-						obj.Href = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Href: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Href = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Href = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Href: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, Variables value)
+	public static void Serialize(Utf8JsonWriter writer, Variables? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -5180,39 +4233,31 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out Variables obj)
+	public static void Deserialize(ref Utf8JsonReader reader, Variables obj)
 	{
-		obj = new Variables();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					obj.All ??= new();
 					var lhs = reader.GetString() ?? throw new NullReferenceException();
-					var rhs = Next(ref reader) switch
-					{
-						JsonTokenType.Null => null,
-						JsonTokenType.StartObject => GetOutParam<VariableValue>(ref reader, Deserialize),
-						var unexpected => throw new InvalidOperationException($"unexpected token type for All: {unexpected} ")
-					};
+					if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+					VariableValue rhs;
+					if (reader.TokenType == JsonTokenType.Null) { break; }
+					else if (reader.TokenType == JsonTokenType.StartObject) { rhs = new(); Deserialize(ref reader, rhs); }
+					else throw new InvalidOperationException($"unexpected token type for All: {reader.TokenType} ");
 					obj.All.Add(lhs, rhs);
 					break;
 				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, VariableValue value)
+	public static void Serialize(Utf8JsonWriter writer, VariableValue? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
@@ -5224,90 +4269,67 @@ public static partial class JsonSerializer
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out VariableValue obj)
+	public static void Deserialize(ref Utf8JsonReader reader, VariableValue obj)
 	{
-		obj = new VariableValue();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
 				case JsonTokenType.PropertyName:
 				{
 					if (reader.ValueTextEquals("value"))
 					{
-						obj.Value = Next(ref reader) switch
-						{
-							JsonTokenType.Null => null,
-							JsonTokenType.String => reader.GetString(),
-							var unexpected => throw new InvalidOperationException($"unexpected token type for Value: {unexpected} ")
-						};
-						break;
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Value = null; break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Value = reader.GetString(); break; }
+						throw new InvalidOperationException($"unexpected token type for Value: {reader.TokenType} ");
 					}
 
 					reader.Skip();
-					break;
-				}
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
 					reader.Skip();
 					break;
 				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, VariableGroups value)
+	public static void Serialize(Utf8JsonWriter writer, VariableGroups? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out VariableGroups obj)
+	public static void Deserialize(ref Utf8JsonReader reader, VariableGroups obj)
 	{
-		obj = new VariableGroups();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
-	public static void Serialize(Utf8JsonWriter writer, TemplateParameters value)
+	public static void Serialize(Utf8JsonWriter writer, TemplateParameters? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
 		writer.WriteStartObject();
 		writer.WriteEndObject();
 	}
 
-	public static void Deserialize(ref Utf8JsonReader reader, out TemplateParameters obj)
+	public static void Deserialize(ref Utf8JsonReader reader, TemplateParameters obj)
 	{
-		obj = new TemplateParameters();
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
-				case JsonTokenType.EndObject:
-				{
-					return;
-				}
-				default:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.EndObject: { return; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
@@ -5326,28 +4348,18 @@ public static partial class JsonSerializer
 	{
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
-				case JsonTokenType.Null:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.Null: { reader.Skip(); break; }
 				case JsonTokenType.String:
 				{
 					var item = reader.GetString();
 					array.Add(item);
 					break;
 				}
-				case JsonTokenType.EndArray:
-				{
-					return array;
-				}
-				default:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.EndArray: { return array; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
@@ -5366,29 +4378,19 @@ public static partial class JsonSerializer
 	{
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
-				case JsonTokenType.Null:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.Null: { reader.Skip(); break; }
 				case JsonTokenType.StartObject:
 				{
-					Deserialize(ref reader, out GitDiffChange value);
-					var item = value;
+					GitDiffChange item = new();
+					Deserialize(ref reader, item);
 					array.Add(item);
 					break;
 				}
-				case JsonTokenType.EndArray:
-				{
-					return array;
-				}
-				default:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.EndArray: { return array; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
@@ -5407,28 +4409,18 @@ public static partial class JsonSerializer
 	{
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
-				case JsonTokenType.Null:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.Null: { reader.Skip(); break; }
 				case JsonTokenType.String:
 				{
 					var item = reader.GetString();
 					array.Add(item);
 					break;
 				}
-				case JsonTokenType.EndArray:
-				{
-					return array;
-				}
-				default:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.EndArray: { return array; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
@@ -5447,29 +4439,19 @@ public static partial class JsonSerializer
 	{
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
-				case JsonTokenType.Null:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.Null: { reader.Skip(); break; }
 				case JsonTokenType.StartObject:
 				{
-					Deserialize(ref reader, out IdentityRefWithVote value);
-					var item = value;
+					IdentityRefWithVote item = new();
+					Deserialize(ref reader, item);
 					array.Add(item);
 					break;
 				}
-				case JsonTokenType.EndArray:
-				{
-					return array;
-				}
-				default:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.EndArray: { return array; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
@@ -5488,29 +4470,19 @@ public static partial class JsonSerializer
 	{
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
-				case JsonTokenType.Null:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.Null: { reader.Skip(); break; }
 				case JsonTokenType.StartObject:
 				{
-					Deserialize(ref reader, out GitPullRequest value);
-					var item = value;
+					GitPullRequest item = new();
+					Deserialize(ref reader, item);
 					array.Add(item);
 					break;
 				}
-				case JsonTokenType.EndArray:
-				{
-					return array;
-				}
-				default:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.EndArray: { return array; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
@@ -5529,29 +4501,19 @@ public static partial class JsonSerializer
 	{
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
-				case JsonTokenType.Null:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.Null: { reader.Skip(); break; }
 				case JsonTokenType.StartObject:
 				{
-					Deserialize(ref reader, out GitPullRequestStatus value);
-					var item = value;
+					GitPullRequestStatus item = new();
+					Deserialize(ref reader, item);
 					array.Add(item);
 					break;
 				}
-				case JsonTokenType.EndArray:
-				{
-					return array;
-				}
-				default:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.EndArray: { return array; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
@@ -5570,29 +4532,19 @@ public static partial class JsonSerializer
 	{
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
-				case JsonTokenType.Null:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.Null: { reader.Skip(); break; }
 				case JsonTokenType.StartObject:
 				{
-					Deserialize(ref reader, out GitRef value);
-					var item = value;
+					GitRef item = new();
+					Deserialize(ref reader, item);
 					array.Add(item);
 					break;
 				}
-				case JsonTokenType.EndArray:
-				{
-					return array;
-				}
-				default:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.EndArray: { return array; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
@@ -5611,29 +4563,19 @@ public static partial class JsonSerializer
 	{
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
-				case JsonTokenType.Null:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.Null: { reader.Skip(); break; }
 				case JsonTokenType.StartObject:
 				{
-					Deserialize(ref reader, out GitRefUpdate value);
-					var item = value;
+					GitRefUpdate item = new();
+					Deserialize(ref reader, item);
 					array.Add(item);
 					break;
 				}
-				case JsonTokenType.EndArray:
-				{
-					return array;
-				}
-				default:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.EndArray: { return array; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
@@ -5652,29 +4594,19 @@ public static partial class JsonSerializer
 	{
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
-				case JsonTokenType.Null:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.Null: { reader.Skip(); break; }
 				case JsonTokenType.StartObject:
 				{
-					Deserialize(ref reader, out GitRefUpdateResult value);
-					var item = value;
+					GitRefUpdateResult item = new();
+					Deserialize(ref reader, item);
 					array.Add(item);
 					break;
 				}
-				case JsonTokenType.EndArray:
-				{
-					return array;
-				}
-				default:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.EndArray: { return array; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
@@ -5693,28 +4625,18 @@ public static partial class JsonSerializer
 	{
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
-				case JsonTokenType.Null:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.Null: { reader.Skip(); break; }
 				case JsonTokenType.String:
 				{
 					var item = reader.GetString();
 					array.Add(item);
 					break;
 				}
-				case JsonTokenType.EndArray:
-				{
-					return array;
-				}
-				default:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.EndArray: { return array; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
@@ -5733,29 +4655,19 @@ public static partial class JsonSerializer
 	{
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
-				case JsonTokenType.Null:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.Null: { reader.Skip(); break; }
 				case JsonTokenType.StartObject:
 				{
-					Deserialize(ref reader, out Pipeline value);
-					var item = value;
+					Pipeline item = new();
+					Deserialize(ref reader, item);
 					array.Add(item);
 					break;
 				}
-				case JsonTokenType.EndArray:
-				{
-					return array;
-				}
-				default:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.EndArray: { return array; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
@@ -5774,29 +4686,19 @@ public static partial class JsonSerializer
 	{
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
-				case JsonTokenType.Null:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.Null: { reader.Skip(); break; }
 				case JsonTokenType.StartObject:
 				{
-					Deserialize(ref reader, out Run value);
-					var item = value;
+					Run item = new();
+					Deserialize(ref reader, item);
 					array.Add(item);
 					break;
 				}
-				case JsonTokenType.EndArray:
-				{
-					return array;
-				}
-				default:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.EndArray: { return array; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
@@ -5815,29 +4717,19 @@ public static partial class JsonSerializer
 	{
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
-				case JsonTokenType.Null:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.Null: { reader.Skip(); break; }
 				case JsonTokenType.StartObject:
 				{
-					Deserialize(ref reader, out PullRequestThread value);
-					var item = value;
+					PullRequestThread item = new();
+					Deserialize(ref reader, item);
 					array.Add(item);
 					break;
 				}
-				case JsonTokenType.EndArray:
-				{
-					return array;
-				}
-				default:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.EndArray: { return array; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
@@ -5856,29 +4748,19 @@ public static partial class JsonSerializer
 	{
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
-				case JsonTokenType.Null:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.Null: { reader.Skip(); break; }
 				case JsonTokenType.StartObject:
 				{
-					Deserialize(ref reader, out PullRequestThreadComment value);
-					var item = value;
+					PullRequestThreadComment item = new();
+					Deserialize(ref reader, item);
 					array.Add(item);
 					break;
 				}
-				case JsonTokenType.EndArray:
-				{
-					return array;
-				}
-				default:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.EndArray: { return array; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
@@ -5897,29 +4779,19 @@ public static partial class JsonSerializer
 	{
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
-				case JsonTokenType.Null:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.Null: { reader.Skip(); break; }
 				case JsonTokenType.StartObject:
 				{
-					Deserialize(ref reader, out Release value);
-					var item = value;
+					Release item = new();
+					Deserialize(ref reader, item);
 					array.Add(item);
 					break;
 				}
-				case JsonTokenType.EndArray:
-				{
-					return array;
-				}
-				default:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.EndArray: { return array; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
@@ -5938,29 +4810,19 @@ public static partial class JsonSerializer
 	{
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
-				case JsonTokenType.Null:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.Null: { reader.Skip(); break; }
 				case JsonTokenType.StartObject:
 				{
-					Deserialize(ref reader, out VariableGroups value);
-					var item = value;
+					VariableGroups item = new();
+					Deserialize(ref reader, item);
 					array.Add(item);
 					break;
 				}
-				case JsonTokenType.EndArray:
-				{
-					return array;
-				}
-				default:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.EndArray: { return array; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
@@ -5979,28 +4841,18 @@ public static partial class JsonSerializer
 	{
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
-				case JsonTokenType.Null:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.Null: { reader.Skip(); break; }
 				case JsonTokenType.String:
 				{
 					var item = reader.GetString();
 					array.Add(item);
 					break;
 				}
-				case JsonTokenType.EndArray:
-				{
-					return array;
-				}
-				default:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.EndArray: { return array; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
@@ -6019,29 +4871,19 @@ public static partial class JsonSerializer
 	{
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
-				case JsonTokenType.Null:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.Null: { reader.Skip(); break; }
 				case JsonTokenType.StartObject:
 				{
-					Deserialize(ref reader, out ReleaseArtifact value);
-					var item = value;
+					ReleaseArtifact item = new();
+					Deserialize(ref reader, item);
 					array.Add(item);
 					break;
 				}
-				case JsonTokenType.EndArray:
-				{
-					return array;
-				}
-				default:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.EndArray: { return array; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
@@ -6060,29 +4902,19 @@ public static partial class JsonSerializer
 	{
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
-				case JsonTokenType.Null:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.Null: { reader.Skip(); break; }
 				case JsonTokenType.StartObject:
 				{
-					Deserialize(ref reader, out ReleaseEnvironment value);
-					var item = value;
+					ReleaseEnvironment item = new();
+					Deserialize(ref reader, item);
 					array.Add(item);
 					break;
 				}
-				case JsonTokenType.EndArray:
-				{
-					return array;
-				}
-				default:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.EndArray: { return array; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
@@ -6101,29 +4933,19 @@ public static partial class JsonSerializer
 	{
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
-				case JsonTokenType.Null:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.Null: { reader.Skip(); break; }
 				case JsonTokenType.StartObject:
 				{
-					Deserialize(ref reader, out ReleaseDefinition value);
-					var item = value;
+					ReleaseDefinition item = new();
+					Deserialize(ref reader, item);
 					array.Add(item);
 					break;
 				}
-				case JsonTokenType.EndArray:
-				{
-					return array;
-				}
-				default:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.EndArray: { return array; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}
@@ -6142,29 +4964,19 @@ public static partial class JsonSerializer
 	{
 		while (true)
 		{
-			switch (Next(ref reader))
+			if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+			switch (reader.TokenType)
 			{
-				case JsonTokenType.Null:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.Null: { reader.Skip(); break; }
 				case JsonTokenType.StartObject:
 				{
-					Deserialize(ref reader, out VariableGroups value);
-					var item = value;
+					VariableGroups item = new();
+					Deserialize(ref reader, item);
 					array.Add(item);
 					break;
 				}
-				case JsonTokenType.EndArray:
-				{
-					return array;
-				}
-				default:
-				{
-					reader.Skip();
-					break;
-				}
+				case JsonTokenType.EndArray: { return array; }
+				default: { reader.Skip(); break; }
 			}
 		}
 	}

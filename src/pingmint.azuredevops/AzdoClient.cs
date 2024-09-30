@@ -62,7 +62,7 @@ public partial class AzdoClient
         message.Headers.Authorization = this.authenticationHeaderValue;
     }
 
-    private static T Deserialize<T>(String json, DeserializerDelegate<T> del)
+    private static T Deserialize<T>(String json, DeserializerDelegate<T> del) where T : new()
     {
         var bytes = Encoding.UTF8.GetBytes(json);
         var options = new JsonReaderOptions()
@@ -71,7 +71,8 @@ public partial class AzdoClient
         };
         var reader = new Utf8JsonReader(bytes, options);
         if (!reader.Read()) { throw new InvalidOperationException("Unable to start parsing JSON"); }
-        del(ref reader, out T model);
+        T model = new();
+        del(ref reader, model);
         return model;
     }
 
@@ -151,13 +152,13 @@ public partial class AzdoClient
         return await response.Content.ReadAsStringAsync();
     }
 
-    private async Task<TResult> GetterAsync<TResult>(Uri url, DeserializerDelegate<TResult> del)
+    private async Task<TResult> GetterAsync<TResult>(Uri url, DeserializerDelegate<TResult> del) where TResult : new()
     {
         var json = await GetStringAsync(url);
         return GetModelFromJson(json, del);
     }
 
-    private async Task<TResult> GetterAsync<TResult>(Func<UrlHelper, Uri> urlFunc, DeserializerDelegate<TResult> del)
+    private async Task<TResult> GetterAsync<TResult>(Func<UrlHelper, Uri> urlFunc, DeserializerDelegate<TResult> del) where TResult : new()
     {
         var url = urlFunc(urlHelper);
         var json = await GetStringAsync(url);
@@ -165,7 +166,7 @@ public partial class AzdoClient
         return GetModelFromJson(json, del);
     }
 
-    private async Task<TResult> PostJsonForJsonAsync<TResult>(Func<UrlHelper, Uri> urlFunc, String jsonRequest, DeserializerDelegate<TResult> del)
+    private async Task<TResult> PostJsonForJsonAsync<TResult>(Func<UrlHelper, Uri> urlFunc, String jsonRequest, DeserializerDelegate<TResult> del) where TResult : new()
     {
         var url = urlFunc(urlHelper);
         var json = await SendJsonStringAsync(url, jsonRequest, HttpMethod.Post);
@@ -173,13 +174,14 @@ public partial class AzdoClient
         return GetModelFromJson(json, del);
     }
 
-    private delegate void DeserializerDelegate<T>(ref System.Text.Json.Utf8JsonReader r, out T value);
+    private delegate void DeserializerDelegate<T>(ref System.Text.Json.Utf8JsonReader r, T value);
 
-    private static T GetModelFromJson<T>(String jsonBody, DeserializerDelegate<T> del)
+    private static T GetModelFromJson<T>(String jsonBody, DeserializerDelegate<T> del) where T : new()
     {
         var reader = new System.Text.Json.Utf8JsonReader(System.Text.Encoding.UTF8.GetBytes(jsonBody));
         if (!reader.Read()) { throw new InvalidOperationException("Reader read failed."); }
-        del(ref reader, out T model);
+        T model = new();
+        del(ref reader, model);
         if (model is null) { throw new InvalidOperationException("Model parse failed."); }
         return model;
     }
