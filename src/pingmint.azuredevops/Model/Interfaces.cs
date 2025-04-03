@@ -11,5 +11,5 @@ public interface IAzdoValueCollectionResult<TCollection, TItem> : IAzdoCountResu
     TCollection? Value { get; }
 }
 
-partial class PipelinesResult : IAzdoValueCollectionResult<List<Pipeline>, Pipeline> { }
-partial class RunsResult : IAzdoValueCollectionResult<List<Run>, Run> { }
+partial record class PipelinesResult : IAzdoValueCollectionResult<List<Pipeline>, Pipeline> { }
+partial record class RunsResult : IAzdoValueCollectionResult<List<Run>, Run> { }

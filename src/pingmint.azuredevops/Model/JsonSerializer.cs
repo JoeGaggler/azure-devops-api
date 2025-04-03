@@ -5,72 +5,8 @@ using System.Text.Json;
 
 namespace Pingmint.AzureDevOps.Model;
 
-public partial class JsonSerializer :
-    JsonSerializer.ISerializes<BuildResult>,
-    JsonSerializer.ISerializes<GitBranchStats>,
-    JsonSerializer.ISerializes<GitCommit>,
-    JsonSerializer.ISerializes<GitCommitRef>,
-    JsonSerializer.ISerializes<GitDiffsChangeCounts>,
-    JsonSerializer.ISerializes<GitDiffChange>,
-    JsonSerializer.ISerializes<GitDiffChangeItem>,
-    JsonSerializer.ISerializes<GitDiffs>,
-    JsonSerializer.ISerializes<GitMergeRequest>,
-    JsonSerializer.ISerializes<GitMergeResult>,
-    JsonSerializer.ISerializes<GitMergeOperationStatusDetail>,
-    JsonSerializer.ISerializes<GitPerson>,
-    JsonSerializer.ISerializes<GitPullRequest>,
-    JsonSerializer.ISerializes<IdentityRefWithVote>,
-    JsonSerializer.ISerializes<GitPullRequestResponse>,
-    JsonSerializer.ISerializes<CreateGitPullRequestStatusesRequest>,
-    JsonSerializer.ISerializes<GitPullRequestStatus>,
-    JsonSerializer.ISerializes<GitStatusContext>,
-    JsonSerializer.ISerializes<GitPullRequestStatusesResponse>,
-    JsonSerializer.ISerializes<GitRef>,
-    JsonSerializer.ISerializes<GitRefResult>,
-    JsonSerializer.ISerializes<GitRefUpdate>,
-    JsonSerializer.ISerializes<GitRefUpdateRequest>,
-    JsonSerializer.ISerializes<GitRefUpdateResponse>,
-    JsonSerializer.ISerializes<GitRefUpdateResult>,
-    JsonSerializer.ISerializes<GitRepository>,
-    JsonSerializer.ISerializes<PipelineRunRequest>,
-    JsonSerializer.ISerializes<PipelinesResult>,
-    JsonSerializer.ISerializes<Pipeline>,
-    JsonSerializer.ISerializes<Project>,
-    JsonSerializer.ISerializes<RunsResult>,
-    JsonSerializer.ISerializes<Run>,
-    JsonSerializer.ISerializes<RunResources>,
-    JsonSerializer.ISerializes<PipelineRunResources>,
-    JsonSerializer.ISerializes<PipelineRunResource>,
-    JsonSerializer.ISerializes<RepositoryRunResources>,
-    JsonSerializer.ISerializes<RepositoryRunResource>,
-    JsonSerializer.ISerializes<Respository>,
-    JsonSerializer.ISerializes<PullRequestThreadsResult>,
-    JsonSerializer.ISerializes<PullRequestThread>,
-    JsonSerializer.ISerializes<PullRequestThreadComment>,
-    JsonSerializer.ISerializes<ReleasesResult>,
-    JsonSerializer.ISerializes<Release>,
-    JsonSerializer.ISerializes<ReleaseArtifact>,
-    JsonSerializer.ISerializes<ReleaseArtifactDefinitionReference>,
-    JsonSerializer.ISerializes<ReleaseDefinitionsResult>,
-    JsonSerializer.ISerializes<ReleaseDefinition>,
-    JsonSerializer.ISerializes<ReleaseEnvironment>,
-    JsonSerializer.ISerializes<ReleasePropertiesCollection>,
-    JsonSerializer.ISerializes<IdReference>,
-    JsonSerializer.ISerializes<IdentityRef>,
-    JsonSerializer.ISerializes<ProjectReference>,
-    JsonSerializer.ISerializes<ReferenceLinks>,
-    JsonSerializer.ISerializes<ReferenceLink>,
-    JsonSerializer.ISerializes<Variables>,
-    JsonSerializer.ISerializes<VariableValue>,
-    JsonSerializer.ISerializes<VariableGroups>,
-    JsonSerializer.ISerializes<TemplateParameters>
+public static partial class JsonSerializer
 {
-	public interface ISerializes<T> where T : notnull
-	{
-		static abstract void Serialize(Utf8JsonWriter writer, T? value);
-		static abstract void Deserialize(ref Utf8JsonReader reader, T value);
-	}
-
 	public static void Serialize(Utf8JsonWriter writer, BuildResult? value)
 	{
 		if (value is null) { writer.WriteNullValue(); return; }
@@ -96,7 +32,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Reason = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Reason = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Reason = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Reason: {reader.TokenType} ");
 					}
 
@@ -161,7 +97,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Name = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Name = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Name = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Name: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("aheadCount"))
@@ -251,14 +187,14 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.treeId = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.treeId = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.treeId = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for treeId: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("commitId"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.commitId = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.commitId = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.commitId = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for commitId: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("author"))
@@ -279,7 +215,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.comment = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.comment = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.comment = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for comment: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("parents"))
@@ -293,7 +229,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.url = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.url = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.url = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for url: {reader.TokenType} ");
 					}
 
@@ -336,14 +272,14 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.commitId = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.commitId = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.commitId = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for commitId: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("url"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.url = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.url = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.url = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for url: {reader.TokenType} ");
 					}
 
@@ -443,7 +379,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.changeType = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.changeType = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.changeType = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for changeType: {reader.TokenType} ");
 					}
 
@@ -511,35 +447,35 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.objectId = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.objectId = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.objectId = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for objectId: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("originalObjectId"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.originalObjectId = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.originalObjectId = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.originalObjectId = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for originalObjectId: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("gitObjectType"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.gitObjectType = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.gitObjectType = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.gitObjectType = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for gitObjectType: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("commitId"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.commitId = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.commitId = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.commitId = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for commitId: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("path"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.path = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.path = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.path = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for path: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("isFolder"))
@@ -554,7 +490,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.url = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.url = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.url = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for url: {reader.TokenType} ");
 					}
 
@@ -649,21 +585,21 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.commonCommit = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.commonCommit = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.commonCommit = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for commonCommit: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("baseCommit"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.baseCommit = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.baseCommit = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.baseCommit = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for baseCommit: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("targetCommit"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.targetCommit = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.targetCommit = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.targetCommit = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for targetCommit: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("aheadCount"))
@@ -720,7 +656,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Comment = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Comment = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Comment = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Comment: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("parents"))
@@ -775,7 +711,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Status = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Status = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Status = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Status: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("mergeOperationId"))
@@ -832,14 +768,14 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.MergeCommitId = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.MergeCommitId = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.MergeCommitId = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for MergeCommitId: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("failureMessage"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.FailureMessage = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.FailureMessage = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.FailureMessage = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for FailureMessage: {reader.TokenType} ");
 					}
 
@@ -887,21 +823,21 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.name = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.name = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.name = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for name: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("email"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.email = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.email = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.email = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for email: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("date"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.date = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.date = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.date = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for date: {reader.TokenType} ");
 					}
 
@@ -988,6 +924,11 @@ public partial class JsonSerializer :
 			writer.WritePropertyName("reviewers");
 			Serialize3(writer, localReviewers);
 		}
+		if (value.Repository is { } localRepository)
+		{
+			writer.WritePropertyName("repository");
+			Serialize(writer, localRepository);
+		}
 		writer.WriteEndObject();
 	}
 
@@ -1011,35 +952,35 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Title = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Title = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Title = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Title: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("description"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Description = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Description = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Description = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Description: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("status"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Status = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Status = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Status = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Status: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("sourceRefName"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.SourceRefName = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.SourceRefName = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.SourceRefName = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for SourceRefName: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("targetRefName"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.TargetRefName = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.TargetRefName = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.TargetRefName = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for TargetRefName: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("lastMergeCommit"))
@@ -1067,21 +1008,21 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.MergeId = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.MergeId = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.MergeId = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for MergeId: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("mergeStatus"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.MergeStatus = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.MergeStatus = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.MergeStatus = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for MergeStatus: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("url"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Url = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Url = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Url = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Url: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("isDraft"))
@@ -1098,6 +1039,13 @@ public partial class JsonSerializer :
 						if (reader.TokenType == JsonTokenType.Null) { obj.Reviewers = null; break; }
 						if (reader.TokenType == JsonTokenType.StartArray) { obj.Reviewers = Deserialize3(ref reader, obj.Reviewers ?? new()); break; }
 						throw new InvalidOperationException($"unexpected token type for Reviewers: {reader.TokenType} ");
+					}
+					else if (reader.ValueTextEquals("repository"))
+					{
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.Repository = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.Repository = new(); Deserialize(ref reader, obj.Repository); break; }
+						throw new InvalidOperationException($"unexpected token type for Repository: {reader.TokenType} ");
 					}
 
 					reader.Skip();
@@ -1174,35 +1122,35 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Id = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Id = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Id = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Id: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("displayName"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.DisplayName = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.DisplayName = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.DisplayName = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for DisplayName: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("uniqueName"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.UniqueName = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.UniqueName = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.UniqueName = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for UniqueName: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("url"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Url = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Url = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Url = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Url: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("imageUrl"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.ImageUrl = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.ImageUrl = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.ImageUrl = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for ImageUrl: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("isContainer"))
@@ -1232,7 +1180,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.ReviewerUrl = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.ReviewerUrl = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.ReviewerUrl = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for ReviewerUrl: {reader.TokenType} ");
 					}
 
@@ -1335,14 +1283,14 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.State = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.State = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.State = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for State: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("description"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Description = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Description = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Description = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Description: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("context"))
@@ -1356,7 +1304,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.TargetUrl = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.TargetUrl = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.TargetUrl = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for TargetUrl: {reader.TokenType} ");
 					}
 
@@ -1436,14 +1384,14 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.State = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.State = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.State = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for State: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("description"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Description = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Description = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Description = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Description: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("context"))
@@ -1457,14 +1405,14 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.CreationDate = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.CreationDate = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.CreationDate = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for CreationDate: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("updatedDate"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.UpdatedDate = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.UpdatedDate = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.UpdatedDate = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for UpdatedDate: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("createdBy"))
@@ -1478,7 +1426,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.TargetUrl = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.TargetUrl = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.TargetUrl = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for TargetUrl: {reader.TokenType} ");
 					}
 
@@ -1521,14 +1469,14 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Genre = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Genre = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Genre = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Genre: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("name"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Name = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Name = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Name = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Name: {reader.TokenType} ");
 					}
 
@@ -1621,14 +1569,14 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Name = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Name = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Name = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Name: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("objectId"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.ObjectId = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.ObjectId = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.ObjectId = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for ObjectId: {reader.TokenType} ");
 					}
 
@@ -1714,21 +1662,21 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Name = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Name = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Name = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Name: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("oldObjectId"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.OldObjectId = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.OldObjectId = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.OldObjectId = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for OldObjectId: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("newObjectId"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.NewObjectId = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.NewObjectId = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.NewObjectId = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for NewObjectId: {reader.TokenType} ");
 					}
 
@@ -1857,21 +1805,21 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Name = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Name = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Name = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Name: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("oldObjectId"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.OldObjectId = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.OldObjectId = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.OldObjectId = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for OldObjectId: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("newObjectId"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.NewObjectId = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.NewObjectId = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.NewObjectId = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for NewObjectId: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("success"))
@@ -1974,14 +1922,14 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.DefaultBranch = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.DefaultBranch = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.DefaultBranch = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for DefaultBranch: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("id"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Id = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Id = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Id = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Id: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("isDisabled"))
@@ -1996,7 +1944,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Name = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Name = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Name = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Name: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("project"))
@@ -2010,7 +1958,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.remoteUrl = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.remoteUrl = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.remoteUrl = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for remoteUrl: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("size"))
@@ -2024,21 +1972,21 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.sshUrl = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.sshUrl = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.sshUrl = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for sshUrl: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("url"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Url = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Url = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Url = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Url: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("webUrl"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.webUrl = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.webUrl = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.webUrl = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for webUrl: {reader.TokenType} ");
 					}
 
@@ -2215,14 +2163,14 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Folder = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Folder = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Folder = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Folder: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("name"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Name = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Name = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Name = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Name: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("revision"))
@@ -2236,7 +2184,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Url = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Url = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Url = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Url: {reader.TokenType} ");
 					}
 
@@ -2304,28 +2252,28 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Id = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Id = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Id = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Id: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("name"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Name = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Name = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Name = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Name: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("url"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Url = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Url = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Url = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Url: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("state"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.State = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.State = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.State = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for State: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("revision"))
@@ -2339,14 +2287,14 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Visibility = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Visibility = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Visibility = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Visibility: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("lastUpdateTime"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.LastUpdateTime = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.LastUpdateTime = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.LastUpdateTime = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for LastUpdateTime: {reader.TokenType} ");
 					}
 
@@ -2496,14 +2444,14 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.CreatedDate = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.CreatedDate = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.CreatedDate = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for CreatedDate: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("finishedDate"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.FinishedDate = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.FinishedDate = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.FinishedDate = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for FinishedDate: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("id"))
@@ -2517,7 +2465,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Name = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Name = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Name = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Name: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("pipeline"))
@@ -2531,7 +2479,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.State = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.State = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.State = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for State: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("resources"))
@@ -2545,7 +2493,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Result = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Result = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Result = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Result: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("templateParameters"))
@@ -2559,7 +2507,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Url = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Url = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Url = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Url: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("variables"))
@@ -2705,7 +2653,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Version = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Version = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Version = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Version: {reader.TokenType} ");
 					}
 
@@ -2792,7 +2740,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.RefName = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.RefName = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.RefName = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for RefName: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("repository"))
@@ -2806,7 +2754,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Version = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Version = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Version = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Version: {reader.TokenType} ");
 					}
 
@@ -2849,14 +2797,14 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Id = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Id = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Id = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Id: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("type"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Type = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Type = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Type = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Type: {reader.TokenType} ");
 					}
 
@@ -2969,7 +2917,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Status = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Status = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Status = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Status: {reader.TokenType} ");
 					}
 
@@ -3029,14 +2977,14 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Content = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Content = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Content = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Content: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("commentType"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.CommentType = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.CommentType = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.CommentType = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for CommentType: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("parentCommentId"))
@@ -3270,21 +3218,21 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.name = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.name = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.name = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for name: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("status"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.status = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.status = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.status = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for status: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("createdOn"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.createdOn = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.createdOn = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.createdOn = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for createdOn: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("createdBy"))
@@ -3298,7 +3246,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.modifiedOn = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.modifiedOn = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.modifiedOn = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for modifiedOn: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("modifiedBy"))
@@ -3347,21 +3295,21 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.description = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.description = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.description = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for description: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("reason"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.reason = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.reason = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.reason = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for reason: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("releaseNameFormat"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.releaseNameFormat = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.releaseNameFormat = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.releaseNameFormat = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for releaseNameFormat: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("keepForever"))
@@ -3383,14 +3331,14 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.logsContainerUrl = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.logsContainerUrl = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.logsContainerUrl = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for logsContainerUrl: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("url"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.url = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.url = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.url = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for url: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("tags"))
@@ -3404,7 +3352,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.triggeringArtifactAlias = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.triggeringArtifactAlias = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.triggeringArtifactAlias = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for triggeringArtifactAlias: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("projectReference"))
@@ -3475,7 +3423,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.alias = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.alias = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.alias = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for alias: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("definitionReference"))
@@ -3695,7 +3643,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.source = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.source = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.source = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for source: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("revision"))
@@ -3709,7 +3657,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.description = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.description = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.description = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for description: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("createdBy"))
@@ -3723,7 +3671,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.createdOn = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.createdOn = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.createdOn = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for createdOn: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("modifiedBy"))
@@ -3737,7 +3685,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.modifiedOn = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.modifiedOn = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.modifiedOn = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for modifiedOn: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("isDeleted"))
@@ -3759,7 +3707,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.releaseNameFormat = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.releaseNameFormat = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.releaseNameFormat = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for releaseNameFormat: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("properties"))
@@ -3780,14 +3728,14 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.name = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.name = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.name = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for name: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("path"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.path = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.path = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.path = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for path: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("projectReference"))
@@ -3801,7 +3749,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.url = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.url = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.url = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for url: {reader.TokenType} ");
 					}
 
@@ -3861,14 +3809,14 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.name = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.name = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.name = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for name: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("status"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.status = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.status = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.status = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for status: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("definitionEnvironmentId"))
@@ -3937,14 +3885,14 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.id = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.id = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.id = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for id: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("name"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.name = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.name = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.name = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for name: {reader.TokenType} ");
 					}
 
@@ -4019,42 +3967,42 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.displayName = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.displayName = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.displayName = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for displayName: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("url"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.url = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.url = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.url = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for url: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("id"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.id = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.id = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.id = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for id: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("uniqueName"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.uniqueName = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.uniqueName = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.uniqueName = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for uniqueName: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("imageUrl"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.imageUrl = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.imageUrl = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.imageUrl = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for imageUrl: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("descriptor"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.descriptor = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.descriptor = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.descriptor = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for descriptor: {reader.TokenType} ");
 					}
 
@@ -4097,14 +4045,14 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.id = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.id = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.id = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for id: {reader.TokenType} ");
 					}
 					else if (reader.ValueTextEquals("name"))
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.name = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.name = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.name = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for name: {reader.TokenType} ");
 					}
 
@@ -4205,7 +4153,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Href = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Href = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Href = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Href: {reader.TokenType} ");
 					}
 
@@ -4282,7 +4230,7 @@ public partial class JsonSerializer :
 					{
 						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
 						if (reader.TokenType == JsonTokenType.Null) { obj.Value = null; break; }
-						if (reader.TokenType == JsonTokenType.String) { obj.Value = reader.GetString(); break; }
+						if (reader.TokenType == JsonTokenType.String) { obj.Value = reader.GetString()!; break; }
 						throw new InvalidOperationException($"unexpected token type for Value: {reader.TokenType} ");
 					}
 
@@ -4355,7 +4303,7 @@ public partial class JsonSerializer :
 				case JsonTokenType.String:
 				{
 					var item = reader.GetString();
-					array.Add(item);
+					array.Add(item!);
 					break;
 				}
 				case JsonTokenType.EndArray: { return array; }
@@ -4416,7 +4364,7 @@ public partial class JsonSerializer :
 				case JsonTokenType.String:
 				{
 					var item = reader.GetString();
-					array.Add(item);
+					array.Add(item!);
 					break;
 				}
 				case JsonTokenType.EndArray: { return array; }
@@ -4632,7 +4580,7 @@ public partial class JsonSerializer :
 				case JsonTokenType.String:
 				{
 					var item = reader.GetString();
-					array.Add(item);
+					array.Add(item!);
 					break;
 				}
 				case JsonTokenType.EndArray: { return array; }
@@ -4848,7 +4796,7 @@ public partial class JsonSerializer :
 				case JsonTokenType.String:
 				{
 					var item = reader.GetString();
-					array.Add(item);
+					array.Add(item!);
 					break;
 				}
 				case JsonTokenType.EndArray: { return array; }
@@ -4981,11 +4929,11 @@ public partial class JsonSerializer :
 		}
 	}
 }
-public sealed partial class BuildResult
+public sealed partial record class BuildResult
 {
 	public String? Reason { get; set; }
 }
-public sealed partial class GitBranchStats
+public sealed partial record class GitBranchStats
 {
 	public GitCommit? Commit { get; set; }
 	public String? Name { get; set; }
@@ -4993,7 +4941,7 @@ public sealed partial class GitBranchStats
 	public int? behindCount { get; set; }
 	public bool? isBaseVersion { get; set; }
 }
-public sealed partial class GitCommit
+public sealed partial record class GitCommit
 {
 	public String? treeId { get; set; }
 	public String? commitId { get; set; }
@@ -5003,22 +4951,22 @@ public sealed partial class GitCommit
 	public List<String>? Parents { get; set; }
 	public String? url { get; set; }
 }
-public sealed partial class GitCommitRef
+public sealed partial record class GitCommitRef
 {
 	public String? commitId { get; set; }
 	public String? url { get; set; }
 }
-public sealed partial class GitDiffsChangeCounts
+public sealed partial record class GitDiffsChangeCounts
 {
 	public int? Add { get; set; }
 	public int? Edit { get; set; }
 }
-public sealed partial class GitDiffChange
+public sealed partial record class GitDiffChange
 {
 	public GitDiffChangeItem? item { get; set; }
 	public String? changeType { get; set; }
 }
-public sealed partial class GitDiffChangeItem
+public sealed partial record class GitDiffChangeItem
 {
 	public String? objectId { get; set; }
 	public String? originalObjectId { get; set; }
@@ -5028,7 +4976,7 @@ public sealed partial class GitDiffChangeItem
 	public bool? isFolder { get; set; }
 	public String? url { get; set; }
 }
-public sealed partial class GitDiffs
+public sealed partial record class GitDiffs
 {
 	public bool? allChangesIncluded { get; set; }
 	public GitDiffsChangeCounts? changeCounts { get; set; }
@@ -5039,29 +4987,29 @@ public sealed partial class GitDiffs
 	public int? aheadCount { get; set; }
 	public int? behindCount { get; set; }
 }
-public sealed partial class GitMergeRequest
+public sealed partial record class GitMergeRequest
 {
 	public String? Comment { get; set; }
 	public List<String>? Parents { get; set; }
 }
-public sealed partial class GitMergeResult
+public sealed partial record class GitMergeResult
 {
 	public String? Status { get; set; }
 	public int? MergeOperationId { get; set; }
 	public GitMergeOperationStatusDetail? DetailedStatus { get; set; }
 }
-public sealed partial class GitMergeOperationStatusDetail
+public sealed partial record class GitMergeOperationStatusDetail
 {
 	public String? MergeCommitId { get; set; }
 	public String? FailureMessage { get; set; }
 }
-public sealed partial class GitPerson
+public sealed partial record class GitPerson
 {
 	public String? name { get; set; }
 	public String? email { get; set; }
 	public String? date { get; set; }
 }
-public sealed partial class GitPullRequest
+public sealed partial record class GitPullRequest
 {
 	public int? PullRequestId { get; set; }
 	public String? Title { get; set; }
@@ -5077,8 +5025,9 @@ public sealed partial class GitPullRequest
 	public String? Url { get; set; }
 	public bool? IsDraft { get; set; }
 	public List<IdentityRefWithVote>? Reviewers { get; set; }
+	public GitRepository? Repository { get; set; }
 }
-public sealed partial class IdentityRefWithVote
+public sealed partial record class IdentityRefWithVote
 {
 	public String? Id { get; set; }
 	public String? DisplayName { get; set; }
@@ -5090,11 +5039,11 @@ public sealed partial class IdentityRefWithVote
 	public int? Vote { get; set; }
 	public String? ReviewerUrl { get; set; }
 }
-public sealed partial class GitPullRequestResponse
+public sealed partial record class GitPullRequestResponse
 {
 	public List<GitPullRequest>? Value { get; set; }
 }
-public sealed partial class CreateGitPullRequestStatusesRequest
+public sealed partial record class CreateGitPullRequestStatusesRequest
 {
 	public int? Iteration { get; set; }
 	public String? State { get; set; }
@@ -5102,7 +5051,7 @@ public sealed partial class CreateGitPullRequestStatusesRequest
 	public GitStatusContext? Context { get; set; }
 	public String? TargetUrl { get; set; }
 }
-public sealed partial class GitPullRequestStatus
+public sealed partial record class GitPullRequestStatus
 {
 	public int? Id { get; set; }
 	public String? State { get; set; }
@@ -5113,47 +5062,47 @@ public sealed partial class GitPullRequestStatus
 	public IdentityRef? CreatedBy { get; set; }
 	public String? TargetUrl { get; set; }
 }
-public sealed partial class GitStatusContext
+public sealed partial record class GitStatusContext
 {
 	public String? Genre { get; set; }
 	public String? Name { get; set; }
 }
-public sealed partial class GitPullRequestStatusesResponse
+public sealed partial record class GitPullRequestStatusesResponse
 {
 	public int? Count { get; set; }
 	public List<GitPullRequestStatus>? Value { get; set; }
 }
-public sealed partial class GitRef
+public sealed partial record class GitRef
 {
 	public String? Name { get; set; }
 	public String? ObjectId { get; set; }
 }
-public sealed partial class GitRefResult
+public sealed partial record class GitRefResult
 {
 	public List<GitRef>? Value { get; set; }
 }
-public sealed partial class GitRefUpdate
+public sealed partial record class GitRefUpdate
 {
 	public String? Name { get; set; }
 	public String? OldObjectId { get; set; }
 	public String? NewObjectId { get; set; }
 }
-public sealed partial class GitRefUpdateRequest
+public sealed partial record class GitRefUpdateRequest
 {
 	public List<GitRefUpdate>? Value { get; set; }
 }
-public sealed partial class GitRefUpdateResponse
+public sealed partial record class GitRefUpdateResponse
 {
 	public List<GitRefUpdateResult>? Value { get; set; }
 }
-public sealed partial class GitRefUpdateResult
+public sealed partial record class GitRefUpdateResult
 {
 	public String? Name { get; set; }
 	public String? OldObjectId { get; set; }
 	public String? NewObjectId { get; set; }
 	public bool? WasSuccessful { get; set; }
 }
-public sealed partial class GitRepository : ILinks
+public sealed partial record class GitRepository : ILinks
 {
 	public ReferenceLinks? Links { get; set; }
 	public String? DefaultBranch { get; set; }
@@ -5167,17 +5116,17 @@ public sealed partial class GitRepository : ILinks
 	public String? Url { get; set; }
 	public String? webUrl { get; set; }
 }
-public sealed partial class PipelineRunRequest
+public sealed partial record class PipelineRunRequest
 {
 	public List<String>? StagesToSkip { get; set; }
 	public RunResources? Resources { get; set; }
 }
-public sealed partial class PipelinesResult
+public sealed partial record class PipelinesResult
 {
 	public int? Count { get; set; }
 	public List<Pipeline>? Value { get; set; }
 }
-public sealed partial class Pipeline : ILinks
+public sealed partial record class Pipeline : ILinks
 {
 	public ReferenceLinks? Links { get; set; }
 	public int? Id { get; set; }
@@ -5186,7 +5135,7 @@ public sealed partial class Pipeline : ILinks
 	public int? Revision { get; set; }
 	public String? Url { get; set; }
 }
-public sealed partial class Project
+public sealed partial record class Project
 {
 	public String? Id { get; set; }
 	public String? Name { get; set; }
@@ -5196,12 +5145,12 @@ public sealed partial class Project
 	public String? Visibility { get; set; }
 	public String? LastUpdateTime { get; set; }
 }
-public sealed partial class RunsResult
+public sealed partial record class RunsResult
 {
 	public int? Count { get; set; }
 	public List<Run>? Value { get; set; }
 }
-public sealed partial class Run : ILinks
+public sealed partial record class Run : ILinks
 {
 	public ReferenceLinks? Links { get; set; }
 	public String? CreatedDate { get; set; }
@@ -5216,59 +5165,59 @@ public sealed partial class Run : ILinks
 	public String? Url { get; set; }
 	public Variables? Variables { get; set; }
 }
-public sealed partial class RunResources
+public sealed partial record class RunResources
 {
 	public PipelineRunResources? Pipelines { get; set; }
 	public RepositoryRunResources? Repositories { get; set; }
 }
-public sealed partial class PipelineRunResources
+public sealed partial record class PipelineRunResources
 {
 	public Dictionary<String, PipelineRunResource>? All { get; set; }
 }
-public sealed partial class PipelineRunResource
+public sealed partial record class PipelineRunResource
 {
 	public Pipeline? Pipeline { get; set; }
 	public String? Version { get; set; }
 }
-public sealed partial class RepositoryRunResources
+public sealed partial record class RepositoryRunResources
 {
 	public Dictionary<String, RepositoryRunResource>? All { get; set; }
 }
-public sealed partial class RepositoryRunResource
+public sealed partial record class RepositoryRunResource
 {
 	public String? RefName { get; set; }
 	public Respository? Repository { get; set; }
 	public String? Version { get; set; }
 }
-public sealed partial class Respository
+public sealed partial record class Respository
 {
 	public String? Id { get; set; }
 	public String? Type { get; set; }
 }
-public sealed partial class PullRequestThreadsResult
+public sealed partial record class PullRequestThreadsResult
 {
 	public List<PullRequestThread>? Value { get; set; }
 }
-public sealed partial class PullRequestThread
+public sealed partial record class PullRequestThread
 {
 	public int? Id { get; set; }
 	public bool? IsDeleted { get; set; }
 	public List<PullRequestThreadComment>? Comments { get; set; }
 	public String? Status { get; set; }
 }
-public sealed partial class PullRequestThreadComment
+public sealed partial record class PullRequestThreadComment
 {
 	public int? Id { get; set; }
 	public String? Content { get; set; }
 	public String? CommentType { get; set; }
 	public int? ParentCommentId { get; set; }
 }
-public sealed partial class ReleasesResult
+public sealed partial record class ReleasesResult
 {
 	public int? Count { get; set; }
 	public List<Release>? Value { get; set; }
 }
-public sealed partial class Release : ILinks
+public sealed partial record class Release : ILinks
 {
 	public ReferenceLinks? Links { get; set; }
 	public int? Id { get; set; }
@@ -5297,21 +5246,21 @@ public sealed partial class Release : ILinks
 	public List<ReleaseArtifact>? artifacts { get; set; }
 	public List<ReleaseEnvironment>? environments { get; set; }
 }
-public sealed partial class ReleaseArtifact
+public sealed partial record class ReleaseArtifact
 {
 	public String? alias { get; set; }
 	public ReleaseArtifactDefinitionReference? definitionReference { get; set; }
 }
-public sealed partial class ReleaseArtifactDefinitionReference
+public sealed partial record class ReleaseArtifactDefinitionReference
 {
 	public IdReference? sourceVersion { get; set; }
 }
-public sealed partial class ReleaseDefinitionsResult
+public sealed partial record class ReleaseDefinitionsResult
 {
 	public int? Count { get; set; }
 	public List<ReleaseDefinition>? Value { get; set; }
 }
-public sealed partial class ReleaseDefinition : ILinks
+public sealed partial record class ReleaseDefinition : ILinks
 {
 	public ReferenceLinks? Links { get; set; }
 	public String? source { get; set; }
@@ -5331,22 +5280,22 @@ public sealed partial class ReleaseDefinition : ILinks
 	public ProjectReference? projectReference { get; set; }
 	public String? url { get; set; }
 }
-public sealed partial class ReleaseEnvironment
+public sealed partial record class ReleaseEnvironment
 {
 	public int? id { get; set; }
 	public String? name { get; set; }
 	public String? status { get; set; }
 	public int? definitionEnvironmentId { get; set; }
 }
-public sealed partial class ReleasePropertiesCollection
+public sealed partial record class ReleasePropertiesCollection
 {
 }
-public sealed partial class IdReference
+public sealed partial record class IdReference
 {
 	public String? id { get; set; }
 	public String? name { get; set; }
 }
-public sealed partial class IdentityRef : ILinks
+public sealed partial record class IdentityRef : ILinks
 {
 	public ReferenceLinks? Links { get; set; }
 	public String? displayName { get; set; }
@@ -5356,36 +5305,36 @@ public sealed partial class IdentityRef : ILinks
 	public String? imageUrl { get; set; }
 	public String? descriptor { get; set; }
 }
-public sealed partial class ProjectReference
+public sealed partial record class ProjectReference
 {
 	public String? id { get; set; }
 	public String? name { get; set; }
 }
-public sealed partial class ReferenceLinks
+public sealed partial record class ReferenceLinks
 {
 	public ReferenceLink? Self { get; set; }
 	public ReferenceLink? Web { get; set; }
 	public Dictionary<String, ReferenceLink>? All { get; set; }
 }
-public sealed partial class ReferenceLink
+public sealed partial record class ReferenceLink
 {
 	public String? Href { get; set; }
 }
-public sealed partial class Variables
+public sealed partial record class Variables
 {
 	public Dictionary<String, VariableValue>? All { get; set; }
 }
-public sealed partial class VariableValue
+public sealed partial record class VariableValue
 {
 	public String? Value { get; set; }
 }
-public sealed partial class VariableGroups
+public sealed partial record class VariableGroups
 {
 }
 public partial interface ILinks
 {
 	ReferenceLinks? Links { get; set; }
 }
-public sealed partial class TemplateParameters
+public sealed partial record class TemplateParameters
 {
 }
