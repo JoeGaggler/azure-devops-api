@@ -24,6 +24,9 @@ partial class AzdoClient
         return Deserialize<Model.GitRefUpdateResponse>(json2, Model.JsonSerializer.Deserialize);
     }
 
+    public async Task<Model.GitPullRequest> GetPullRequestsByRepositoryAsync(int prId) =>
+        await GetterAsync<Model.GitPullRequest>(u => u.PullRequest(prId), Model.JsonSerializer.Deserialize);
+
     public async Task<Model.GitPullRequestResponse> GetPullRequestsByRepositoryAsync(String repositoryNameOrId) =>
         await GetterAsync<Model.GitPullRequestResponse>(u => u.GetPullRequests(repositoryNameOrId), Model.JsonSerializer.Deserialize);
 
