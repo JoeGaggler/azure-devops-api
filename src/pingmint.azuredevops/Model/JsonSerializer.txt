@@ -82,6 +82,7 @@ GitPullRequest
 - isDraft => IsDraft : bool
 - reviewers => Reviewers : [IdentityRefWithVote]
 - repository => Repository : GitRepository
+- createdBy => CreatedBy : IdentityRef
 
 IdentityRefWithVote
 - id => Id : String

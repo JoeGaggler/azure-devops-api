@@ -929,6 +929,11 @@ public static partial class JsonSerializer
 			writer.WritePropertyName("repository");
 			Serialize(writer, localRepository);
 		}
+		if (value.CreatedBy is { } localCreatedBy)
+		{
+			writer.WritePropertyName("createdBy");
+			Serialize(writer, localCreatedBy);
+		}
 		writer.WriteEndObject();
 	}
 
@@ -1046,6 +1051,13 @@ public static partial class JsonSerializer
 						if (reader.TokenType == JsonTokenType.Null) { obj.Repository = null; break; }
 						if (reader.TokenType == JsonTokenType.StartObject) { obj.Repository = new(); Deserialize(ref reader, obj.Repository); break; }
 						throw new InvalidOperationException($"unexpected token type for Repository: {reader.TokenType} ");
+					}
+					else if (reader.ValueTextEquals("createdBy"))
+					{
+						if (!reader.Read()) throw new InvalidOperationException("Unable to read next token from Utf8JsonReader");
+						if (reader.TokenType == JsonTokenType.Null) { obj.CreatedBy = null; break; }
+						if (reader.TokenType == JsonTokenType.StartObject) { obj.CreatedBy = new(); Deserialize(ref reader, obj.CreatedBy); break; }
+						throw new InvalidOperationException($"unexpected token type for CreatedBy: {reader.TokenType} ");
 					}
 
 					reader.Skip();
@@ -5026,6 +5038,7 @@ public sealed partial record class GitPullRequest
 	public bool? IsDraft { get; set; }
 	public List<IdentityRefWithVote>? Reviewers { get; set; }
 	public GitRepository? Repository { get; set; }
+	public IdentityRef? CreatedBy { get; set; }
 }
 public sealed partial record class IdentityRefWithVote
 {
