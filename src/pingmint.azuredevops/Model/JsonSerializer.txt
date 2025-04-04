@@ -114,6 +114,7 @@ GitPullRequestStatus
 - updatedDate => UpdatedDate : String
 - createdBy => CreatedBy : IdentityRef
 - targetUrl => TargetUrl : String
+- isContainer => IsContainer : bool
 
 GitStatusContext
 - genre => Genre : String
@@ -333,6 +334,7 @@ IdentityRef : ILinks
 - uniqueName : String
 - imageUrl : String
 - descriptor : String
+- isContainer => IsContainer : bool
 
 ProjectReference
 - id : String
